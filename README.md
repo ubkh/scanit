@@ -3,8 +3,15 @@
 ## Deployed version
 The deployed version of the application can be found at *<[enter URL here](URL)>*.
 
+## Prerequisites
+- Expo Go app on mobile device.
+- Modern version of NodeJS and Git.
+
 ## Installation instructions
-To install the software and use it in your local development environment, you must first set up and activate a local development environment.  From the root of the project:
+To install the software and use it in your local development environment, you must first set up a local development environment.  
+
+### Backend
+From the root of the project:
 
 ```
 $ virtualenv venv
@@ -34,8 +41,28 @@ Run all tests with:
 $ python3 manage.py test
 ```
 
+To start the development server:
+
+```
+$ python3 manage.py runserver
+```
+
+### Frontend
+
+From the frontend root (```frontend/scanit```):
+
+```
+$ npm install
+```
+
+To start the development server:
+
+```
+$ npx expo start
+```
+
 ## Sources
-The packages used by this application are specified in `requirements.txt`
+The packages used by this application are specified in `requirements.txt` for the backend and in the `dependencies` section of `frontend/scanit/package.json` for the frontend.
 
 ## Authors
 Team *Pubjee Mobail*:

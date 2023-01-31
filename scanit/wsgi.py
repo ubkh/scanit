@@ -1,5 +1,5 @@
 """
-WSGI config for msms project.
+WSGI config for scabut project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

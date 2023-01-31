@@ -1,5 +1,5 @@
 """
-ASGI config for msms project.
+ASGI config for scanit project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
