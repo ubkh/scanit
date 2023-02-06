@@ -1,9 +1,9 @@
 
 from django.urls import path
-from .views import main, TestView, get_text_list
+from .views import main, TestCreateView, TestGetListView
 
 urlpatterns = [
     path('', main),
-    path('api/', TestView.as_view()),
-    path('api/list', get_text_list, name='get_text_list')
+    path('create/', TestCreateView.as_view()),
+    path('list/', TestGetListView.as_view(), name='get_text_list')
 ]

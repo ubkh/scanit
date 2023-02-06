@@ -10,13 +10,17 @@ from rest_framework import generics
 def main(request):
     return HttpResponse("<h1>Hello, world.</h1>")
 
-class TestView(generics.CreateAPIView):
+class TestCreateView(generics.CreateAPIView):
     queryset = Test.objects.all()
     serializer_class = TestSerializer
 
-@csrf_exempt
-def get_text_list(request):
-    if request.method == "GET":
-        text_list = Test.objects.all()
-        serializer = TestSerializer(text_list, many=True)
-        return JsonResponse(serializer.data, safe=False)
+# @csrf_exempt
+# def get_text_list(request):
+#     if request.method == "GET":
+#         text_list = Test.objects.all()
+#         serializer = TestSerializer(text_list, many=True)
+#         return JsonResponse(serializer.data, safe=False)
+
+class TestGetListView(generics.ListAPIView):
+    queryset = Test.objects.all()
+    serializer_class = TestSerializer

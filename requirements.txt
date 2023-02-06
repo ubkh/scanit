@@ -2,3 +2,5 @@ coverage
 Django
 Faker
 djangorestframework
+djangorestframework-simplejwt
+django-cors-headers

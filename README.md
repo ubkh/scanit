@@ -8,7 +8,18 @@ The deployed version of the application can be found at *<[enter URL here](URL)>
 - Modern version of NodeJS and Git.
 
 ## Installation instructions
-To install the software and use it in your local development environment, you must first set up a local development environment.  
+To install the software and use it in your local development environment, you must set up a a local development environment.  
+
+First set the environment variable for the Django server address:
+
+```
+$ export DJANGO=<YOUR_IP>:8000 || set DJANGO=<YOUR_IP>:8000
+```
+
+This IP must be in the form ```192.168.X.X``` - found in Network Settings.
+*(eg. DJANGO=192.168.1.208:8000)*
+
+If the IP ever changes re-run this with the new one.
 
 ### Backend
 From the root of the project:
@@ -36,15 +47,18 @@ Seed the development database with:
 $ python3 manage.py seed
 ```
 
-Run all tests with:
-```
-$ python3 manage.py test
-```
-
 To start the development server:
 
 ```
-$ python3 manage.py runserver
+$ python3 manage.py runserver <YOUR_IP>:8000
+```
+
+This IP must be in the form ```192.168.X.X``` - found in Network Settings.
+*(eg. DJANGO=192.168.1.208:8000)*
+
+Run all tests with:
+```
+$ python3 manage.py test
 ```
 
 ### Frontend
@@ -55,10 +69,24 @@ From the frontend root (```frontend/scanit```):
 $ npm install
 ```
 
+Create a ```.env.local``` file at the frontend root and add to its contents:
+
+```
+DJANGO=<YOUR_DJANGO_IP>:8000
+```
+
+This IP must be in the form ```192.168.X.X``` - found in Network Settings.
+*(eg. DJANGO=192.168.1.208:8000)*
+
 To start the development server:
 
 ```
 $ npx expo start
+```
+
+Run all tests with:
+```
+$ npm run test
 ```
 
 ## Sources
@@ -67,10 +95,10 @@ The packages used by this application are specified in `requirements.txt` for th
 ## Authors
 Team *Pubjee Mobail*:
 - Ubayd Khan ([ubayd.khan@kcl.ac.uk](ubayd.khan@kcl.ac.uk))
-- Abdullah Beg ([muhammad.beg@kcl.ac.uk](muhammad.beg@kcl.ac.uk))
-- Mudassir Ahmad ([syed.m.ahmad@kcl.ac.uk](syed.m.ahmad@kcl.ac.uk))
-- Sayed Alam ([sayedul.alam@kcl.ac.uk](sayedul.alam@kcl.ac.uk))
+- Muhammad (Abdullah) Beg ([muhammad.beg@kcl.ac.uk](muhammad.beg@kcl.ac.uk))
+- Syed Mudassir (Mudassir) Ahmad ([syed.m.ahmad@kcl.ac.uk](syed.m.ahmad@kcl.ac.uk))
+- Sayedul (Sayed) Alam ([sayedul.alam@kcl.ac.uk](sayedul.alam@kcl.ac.uk))
 - Ghaith Allajmi ([ghaith.allajmi@kcl.ac.uk](ghaith.allajmi@kcl.ac.uk))
 - Nizom Badal ([nizom.badal@kcl.ac.uk](nizom.badal@kcl.ac.uk))
-- Shafiul Islam-Mehdi ([shafiul.islam-mehdi@kcl.ac.uk](shafiul.islam-mehdi@kcl.ac.uk))
+- Shafiul (Mehdi) Islam-Mehdi ([shafiul.islam-mehdi@kcl.ac.uk](shafiul.islam-mehdi@kcl.ac.uk))
 - Abed Talukdar ([abed.talukdar@kcl.ac.uk](abed.talukdar@kcl.ac.uk))
