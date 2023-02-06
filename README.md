@@ -43,7 +43,7 @@ $ python3 manage.py runserver <YOUR_IP>:8000
 ```
 
 This IP must be in the form ```192.168.X.X``` - found in Network Settings.
-*(eg. DJANGO=192.168.1.208:8000)*
+*(eg. 192.168.1.208:8000)*
 
 Run all tests with:
 ```
