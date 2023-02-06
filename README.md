@@ -8,18 +8,7 @@ The deployed version of the application can be found at *<[enter URL here](URL)>
 - Modern version of NodeJS and Git.
 
 ## Installation instructions
-To install the software and use it in your local development environment, you must set up a a local development environment.  
-
-First set the environment variable for the Django server address:
-
-```
-$ export DJANGO=<YOUR_IP>:8000 || set DJANGO=<YOUR_IP>:8000
-```
-
-This IP must be in the form ```192.168.X.X``` - found in Network Settings.
-*(eg. DJANGO=192.168.1.208:8000)*
-
-If the IP ever changes re-run this with the new one.
+To install the software and use it in your local development environment, you must first set up a a local development environment.  
 
 ### Backend
 From the root of the project:
