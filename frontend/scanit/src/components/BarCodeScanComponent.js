@@ -50,6 +50,9 @@ function BarCodeScanComponent(props){
             onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
             style={BarCodeScanStyle.barcodebox}
           />
+          <Text>&nbsp;</Text>
+          <Text style={BarCodeScanStyle.subtitle}> Point your camera at a barcode to ScanIt! </Text>
+          <Text>&nbsp;</Text>
           {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
         </View>
       );

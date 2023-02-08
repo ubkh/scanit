@@ -15,6 +15,10 @@ const BarCodeScanStyle = StyleSheet.create({
       overflow: 'hidden',
       borderRadius: 30,
       backgroundColor: 'tomato'
+    },
+    subtitle: {
+      fontSize: 20,
+      fontWeight: "bold",
     }
   });
 
