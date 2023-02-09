@@ -4,6 +4,8 @@ import AnotherScreen from './screens/AnotherScreen';
 import HomeScreen from './screens/HomeScreen';
 import BarCodeScanComponent from '../components/BarCodeScanComponent';
 import { Ionicons } from '@expo/vector-icons';
+import { Alert, TouchableOpacity } from 'react-native';
+import HeaderButtonStyle from '../styles/HeaderButtonStyle';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -27,9 +29,35 @@ function Navigator(props) {
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="home" color={color} size={size} />
                     ),
-                }}
+                    headerRight: () => (
+                      <TouchableOpacity onPress={() => Alert.alert(
+                        'Basket Button',
+                        'You pressed the basket button!',
+                        [
+                          {
+                            text: 'Ok',
+                            onPress: () => console.log("Ok on dialog was pressed"),
+                            style: 'default',
+                          },
+                          {
+                            text: 'Dismiss',
+                            onPress: () => console.log("Dismiss on dialog was pressed"),
+                            style: 'cancel',
+                          },
+                        ],)}>
+                        <Ionicons name="basket-outline" style={HeaderButtonStyle.button} size={35}/>
+                      </TouchableOpacity>
+                    ),
+                  }}
             />
-            <Tab.Screen name="Another" component={AnotherScreen} />
+            <Tab.Screen 
+              name="Another" 
+              component={AnotherScreen}
+              options={{
+                tabBarIcon: ({ color, size }) => (
+                    <Ionicons name="settings-outline" color={color} size={size} />
+                ),
+              }} />
         </Tab.Navigator>
     )
 }
