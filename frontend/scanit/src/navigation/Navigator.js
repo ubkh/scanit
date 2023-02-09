@@ -31,8 +31,8 @@ function Navigator(props) {
                     ),
                     headerRight: () => (
                       <TouchableOpacity onPress={() => Alert.alert(
-                        'Basket Button',
-                        'You pressed the basket button!',
+                        'Shopping Cart Button',
+                        'You pressed the shopping cart button!',
                         [
                           {
                             text: 'Ok',
@@ -45,7 +45,7 @@ function Navigator(props) {
                             style: 'cancel',
                           },
                         ],)}>
-                        <Ionicons name="basket-outline" style={HeaderButtonStyle.button} size={35}/>
+                        <Ionicons name="cart-outline" style={HeaderButtonStyle.button} size={35}/>
                       </TouchableOpacity>
                     ),
                   }}
