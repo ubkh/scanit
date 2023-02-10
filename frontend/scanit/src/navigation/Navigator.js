@@ -2,6 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import AnotherScreen from './screens/AnotherScreen';
 import HomeScreen from './screens/HomeScreen';
+import SignInScreen from './screens/SignInScreen';
 import BarCodeScanComponent from '../components/BarCodeScanComponent';
 import { Ionicons } from '@expo/vector-icons';
 import { Alert, TouchableOpacity } from 'react-native';
@@ -15,6 +16,14 @@ function HomeStack(props) {
     <Stack.Navigator>
       <Stack.Screen name="HomeScreen" component={HomeScreen} options={{headerShown: false}} />
       <Stack.Screen name="BarCodeScanComponent" component={BarCodeScanComponent} options={{headerShown: false}}/>
+    </Stack.Navigator>
+  );
+}
+
+function SignInStack(props) {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="SignInScreen" component={SignInScreen} options={{headerShown: false}} />
     </Stack.Navigator>
   );
 }
@@ -53,6 +62,14 @@ function Navigator(props) {
             <Tab.Screen 
               name="Another" 
               component={AnotherScreen}
+              options={{
+                tabBarIcon: ({ color, size }) => (
+                    <Ionicons name="settings-outline" color={color} size={size} />
+                ),
+              }} />
+              <Tab.Screen 
+              name="Sign Up" 
+              component={SignInStack}
               options={{
                 tabBarIcon: ({ color, size }) => (
                     <Ionicons name="settings-outline" color={color} size={size} />
