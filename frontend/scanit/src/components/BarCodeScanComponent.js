@@ -10,6 +10,8 @@ function BarCodeScanComponent(props){
     const [scanned, setScanned] = useState(false);
     const [text, setText] = useState("Not scanned yet");
     const navigation = useNavigation();
+    const globalContext = useContext(Context);
+    const { basketList } = globalContext;
 
     const askForCameraPermission = () => {
         (async () => {
@@ -25,6 +27,7 @@ function BarCodeScanComponent(props){
       const handleBarCodeScanned = ({ type, data }) => {
         setScanned(true);
         setText(data)
+        globalContext.setBasketList([...globalContext.basketList, { 'data': data, 'type': type }])
         console.log('Type: ' + type + '\nData: ' + data)
         navigation.navigate('HomeScreen', { data, type });
       };
