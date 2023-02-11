@@ -9,7 +9,7 @@ class Test(models.Model):
     text = models.CharField(max_length=100)
 
 class Product(models.Model):
-    retailerID = models.ForeignKey()
+    retailerID = models.PositiveIntegerField()
     barcodeID = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=100, unique=True)
     description = models.CharField(max_length=750, blank=True)
@@ -29,31 +29,31 @@ class Product(models.Model):
         self.full_clean()
         super().save(*args, **kwargs)
 
-class UserAccount(User):
+# class UserAccount(User):
     
-    def __init__(self):
-        super(self)
+#     def __init__(self):
+#         super(self)
     
-    name = models.CharField()
-    email = models.EmailField()
-    password = models.CharField()
-    dob = models.DateField()
+#     name = models.CharField()
+#     # email = models.EmailField()
+#     # password = models.CharField()
+#     dob = models.DateField()
     
 
-class RetailerAccount(UserAccount):
-    retailerID = models.PositiveIntegerField()
-    retailBarcode = models.CharField()
-    shop_address = models.CharField()
-    payment_method = models.CharField()
-    balance = models.DecimalField()
+# class RetailerAccount(UserAccount):
+#     retailerID = models.PositiveIntegerField()
+#     retailBarcode = models.CharField()
+#     shop_address = models.CharField()
+#     payment_method = models.CharField()
+#     balance = models.DecimalField()
 
     
-class CustomerAccount(UserAccount):
-    customerID = models.PositiveIntegerField()
-    personal_address = models.CharField()
-    payment_method = models.CharField()
+# class CustomerAccount(UserAccount):
+#     customerID = models.PositiveIntegerField()
+#     personal_address = models.CharField()
+#     payment_method = models.CharField()
 
-class AdminAccount(UserAccount):
-    adminID = models.PositiveIntegerField()
+# class AdminAccount(UserAccount):
+#     adminID = models.PositiveIntegerField()
     
     
