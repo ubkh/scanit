@@ -23,7 +23,8 @@ const styles = StyleSheet.create({
         backgroundColor:  '#3b71f3',
     },
     container_SECONDARY:{
-        top: 130,
+        borderColor: '#3b71f3',
+        borderWidth: 2,
     },
     container_TERTIARY: {
 
@@ -34,8 +35,8 @@ const styles = StyleSheet.create({
     text_PRIMARY: {
         color: 'white',
     },
-    text_PRIMARY: {
-        color: 'black',
+    text_SECONDARY: {
+        color: 'blue',
     },
     text_TERTIARY: {
         color: 'black',

@@ -3,10 +3,15 @@ import { createStackNavigator } from '@react-navigation/stack';
 import AnotherScreen from './screens/AnotherScreen';
 import HomeScreen from './screens/HomeScreen';
 import SignInScreen from './screens/SignInScreen';
+import SignUpScreen from './screens/SignUpScreen';
+import ResetPasswordScreen from './screens/ResetPasswordScreen';
+import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
+import VerificationScreen from './screens/VerificationScreen';
 import BarCodeScanComponent from '../components/BarCodeScanComponent';
 import { Ionicons } from '@expo/vector-icons';
 import { Alert, TouchableOpacity } from 'react-native';
 import HeaderButtonStyle from '../styles/HeaderButtonStyle';
+import { NavigationContainer } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -20,12 +25,17 @@ function HomeStack(props) {
   );
 }
 
-function SignInStack(props) {
+const SignInStack = () => {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="SignInScreen" component={SignInScreen} options={{headerShown: false}} />
-    </Stack.Navigator>
-  );
+      <Stack.Navigator screenOptions={{headerShown: false}}>
+        <Stack.Screen name = "SignIn" component={SignInScreen}/>
+        <Stack.Screen name = "SignUp" component={SignUpScreen}/>
+        <Stack.Screen name = "ResetPassword" component={ResetPasswordScreen}/>
+        <Stack.Screen name = "ForgotPassword" component={ForgotPasswordScreen}/>
+        <Stack.Screen name = "Verification" component={VerificationScreen}/>
+        <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}} />
+      </Stack.Navigator>
+  )
 }
 
 function Navigator(props) {
@@ -60,15 +70,7 @@ function Navigator(props) {
                   }}
             />
             <Tab.Screen 
-              name="Another" 
-              component={AnotherScreen}
-              options={{
-                tabBarIcon: ({ color, size }) => (
-                    <Ionicons name="settings-outline" color={color} size={size} />
-                ),
-              }} />
-              <Tab.Screen 
-              name="Sign Up" 
+              name="Sign In" 
               component={SignInStack}
               options={{
                 tabBarIcon: ({ color, size }) => (

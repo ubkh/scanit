@@ -3,24 +3,26 @@ import { StyleSheet, Text, View, Image, useWindowDimensions } from 'react-native
 import Logo from '../../../assets/ScanItLogo.png';
 import CustomInput from '../../components/CustomInput.js';
 import CustomButton from '../../components/CustomButton.js';
-
-const onSignInPressed = () => {
-  console.warn("signed in")
-}
-
-const onForgotPasswordPressed = () => {
-    console.warn("forgot lad")
-}
-
-const onSignUpPressed = () => {
-    console.warn("tek me")
-}
+import { useNavigation } from '@react-navigation/native';
 
 function SignInScreen(props) {
     const[username, setUsername] = useState('');
     const[password, setPassword] = useState('');
 
     const{height} = useWindowDimensions();
+    const navigation = useNavigation();
+
+    const onSignInPressed = () => {
+        navigation.navigate('Home');
+    }
+      
+      const onForgotPasswordPressed = () => {
+        navigation.navigate('ForgotPassword')
+    }
+      
+      const onSignUpPressed = () => {
+        navigation.navigate('SignUp')
+    }
 
     return (
         <View style={styles.container}>
@@ -33,8 +35,8 @@ function SignInScreen(props) {
             <CustomInput placeholder = "Username" value = {username} setValue = {setUsername}/>
             <CustomInput placeholder = "Password" value = {password} setValue = {setPassword} secureTextEntry/>
             <CustomButton text = "Sign In" onPress={onSignInPressed}/>
-            <CustomButton text = "Forgot Password?" onPress={onForgotPasswordPressed} type = "TERTIARY"/>
-            <CustomButton text = "Dont have an account? Create one" onPress={onSignUpPressed} type = "SECONDARY"/>
+            <CustomButton text = "Forgot Password?" onPress={onForgotPasswordPressed} type = "SECONDARY"/>
+            <CustomButton text = "Dont have an account? Create one" onPress={onSignUpPressed} type = "TERTIARY"/>
         </View>
     );
 }
