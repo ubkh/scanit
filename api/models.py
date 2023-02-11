@@ -42,6 +42,7 @@ class UserAccount(User):
 
 class RetailerAccount(UserAccount):
     retailerID = models.PositiveIntegerField()
+    retailBarcode = models.CharField()
     shop_address = models.CharField()
     payment_method = models.CharField()
     balance = models.DecimalField()
