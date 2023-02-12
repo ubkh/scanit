@@ -14,7 +14,12 @@
     "transformIgnorePatterns": [
       "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)"
     ],
-    "moduleFileExtensions": ["js", "jsx", "ts", "tsx"]
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "ts",
+      "tsx"
+    ]
   },
   "dependencies": {
     "@expo/webpack-config": "^0.17.2",
@@ -26,14 +31,16 @@
     "expo": "~47.0.12",
     "expo-barcode-scanner": "~12.1.0",
     "expo-status-bar": "~1.4.2",
+    "formik": "^2.2.9",
+    "jest": "^26.6.3",
+    "jest-expo": "^47.0.1",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-native": "0.70.5",
+    "react-native-currency-input": "^1.1.0",
     "react-native-dotenv": "^3.4.7",
     "react-native-web": "~0.18.9",
-    "react-scripts": "4.0.3",
-    "jest": "^26.6.3",
-    "jest-expo": "^47.0.1"
+    "react-scripts": "4.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
