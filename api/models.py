@@ -11,7 +11,7 @@ class Test(models.Model):
 class Product(models.Model):
     retailerID = models.PositiveIntegerField()
     barcodeID = models.CharField(max_length=20, unique=True)
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
     description = models.CharField(max_length=750, blank=True)
     price = models.PositiveIntegerField(validators=[MinValueValidator(0)]) # accepts ints too. max price is 999.99
     quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
