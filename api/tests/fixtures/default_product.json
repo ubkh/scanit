@@ -1,0 +1,13 @@
+[
+    {
+        "model": "api.product",
+        "pk": "1",
+        "fields": {
+            "name": "Copium",
+            "description": "High quality copium.",
+            "price": 8.00,
+            "quantity": 300,
+            "expiry": "2025-09-01"
+        }
+    }
+]
