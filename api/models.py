@@ -13,7 +13,7 @@ class Product(models.Model):
     barcodeID = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=100, unique=True)
     description = models.CharField(max_length=750, blank=True)
-    price = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(0.05)]) # accepts ints too. max price is 999.99
+    price = models.PositiveIntegerField(validators=[MinValueValidator(0)]) # accepts ints too. max price is 999.99
     quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     expiry = models.DateField()
 

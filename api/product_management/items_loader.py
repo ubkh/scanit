@@ -6,16 +6,18 @@ def import_data(file_path: str):
     df = pd.read_excel(file_path)
     for index, row in df.iterrows():
 
-        print(row['barcodeID'], end=" ")
-        print(row['name'], end=" ")
-        print(row['description'], end=" " )
-        print(row['price'], end=" ")
-        print(row['quantity'], end=" ")
-        print(row['expiry'])
+        print(type(row['barcodeID']), end=" ")
+        print(type(row['name']), end=" ")
+        print(type(row['description']), end=" " )
+        print(type(row['price']), end=" ")
+        print(type(row['quantity']), end=" ")
+        print(type(row['expiry']))
         product = Product(
+            retailerID=9,
+            barcodeID=row['barcodeID'],
             name=row['name'],
             description=row['description'],
-            price=row['price'],
+            price=int((row['price']) * 100),
             quantity=row['quantity'],
             expiry=row['expiry']
         )
