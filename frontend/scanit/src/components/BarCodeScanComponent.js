@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from 'react';
 import {useNavigation} from'@react-navigation/native';
 import { Context } from '../GlobalContext';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, Alert } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import BarCodeScanStyle from '../styles/BarCodeScanStyle';
 
@@ -27,9 +27,27 @@ function BarCodeScanComponent(props){
       const handleBarCodeScanned = ({ type, data }) => {
         setScanned(true);
         setText(data)
-        globalContext.setBasketList([...globalContext.basketList, { 'data': data, 'type': type }])
         console.log('Type: ' + type + '\nData: ' + data)
-        navigation.navigate('HomeScreen', { data, type });
+        const check  = basketList.find(obj => obj.data === data)
+        if (check) {
+          Alert.alert(
+          'Item Already in Basket',
+          'This item is already in your basket!',
+          [
+            {
+              text: 'Ok',
+              onPress: () => {
+                console.log("Ok on dialog was pressed")
+                navigation.navigate('HomeScreen', { data, type });
+              },
+              style: 'default',
+            },
+          ],)
+        }
+        else {
+          globalContext.setBasketList([...globalContext.basketList, { 'data': data, 'type': type }])
+          navigation.navigate('HomeScreen', { data, type });
+        }
       };
     
       if (hasPermission === null) {

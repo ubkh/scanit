@@ -16,11 +16,12 @@ function HomeStack(props) {
   return (
     <Stack.Navigator>
       <Stack.Screen name="HomeScreen" component={HomeScreen} options={{headerShown: false}} />
-      <Stack.Screen name="Basket" component={BasketScreen} />
+      <Stack.Screen name="Basket" component={BasketScreen} options={{tabBarVisible: false}} />
       <Stack.Screen name="BarCodeScanComponent" component={BarCodeScanComponent} options={{headerTitle: ""}}/>
     </Stack.Navigator>
   );
 }
+
 
 function Navigator(props) {
   const navigation = useNavigation();
