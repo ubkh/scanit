@@ -8,6 +8,7 @@ export default function ContextProvider(props) {
     const [ isLoggedIn, setIsLoggedIn ] = useState(false)
     const [barcodeData, setBarcodeData] = useState("empty")
     const[barcodeType, setBarcodeType] = useState("empty")
+    const[basketList, setBasketList] = useState([])
 
     useEffect(() => {
     }, []);
@@ -15,7 +16,9 @@ export default function ContextProvider(props) {
     const globalContext = {
         domain,
         isLoggedIn,
-        setIsLoggedIn
+        setIsLoggedIn,
+        basketList,
+        setBasketList
     }
 
     return (

@@ -29,9 +29,11 @@ function HomeScreen(props, route) {
     const globalContext = useContext(Context);
     const navigation = useNavigation();
     const { domain } = globalContext;
+    const { basketList } = globalContext;
 
     console.log(data);
     console.log(type);
+    console.log(basketList);
 
     return (
         <View style={ContainerStyle.container}>
