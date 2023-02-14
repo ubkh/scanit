@@ -1,7 +1,9 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+import { useNavigation, useRoute } from'@react-navigation/native';
 import AnotherScreen from './screens/AnotherScreen';
 import HomeScreen from './screens/HomeScreen';
+import BasketScreen from './screens/BasketScreen';
 import BarCodeScanComponent from '../components/BarCodeScanComponent';
 import { Ionicons } from '@expo/vector-icons';
 import { Alert, TouchableOpacity } from 'react-native';
@@ -14,12 +16,15 @@ function HomeStack(props) {
   return (
     <Stack.Navigator>
       <Stack.Screen name="HomeScreen" component={HomeScreen} options={{headerShown: false}} />
-      <Stack.Screen name="BarCodeScanComponent" component={BarCodeScanComponent} options={{headerShown: false}}/>
+      <Stack.Screen name="Basket" component={BasketScreen} options={{tabBarVisible: false}} />
+      <Stack.Screen name="BarCodeScanComponent" component={BarCodeScanComponent} options={{headerTitle: ""}}/>
     </Stack.Navigator>
   );
 }
 
+
 function Navigator(props) {
+  const navigation = useNavigation();
     return (
         <Tab.Navigator>
             <Tab.Screen 
@@ -30,21 +35,23 @@ function Navigator(props) {
                         <Ionicons name="home" color={color} size={size} />
                     ),
                     headerRight: () => (
-                      <TouchableOpacity onPress={() => Alert.alert(
-                        'Shopping Cart Button',
-                        'You pressed the shopping cart button!',
-                        [
-                          {
-                            text: 'Ok',
-                            onPress: () => console.log("Ok on dialog was pressed"),
-                            style: 'default',
-                          },
-                          {
-                            text: 'Dismiss',
-                            onPress: () => console.log("Dismiss on dialog was pressed"),
-                            style: 'cancel',
-                          },
-                        ],)}>
+                      <TouchableOpacity onPress={() => navigation.navigate("Basket")}
+                        // Alert.alert(
+                        // 'Shopping Cart Button',
+                        // 'You pressed the shopping cart button!',
+                        // [
+                        //   {
+                        //     text: 'Ok',
+                        //     onPress: () => console.log("Ok on dialog was pressed"),
+                        //     style: 'default',
+                        //   },
+                        //   {
+                        //     text: 'Dismiss',
+                        //     onPress: () => console.log("Dismiss on dialog was pressed"),
+                        //     style: 'cancel',
+                        //   },
+                        // ],)
+                        >
                         <Ionicons name="cart-outline" style={HeaderButtonStyle.button} size={35}/>
                       </TouchableOpacity>
                     ),

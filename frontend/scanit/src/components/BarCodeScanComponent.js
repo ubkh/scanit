@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from 'react';
 import {useNavigation} from'@react-navigation/native';
 import { Context } from '../GlobalContext';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, Alert } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import BarCodeScanStyle from '../styles/BarCodeScanStyle';
 
@@ -10,6 +10,8 @@ function BarCodeScanComponent(props){
     const [scanned, setScanned] = useState(false);
     const [text, setText] = useState("Not scanned yet");
     const navigation = useNavigation();
+    const globalContext = useContext(Context);
+    const { basketList } = globalContext;
 
     const askForCameraPermission = () => {
         (async () => {
@@ -26,6 +28,7 @@ function BarCodeScanComponent(props){
         setScanned(true);
         setText(data)
         console.log('Type: ' + type + '\nData: ' + data)
+        globalContext.setBasketList([...globalContext.basketList, { 'data': data, 'type': type }])
         navigation.navigate('HomeScreen', { data, type });
       };
     
