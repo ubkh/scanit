@@ -28,26 +28,8 @@ function BarCodeScanComponent(props){
         setScanned(true);
         setText(data)
         console.log('Type: ' + type + '\nData: ' + data)
-        const check  = basketList.find(obj => obj.data === data)
-        if (check) {
-          Alert.alert(
-          'Item Already in Basket',
-          'This item is already in your basket!',
-          [
-            {
-              text: 'Ok',
-              onPress: () => {
-                console.log("Ok on dialog was pressed")
-                navigation.navigate('HomeScreen', { data, type });
-              },
-              style: 'default',
-            },
-          ],)
-        }
-        else {
-          globalContext.setBasketList([...globalContext.basketList, { 'data': data, 'type': type }])
-          navigation.navigate('HomeScreen', { data, type });
-        }
+        globalContext.setBasketList([...globalContext.basketList, { 'data': data, 'type': type }])
+        navigation.navigate('HomeScreen', { data, type });
       };
     
       if (hasPermission === null) {
