@@ -6,9 +6,10 @@ export const Context = createContext();
 export default function ContextProvider(props) {
     const [ domain, setDomain ] = useState(DJANGO);
     const [ isLoggedIn, setIsLoggedIn ] = useState(false)
-    const [barcodeData, setBarcodeData] = useState("empty")
-    const[barcodeType, setBarcodeType] = useState("empty")
+    const [retailerBarcodeData, setRetailerBarcodeData] = useState("")
+    const[retailerBarcodeType, setRetailerBarcodeType] = useState("")
     const[basketList, setBasketList] = useState([])
+    const[isRetailerScanned, setRetailerScanned] = useState(false)
 
     useEffect(() => {
     }, []);
@@ -18,7 +19,13 @@ export default function ContextProvider(props) {
         isLoggedIn,
         setIsLoggedIn,
         basketList,
-        setBasketList
+        setBasketList,
+        isRetailerScanned,
+        setRetailerScanned,
+        retailerBarcodeData,
+        setRetailerBarcodeData,
+        retailerBarcodeType,
+        setRetailerBarcodeType
     }
 
     return (
