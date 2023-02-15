@@ -104,7 +104,7 @@ function HomeScreen(props, route) {
             {retailerBarcodeType ? <Text>Type: {JSON.stringify(retailerBarcodeType)}</Text> : <Text>Nothing yet</Text>}
             <Text>&nbsp;</Text>
             <Button onPress={() => navigation.navigate('BarCodeScanComponent')}
-                title="Scan Barcode!" disabled={!isRetailerScanned}>
+                title="Scan Product Barcode!" disabled={!isRetailerScanned}>
             </Button>
             <Text>&nbsp;</Text>
             <Text>Info on most recent barcode scanned (retailer/product):</Text>
