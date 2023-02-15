@@ -41,7 +41,7 @@ function HomeScreen(props, route) {
         setRetailerBarcodeData(null);
         setRetailerBarcodeType(null);
         globalContext.setBasketList([]);
-        console.log("Reset retailer")
+        console.log("Reset retailer and basket")
     };
 
     console.log(data);

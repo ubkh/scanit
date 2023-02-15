@@ -18,7 +18,7 @@ function BasketScreen(props) {
               {
                 text: 'Ok',
                 onPress: () => {
-                  console.log(`Removing item at index ${index} of the basket`)
+                  console.log(`Removing item at index ${index} of the basket. Bros too poor lmao`)
                   const newList = [...basketList];
                   newList.splice(index, 1);
                   setBasketList(newList);
@@ -56,7 +56,7 @@ function BasketScreen(props) {
                   <Text>&nbsp;</Text>
               </View>
             ))}
-            <View style={{width: '100%'}}><Button onPress= {() => console.log("Checkout button. Too broke to buy stuff yet")}>Checkout!</Button></View>
+            <View style={{width: '100%'}}><Button onPress= {() => console.log("Checkout button")}>Checkout!</Button></View>
           </ScrollView>
         </View>
         );
