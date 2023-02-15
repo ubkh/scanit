@@ -56,7 +56,7 @@ function BasketScreen(props) {
                   <Text>&nbsp;</Text>
               </View>
             ))}
-            <View style={{width: '100%'}}><Button onPress= {() => console.log("Checkout button")}>Checkout!</Button></View>
+            <View style={{width: '100%'}}><Button onPress= {() => console.log("Checkout button. Too broke to buy stuff yet")}>Checkout!</Button></View>
           </ScrollView>
         </View>
         );

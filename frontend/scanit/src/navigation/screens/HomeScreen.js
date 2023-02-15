@@ -35,7 +35,6 @@ function HomeScreen(props, route) {
     const { setRetailerScanned } = globalContext;
     const { retailerBarcodeData, retailerBarcodeType } = globalContext;
     const { setRetailerBarcodeData, setRetailerBarcodeType } = globalContext;
-    const [refresh, setRefresh] = useState(false); // Add a state variable to trigger re-render
 
     const resetRetailerBarcode = () => {
         globalContext.setRetailerScanned(false);
