@@ -12,6 +12,9 @@ function BarCodeScanComponent(props){
     const navigation = useNavigation();
     const globalContext = useContext(Context);
     const { basketList } = globalContext;
+    const { isRetailerScanned, setIsRetailerScanned } = globalContext;
+    const { retailerBarcodeData, retailerBarcodeType } = globalContext;
+    const { setRetailerBarcodeData, setRetailerBarcodeType } = globalContext;
 
     const askForCameraPermission = () => {
         (async () => {
@@ -28,7 +31,16 @@ function BarCodeScanComponent(props){
         setScanned(true);
         setText(data)
         console.log('Type: ' + type + '\nData: ' + data)
-        globalContext.setBasketList([...globalContext.basketList, { 'data': data, 'type': type }])
+        if (!isRetailerScanned) {
+          globalContext.setRetailerScanned(true)
+          console.log("Retailer Barcode Scanned!")
+          globalContext.setRetailerBarcodeData(data)
+          globalContext.setRetailerBarcodeType(type)
+        }
+        else {
+          globalContext.setBasketList([...globalContext.basketList, { 'data': data, 'type': type }])
+        }
+        
         navigation.navigate('HomeScreen', { data, type });
       };
     

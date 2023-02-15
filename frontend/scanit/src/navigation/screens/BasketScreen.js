@@ -18,7 +18,7 @@ function BasketScreen(props) {
               {
                 text: 'Ok',
                 onPress: () => {
-                  console.log(`Removing item at index ${index} of the basket`)
+                  console.log(`Removing item at index ${index} of the basket. Bros too poor lmao`)
                   const newList = [...basketList];
                   newList.splice(index, 1);
                   setBasketList(newList);
