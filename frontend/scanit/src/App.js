@@ -8,9 +8,7 @@ function App(props) {
   //console.log("Platform.OS: " + Platform.OS)
   // if (Platform.OS === 'web') {
   //   return (
-  //     <View style={styles.container}>
-  //       <Text>This section of ScanIt is not supported on web.</Text>
-  //     </View>
+  //     <Text>Hackerman456</Text>
   //   );
   // }
   return (

@@ -68,6 +68,10 @@ function HomeScreen(props, route) {
             <Button onPress={() => navigation.navigate('BarCodeScanComponent')}
                 title="Scan Retailer Barcode!" disabled={isRetailerScanned}>
             </Button>
+
+            <Button onPress={() => navigation.navigate('ItemLoader')}
+                title="Item Loader">
+            </Button>
             {isRetailerScanned ?
                 <View> 
                     <TouchableOpacity onPress={() => {

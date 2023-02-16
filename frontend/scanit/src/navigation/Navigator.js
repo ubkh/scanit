@@ -8,6 +8,7 @@ import BarCodeScanComponent from '../components/BarCodeScanComponent';
 import { Ionicons } from '@expo/vector-icons';
 import { Alert, TouchableOpacity } from 'react-native';
 import HeaderButtonStyle from '../styles/HeaderButtonStyle';
+import ItemLoader from '../components/ItemLoader';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -18,6 +19,7 @@ function HomeStack(props) {
       <Stack.Screen name="HomeScreen" component={HomeScreen} options={{headerShown: false}} />
       <Stack.Screen name="Basket" component={BasketScreen} options={{tabBarVisible: false}} />
       <Stack.Screen name="BarCodeScanComponent" component={BarCodeScanComponent} options={{headerTitle: ""}}/>
+      <Stack.Screen name="ItemLoader" component={ItemLoader}/>
     </Stack.Navigator>
   );
 }
