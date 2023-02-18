@@ -1,11 +1,15 @@
 import { View } from "react-native";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Button, Text, Input } from "@rneui/base";
 import CurrencyInput from "react-native-currency-input";
 import { Formik } from "formik";
+import { Context } from "../GlobalContext";
 
 function StoreAddItemForm(props) {
   // const [values, setValues] = useState(null);
+  const globalContext = useContext(Context);
+  const { domain } = globalContext;
+  const errorStyle = { color: "#c20808" };
 
   const validateForm = (values) => {
     const errors = {};
@@ -24,7 +28,7 @@ function StoreAddItemForm(props) {
 
     if (!values.price) {
       errors.price = "Required";
-    } else if (!/^[0-9.]+/i.test(values.price)) {
+    } else if (!/^[0-9.]+/i.test(values.price) || values.price === "0") {
       errors.price = "Invalid price";
     }
 
@@ -55,7 +59,19 @@ function StoreAddItemForm(props) {
     return errors;
   };
 
-  const errorStyle = { color: "#c20808" };
+  async function submitHandler(values) {
+    console.log(`price = ${values.price}`);
+    const jsonObj = JSON.stringify({
+      ...values,
+      price: Math.ceil(parseFloat(values.price) * 100), // some inputs like "300.09" becomes 30008.9999999 for some reason, hence Math.ceil
+      quantity: parseInt(values.quantity),
+    });
+    await fetch(`http://${domain}/api/store-add-item/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: jsonObj,
+    });
+  }
 
   return (
     <Formik
@@ -67,7 +83,7 @@ function StoreAddItemForm(props) {
         expiry: "",
         barcode: "",
       }}
-      onSubmit={(vals) => console.log(vals)}
+      onSubmit={(vals) => submitHandler(vals)}
       validate={validateForm}
     >
       {({
@@ -77,6 +93,7 @@ function StoreAddItemForm(props) {
         values,
         errors,
         touched,
+        isSubmitting,
       }) => (
         <View>
           <Text>Please fill in the details of the item.</Text>
@@ -169,7 +186,11 @@ function StoreAddItemForm(props) {
             maxLength={13}
           />
 
-          <Button title={"Add item"} onPress={handleSubmit} />
+          <Button
+            title={"Add item"}
+            onPress={handleSubmit}
+            disabled={isSubmitting}
+          />
         </View>
       )}
     </Formik>

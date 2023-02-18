@@ -1,10 +1,12 @@
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest, HttpResponseServerError
 from django.views.decorators.csrf import csrf_exempt
+from django.core.exceptions import ValidationError
 
-from .models import Test
+from .models import Test, Product
 from .serializers import TestSerializer
 from rest_framework import generics
+import json
 
 # Create your views here.
 def main(request):
@@ -24,3 +26,17 @@ class TestCreateView(generics.CreateAPIView):
 class TestGetListView(generics.ListAPIView):
     queryset = Test.objects.all()
     serializer_class = TestSerializer
+
+@csrf_exempt
+def storeAddItem(request):
+    productData = json.loads(request.body)
+    try:
+        # Same product with same expiry date and retailer is in the db, i.e: same batch. Update quantity and do not create new entries.
+        # if (Product.objects.get(barcode = productData['barcode'], expiry = productData['expiry'], retailer = RETAILER_ID)):
+        #     pass
+        Product.objects.create(**productData)
+        return HttpResponse(status=200)
+    except ValidationError:
+        return HttpResponseBadRequest()
+    except:
+        return HttpResponseServerError()
