@@ -1,16 +1,14 @@
-
-from django.urls import re_path
-from rest_framework.authtoken.views import obtain_auth_token
-from .views import CreateUserAPIView, LogoutUserAPIView
+from django.urls import path
+from .views import (
+	UserRegistrationAPIView,
+	UserLoginAPIView,
+	UserViewAPI,
+	UserLogoutViewAPI
+)
 
 urlpatterns = [
-    re_path(r'^auth/login/$',
-        obtain_auth_token,
-        name='auth_user_login'),
-    re_path(r'^auth/register/$',
-        CreateUserAPIView.as_view(),
-        name='auth_user_create'),
-    re_path(r'^auth/logout/$',
-        LogoutUserAPIView.as_view(),
-        name='auth_user_logout')
+	path('user/register/', UserRegistrationAPIView.as_view()),
+	path('user/login/', UserLoginAPIView.as_view()),
+	path('user/', UserViewAPI.as_view()),
+	path('user/logout/', UserLogoutViewAPI.as_view()),
 ]

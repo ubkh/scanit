@@ -1,16 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useContext} from 'react';
 import { StyleSheet, Text, View, Image, useWindowDimensions } from 'react-native';
 import Logo from '../../../assets/ScanItLogo.png';
 import CustomInput from '../../components/CustomInput.js';
 import CustomButton from '../../components/CustomButton.js';
 import { useNavigation } from '@react-navigation/native';
+import { Context } from '../../GlobalContext.js';
 
 function SignInScreen(props) {
-    const[username, setUsername] = useState('');
+    const globalContext = useContext(Context)
+    const { setIsLogedIn, domain } = globalContext;
+ 
+    const[email, setEmail] = useState('');
     const[password, setPassword] = useState('');
 
     const{height} = useWindowDimensions();
     const navigation = useNavigation();
+
+    function handleLogin() {
+        let body = JSON.stringify({
+            'email': email.toLowerCase(),
+            'password': password
+        })
+
+        fetch(`${domain}/api/user/login/`,{
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json'
+            },
+            body:body
+        })
+        .then(res => {
+            if (res.ok) {
+                return res.json()
+            } else {
+                throw res.json()
+            }
+        })
+        .then(json => {
+            console.log('logged in')
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    }
 
     const onSignInPressed = () => {
         navigation.navigate('Home');
@@ -32,9 +64,9 @@ function SignInScreen(props) {
                 resizeMode="contain"
                 />
             
-            <CustomInput placeholder = "Username" value = {username} setValue = {setUsername}/>
+            <CustomInput placeholder = "Email" value = {email} setValue = {setEmail}/>
             <CustomInput placeholder = "Password" value = {password} setValue = {setPassword} secureTextEntry/>
-            <CustomButton text = "Sign In" onPress={onSignInPressed}/>
+            <CustomButton text = "Sign In" onPress={handleLogin}/>
             <CustomButton text = "Forgot Password?" onPress={onForgotPasswordPressed} type = "SECONDARY"/>
             <CustomButton text = "Dont have an account? Create one" onPress={onSignUpPressed} type = "TERTIARY"/>
         </View>

@@ -12,6 +12,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { Alert, TouchableOpacity } from 'react-native';
 import HeaderButtonStyle from '../styles/HeaderButtonStyle';
 import { NavigationContainer } from '@react-navigation/native';
+import { Context } from '../GlobalContext';
+import { useContext } from 'react';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -39,9 +41,14 @@ const SignInStack = () => {
 }
 
 function Navigator(props) {
+    const globalContext = useContext(Context)
+    const { isLoggedin } = globalContext;
+
     return (
-        <Tab.Navigator>
-            <Tab.Screen 
+        <Stack.Navigator>
+            {(!isLoggedin || !token)}
+            <Stack.Screen name="Sign In" component={SignInStack} options={{ headerShown: false}}/>
+            <Stack.Screen 
                 name="Home"
                 component={HomeStack} 
                 options={{
@@ -69,15 +76,7 @@ function Navigator(props) {
                     ),
                   }}
             />
-            <Tab.Screen 
-              name="Sign In" 
-              component={SignInStack}
-              options={{
-                tabBarIcon: ({ color, size }) => (
-                    <Ionicons name="settings-outline" color={color} size={size} />
-                ),
-              }} />
-        </Tab.Navigator>
+        </Stack.Navigator>
     )
 }
 

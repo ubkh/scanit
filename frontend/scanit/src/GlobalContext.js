@@ -6,6 +6,7 @@ export const Context = createContext();
 export default function ContextProvider(props) {
     const [ domain, setDomain ] = useState(DJANGO);
     const [ isLoggedIn, setIsLoggedIn ] = useState(false)
+    const [ token, setToken ] = useState()
     const [barcodeData, setBarcodeData] = useState("empty")
     const[barcodeType, setBarcodeType] = useState("empty")
 
@@ -15,7 +16,9 @@ export default function ContextProvider(props) {
     const globalContext = {
         domain,
         isLoggedIn,
-        setIsLoggedIn
+        setIsLoggedIn,
+        token,
+        setToken
     }
 
     return (

@@ -1,20 +1,21 @@
 # Translates models into JSON objects
-
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
-class CreateUserSerializer(serializers.ModelSerializer):
-    username = serializers.CharField()
-    password = serializers.CharField(write_only = True,
-                                    style = {'input_type': 'pasword'})
-    class Meta:
-        model = get_user_model()
-        fields = ('username', 'password', 'first_name', 'last_name')
-        write_only_fields = ('password')
-        read_only_fields = ('is_staff', 'is_superuser', 'is_active',)
+class UserRegistrationSerializer(serializers.ModelSerializer):
+	password = serializers.CharField(max_length=100, min_length=8, style={'input_type': 'password'})
+	class Meta:
+		model = get_user_model()
+		fields = ['email','first_name', 'last_name', 'password']
 
-    def create(self, validated_data):
-        user = super(CreateUserSerializer, self).create(validated_data)
-        user.set_password(validated_data['password'])
-        user.save()
-        return user
+	def create(self, validated_data):
+		user_password = validated_data.get('password', None)
+		db_instance = self.Meta.model(email=validated_data.get('email'), first_name=validated_data.get('first_name'), last_name=validated_data.get('last_name'))
+		db_instance.set_password(user_password)
+		db_instance.save()
+		return db_instance
+
+class UserLoginSerializer(serializers.Serializer):
+	email = serializers.CharField(max_length=100)
+	password = serializers.CharField(max_length=100, min_length=8, style={'input_type': 'password'})
+	token = serializers.CharField(max_length=255, read_only=True)
