@@ -9,13 +9,13 @@ class Test(models.Model):
     text = models.CharField(max_length=100)
 
 class Product(models.Model):
-    retailerID = models.PositiveIntegerField()
-    barcodeID = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=750, blank=True)
-    price = models.PositiveIntegerField(validators=[MinValueValidator(0)]) # accepts ints too. max price is 999.99
+    price = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     expiry = models.DateField()
+    barcode = models.CharField(max_length=20)
+    # retailer = models.ForeignKey(on_delete= models.CASCADE)
 
     def is_expiry_date_past(self):
         if self.expiry < datetime.date.today(): return True
