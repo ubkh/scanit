@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.core.validators import RegexValidator
 
 
 class CustomUserManager(BaseUserManager):
@@ -32,10 +33,13 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+	phone_regex = RegexValidator(regex=r'^\0?1?\d{11}$', message="Phone number must have 11 digits.")
+
 	user_id = models.AutoField(primary_key=True)
 	email = models.EmailField(max_length=100, unique=True)
 	first_name = models.CharField(max_length=32)
 	last_name = models.CharField(max_length=32)
+	number = models.CharField(validators=[phone_regex], max_length=11, blank=True)
 	is_active = models.BooleanField(default=True)
 	is_staff = models.BooleanField(default=False)
 	date_joined = models.DateField(auto_now_add=True)

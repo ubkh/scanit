@@ -8,21 +8,22 @@ import { Context } from '../../GlobalContext.js';
 
 function SignInScreen(props) {
     const globalContext = useContext(Context)
-    const { setIsLogedIn, domain } = globalContext;
+    const { setIsLoggedIn, domain, userObj, setUserObj, setToken } = globalContext;
  
     const[email, setEmail] = useState('');
     const[password, setPassword] = useState('');
+    const[ error, setError ] = useState('');
 
     const{height} = useWindowDimensions();
     const navigation = useNavigation();
 
-    function handleLogin() {
+    function onLoginPressed() {
         let body = JSON.stringify({
             'email': email.toLowerCase(),
             'password': password
         })
 
-        fetch(`${domain}/api/user/login/`,{
+        fetch(`http://192.168.1.253:8000/api/user/login/`,{
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json'
@@ -33,26 +34,26 @@ function SignInScreen(props) {
             if (res.ok) {
                 return res.json()
             } else {
+                setError('Invalid credentials')
                 throw res.json()
             }
         })
         .then(json => {
-            console.log('logged in')
+            setUserObj(json)
+            setToken(json.token)
+            setIsLoggedIn(true)
+            navigation.navigate('Home');
         })
         .catch(error => {
             console.log(error)
         })
     }
-
-    const onSignInPressed = () => {
-        navigation.navigate('Home');
-    }
       
-      const onForgotPasswordPressed = () => {
+    const onForgotPasswordPressed = () => {
         navigation.navigate('ForgotPassword')
     }
       
-      const onSignUpPressed = () => {
+    const onSignUpPressed = () => {
         navigation.navigate('SignUp')
     }
 
@@ -66,7 +67,8 @@ function SignInScreen(props) {
             
             <CustomInput placeholder = "Email" value = {email} setValue = {setEmail}/>
             <CustomInput placeholder = "Password" value = {password} setValue = {setPassword} secureTextEntry/>
-            <CustomButton text = "Sign In" onPress={handleLogin}/>
+            <Text style={styles.errorLabel }>{error}</Text>
+            <CustomButton text = "Sign In" onPress={onLoginPressed}/>
             <CustomButton text = "Forgot Password?" onPress={onForgotPasswordPressed} type = "SECONDARY"/>
             <CustomButton text = "Dont have an account? Create one" onPress={onSignUpPressed} type = "TERTIARY"/>
         </View>
@@ -85,6 +87,11 @@ const styles = StyleSheet.create({
         maxWidth: 300,
         maxHeight: 200,
     },
+    errorLabel: {
+        width: "100%",
+        textAlign: "center",
+        color: "red",
+    }
 });
 
 export default SignInScreen;

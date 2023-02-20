@@ -42,13 +42,13 @@ const SignInStack = () => {
 
 function Navigator(props) {
     const globalContext = useContext(Context)
-    const { isLoggedin } = globalContext;
+    const { isLoggedin, userObj } = globalContext;
 
     return (
-        <Stack.Navigator>
-            {(!isLoggedin || !token)}
-            <Stack.Screen name="Sign In" component={SignInStack} options={{ headerShown: false}}/>
-            <Stack.Screen 
+        <Tab.Navigator>
+            {(!isLoggedin || !userObj)}
+            <Tab.Screen name="Sign In" component={SignInStack} options={{ headerShown: false}}/>
+            <Tab.Screen 
                 name="Home"
                 component={HomeStack} 
                 options={{
@@ -76,7 +76,7 @@ function Navigator(props) {
                     ),
                   }}
             />
-        </Stack.Navigator>
+        </Tab.Navigator>
     )
 }
 

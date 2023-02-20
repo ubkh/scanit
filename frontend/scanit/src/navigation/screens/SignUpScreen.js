@@ -6,15 +6,49 @@ import CustomButton from '../../components/CustomButton.js';
 import { useNavigation } from '@react-navigation/native';
 
 function SignUpScreen(props) {
-    const[username, setUsername] = useState('');
+    const[firstName, setFirstName] = useState('');
+    const[lastName, setLastName] = useState('');
     const[email, setEmail] = useState('');
     const[number, setNumber] = useState('');
     const[password, setPassword] = useState('');
     const[confirmPassword, setConfirmPassword] = useState('');
+    const[error, setError] = useState('');
 
     const navigation = useNavigation();
 
     const onRegisterPressed = () => {
+        let body = JSON.stringify({
+            'email': email.toLowerCase(),
+            'first_name': firstName,
+            'last_name': lastName,
+            'number': number,
+            'password': password
+        })
+
+        fetch(`http://192.168.1.253:8000/api/user/register/`,{
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json'
+            },
+            body:body
+        })
+        .then(res => {
+            if (res.ok) {
+                return res.json()
+            } else {
+                setError('user already exists')
+                throw res.json()
+            }
+        })
+        .then(json => {
+            setUserObj(json)
+            setToken(json.token)
+            setIsLoggedIn(true)
+            navigation.navigate('Home');
+        })
+        .catch(error => {
+            console.log(error)
+        })
         navigation.navigate('Verification');
     }
     
@@ -34,11 +68,12 @@ function SignUpScreen(props) {
         <View style={styles.container}>
             <Text style={styles.title}>Create an account</Text>
             
-            <CustomInput placeholder = "Username" value = {username} setValue = {setUsername}/>
+            <CustomInput placeholder = "First name" value = {firstName} setValue = {setFirstName}/>
+            <CustomInput placeholder = "Last name" value = {lastName} setValue = {setLastName}/>
             <CustomInput placeholder = "Email" value = {email} setValue = {setEmail}/>
             <CustomInput placeholder = "Phone number" value = {number} setValue = {setNumber}/>
             <CustomInput placeholder = "Password" value = {password} setValue = {setPassword} secureTextEntry/>
-            <CustomInput placeholder = "Confirm password" value = {confirmPassword} setValue = {setConfirmPassword} secureTextEntry/>
+            {/* <CustomInput placeholder = "Confirm password" value = {confirmPassword} setValue = {setConfirmPassword} secureTextEntry/> */}
             <CustomButton text = "Register" onPress={onRegisterPressed}/>
             <Text style = {styles.text}>
                 By registering, you confirm that you accept our <Text style = {styles.link} onPress = {onTOUPressed}>Terms of Use</Text> and <Text style = {styles.link} onPress = {onPPPressed}>Privacy Policy</Text>

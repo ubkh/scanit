@@ -1,11 +1,17 @@
 import React, { useEffect, useState, useRef, createContext } from 'react';
-import { DJANGO } from '@env'
+import { DJANGO } from '@env';
+import * as SecureStore from 'expo-secure-store';
 
 export const Context = createContext();
+
+const setToken = async(token) => {
+    await SecureStore.setItemAsync('token', token);
+}
 
 export default function ContextProvider(props) {
     const [ domain, setDomain ] = useState(DJANGO);
     const [ isLoggedIn, setIsLoggedIn ] = useState(false)
+    const [ userObj, setUserObj ] = useState()
     const [ token, setToken ] = useState()
     const [barcodeData, setBarcodeData] = useState("empty")
     const[barcodeType, setBarcodeType] = useState("empty")
@@ -18,7 +24,10 @@ export default function ContextProvider(props) {
         isLoggedIn,
         setIsLoggedIn,
         token,
-        setToken
+        setToken,
+        userObj,
+        setUserObj,
+        setToken,
     }
 
     return (
