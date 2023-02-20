@@ -3,13 +3,15 @@ from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 import datetime
+import barcode
+from barcode.writer import ImageWriter
 
 # Create your models here.
 class Test(models.Model):
     text = models.CharField(max_length=100)
 
 class Product(models.Model):
-    retailerID = models.PositiveIntegerField()
+    retailerID = models.PositiveIntegerField() # this should be a foreign key to the retailer account
     barcodeID = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=750, blank=True)
@@ -41,11 +43,21 @@ class Product(models.Model):
     
 
 # class RetailerAccount(UserAccount):
-#     retailerID = models.PositiveIntegerField()
-#     retailBarcode = models.CharField()
+#     barcode = models.CharField(max_length=100, unique=True, null=True, blank=True)
 #     shop_address = models.CharField()
 #     payment_method = models.CharField()
 #     balance = models.DecimalField()
+
+#     # UNCOMMENT WHEN READY TO IMPLEMENT RETAILER ACCOUNTS
+#     def save(self, *args, **kwargs):
+#         if not self.barcode:
+#             # Generate unique barcode
+#             ean = barcode.get_barcode_class('ean13')
+#             value = "8" + "0" * (12 - len(str(self.id))) + str(self.id)
+#             self.barcode = ean(value, writer=ImageWriter()).get_fullcode()
+
+#         super().save(*args, **kwargs)
+
 
     
 # class CustomerAccount(UserAccount):
