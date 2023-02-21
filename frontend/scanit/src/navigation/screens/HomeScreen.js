@@ -2,7 +2,7 @@ import { View, Platform, TouchableOpacity, Alert } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useState, useContext, useEffect } from 'react';
 import { useNavigation, useRoute } from'@react-navigation/native';
-import { Button, Text } from '@rneui/base';
+import { Button, Text, Heading } from 'native-base';
 import { Context } from '../../GlobalContext';
 import ContainerStyle from '../../styles/ContainerStyle';
 
@@ -51,6 +51,8 @@ function HomeScreen(props, route) {
 
     return (
         <View style={ContainerStyle.container}>
+            <Heading size="lg" fontSize={30} bold justifyContent="left">Home</Heading>
+            <Text style={{ fontFamily: 'Rubik-Bold' }}>This is some test text!</Text>
             {isRetailerScanned ?
                 <View style={{justifyContent: 'flex-start', padding: 20,}}> 
                 <Text style={{fontWeight: 'bold'}}>
@@ -61,12 +63,13 @@ function HomeScreen(props, route) {
             }
             <Text>{sampleText}</Text>
             <Text>&nbsp;</Text>
-            <Button onPress={() => getTestList(setSampleText, domain)}
-                title="GET data">
+            <Button onPress={() => getTestList(setSampleText, domain)} bg="brand.400">
+                GET data
             </Button>
             <Text>&nbsp;</Text>
             <Button onPress={() => navigation.navigate('BarCodeScanComponent')}
-                title="Scan Retailer Barcode!" disabled={isRetailerScanned}>
+                disabled={isRetailerScanned} shadow={2} bg="brand.400">
+                Scan Retailer Barcode!
             </Button>
             {isRetailerScanned ?
                 <View> 

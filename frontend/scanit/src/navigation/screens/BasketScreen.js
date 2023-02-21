@@ -2,7 +2,7 @@ import { View, ScrollView, Platform, TouchableOpacity, StyleSheet, Alert } from 
 import { StatusBar } from 'expo-status-bar';
 import { useState, useContext, useEffect } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { Button, Text } from '@rneui/base';
+import { Button, Text } from 'native-base';
 import { Context } from '../../GlobalContext';
 import ContainerStyle from '../../styles/ContainerStyle';
 
