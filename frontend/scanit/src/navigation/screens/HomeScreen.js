@@ -44,10 +44,10 @@ function HomeScreen(props, route) {
         console.log("Reset retailer and basket")
     };
 
-    console.log(data);
-    console.log(type);
+    console.log(`Most recent barcode data: ${data}`);
+    console.log(`Most recent barcode type: ${type}`);
     console.log(basketList);
-    console.log(isRetailerScanned);
+    console.log(`Has retailer been scanned? ${isRetailerScanned}`);
 
     return (
         <View style={ContainerStyle.container}>
