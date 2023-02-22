@@ -33,7 +33,7 @@ function Navigator(props) {
   const BasketIconWithBadge = withBadge(basketList.length, {
     badgeStyle: {backgroundColor: 'red'},
     textStyle: {color: 'white'},
-  }) (Ionicons); // wrapping the Ionicons with the high order function to add number badge
+  }) (Ionicons); // wrapping the Ionicons component with the high order function to add number badge
 
   function renderBasketIconWithBadge(color, size) {
     if (basketList.length > 0) {
