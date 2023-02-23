@@ -19,7 +19,7 @@ const validateForm = (values) => {
 
   if (!values.quantity) {
     errors.quantity = "Required";
-  } else if (!/^[0-9]+/i.test(values.quantity)) {
+  } else if (/\b0+/i.test(values.quantity)) {
     errors.quantity = "Invalid quantity";
   }
 
@@ -37,8 +37,8 @@ const validateForm = (values) => {
 
   if (!values.barcode) {
     errors.barcode = "Required";
-  } else if (!/[0-9]+/i.test(values.barcode)) {
-    errors.barcode = "Invalid barcode number";
+  } else if (values.barcode.length > 13) {
+    errors.barcode = "Must be 13 or less";
   }
 
   return errors;
