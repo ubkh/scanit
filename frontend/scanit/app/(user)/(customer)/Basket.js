@@ -2,8 +2,8 @@ import { View, ScrollView, Platform, TouchableOpacity, StyleSheet, Alert, Toucha
 import { useState, useContext, useEffect } from 'react';
 // import { useNavigation, useRoute } from '@react-navigation/native';
 import { Button, Text } from 'native-base';
-import { Context } from '../../context/GlobalContext';
-import ContainerStyle from '../../styles/ContainerStyle';
+import { Context } from '../../../context/GlobalContext';
+import ContainerStyle from '../../../styles/ContainerStyle';
 import { Ionicons } from '@expo/vector-icons';
 
 function Basket(props) {

@@ -2,8 +2,8 @@ import { Slot, Navigator, Tabs } from "expo-router";
 import React, { useState, useEffect, useContext } from "react";
 import { useWindowDimensions, Platform } from "react-native";
 import { TabRouter } from "@react-navigation/native";
-import NavBarComponent from "../../components/NavBarComponent";
-import { Context } from "../../context/GlobalContext";
+import NavBarComponent from "../../../components/NavBarComponent";
+import { Context } from "../../../context/GlobalContext";
 import { Ionicons } from '@expo/vector-icons';
 
 const links = [
@@ -68,14 +68,12 @@ export default function CustomerLayout() {
                         ),
                     }}>
                 </Tabs.Screen>
-                {/* There might be a better way of doing this */}
-                {/* Maybe using initialRouteName? */}
-                <Tabs.Screen 
+                {/* <Tabs.Screen 
                     name="index"
                     options={{
                         tabBarButton: () => null,
                     }}>
-                </Tabs.Screen>
+                </Tabs.Screen> */}
             </Tabs>
     )
   }

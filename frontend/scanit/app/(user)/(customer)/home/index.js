@@ -1,10 +1,10 @@
 import { View, Text, Button, Box, Heading, StatusBar } from 'native-base';
-import { useAuth } from '../../../context/AuthContext';
-import { Link, useRouter, useSearchParams } from "expo-router";
+import { useAuth } from '../../../../context/AuthContext';
+import { Link, useRouter, useSearchParams, Redirect } from "expo-router";
 import { useState, useContext } from 'react';
 import { TouchableOpacity, Alert } from 'react-native';
-import { Context } from '../../../context/GlobalContext';
-import ContainerStyle from '../../../styles/ContainerStyle';
+import { Context } from '../../../../context/GlobalContext';
+import ContainerStyle from '../../../../styles/ContainerStyle';
 
 function getTestList(setSampleText, domain) {
     return fetch(`http://${domain}/api/list`, {
@@ -23,12 +23,19 @@ function getTestList(setSampleText, domain) {
 }
 
 function Home() {
+    const globalContext = useContext(Context);
+    const userType = globalContext.userType;
+    // This is temporary until we find a better way to deal w this
+    if (userType === "retailer") {
+        return <Redirect href="/(retailer)/home" />
+    }
+    //
+
     const [sampleText, setSampleText] = useState("Hello, World!");
     //route = useRoute();
     const router = useRouter();
     const params = useSearchParams();
     const {data, type} = params || {};
-    const globalContext = useContext(Context);
     //const navigation = useNavigation();
     const { domain } = globalContext;
     const { basketList } = globalContext;

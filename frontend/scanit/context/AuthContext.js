@@ -4,10 +4,12 @@ import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 
 const AuthContext = React.createContext(null);
 
+// This hook can be used to access the user info.
 export function useAuth() {
   return React.useContext(AuthContext);
 }
 
+// This hook will protect the route access based on user authentication.
 function useProtectedRoute(user) {
   const rootSegment = useSegments()[0];
   const router = useRouter();
@@ -24,7 +26,7 @@ function useProtectedRoute(user) {
     ) {
       // Redirect to the sign-in page.
       router.replace("/login");
-    } else if (user && rootSegment !== "(customer)") {
+    } else if (user && rootSegment !== "(user)") {
       // Redirect away from the sign-in page.
       router.replace("/");
     }

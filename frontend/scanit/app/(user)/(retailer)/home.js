@@ -1,15 +1,15 @@
 import { View, Text, Button, Box, Heading, StatusBar } from 'native-base';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../../context/AuthContext';
 import { Link, useRouter, useSearchParams } from "expo-router";
 import { useState, useContext } from 'react';
-import { Context } from '../../context/GlobalContext';
-import ContainerStyle from '../../styles/ContainerStyle';
+import { Context } from '../../../context/GlobalContext';
+import ContainerStyle from '../../../styles/ContainerStyle';
 
 function Retailer() {
     return (
         <View style={ContainerStyle.container}>
             <Heading size="lg" fontSize={30} bold justifyContent="left">Home</Heading>
-            <Text style={{ fontFamily: 'Rubik-Bold' }}>This is some test text!</Text>
+            <Text style={{ fontFamily: 'Rubik-Bold' }}>You are in the retailer home!</Text>
             <LogOutButton />
         </View>
     );
