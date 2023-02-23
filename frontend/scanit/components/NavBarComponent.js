@@ -1,8 +1,10 @@
 import React from 'react';
-import { Link } from 'expo-router';
+import { Link, usePathname } from 'expo-router';
 import { View, Box, HStack, Text, IconButton, Icon, Flex, Divider, Button } from 'native-base';
 
 const NavBarComponent = ({ links, isSmallScreen }) => {
+  const pathname = usePathname();
+  
   return (
     <View>
       <Box safeAreaTop bg="white" />
@@ -26,6 +28,7 @@ const NavBarComponent = ({ links, isSmallScreen }) => {
         </HStack>
         {isSmallScreen ? (
           <HStack alignItems="center">
+            {/* This doesn't do anything yet, just an icon! Maybe add drawer functionality here? */}
             <IconButton
               icon={<Icon size="sm" as={MaterialIcons} name="menu" color="white" />}
             />
@@ -35,7 +38,11 @@ const NavBarComponent = ({ links, isSmallScreen }) => {
             <Flex direction="row" h="9" p="2">
               {links.map((link, index) => (
                 <React.Fragment key={index}>
-                  <Link href={link.url}>{link.label}</Link>
+                  <Link 
+                    href={link.url}
+                    style={[pathname === link.url && { fontWeight: 'bold' }]}>
+                      {link.label}
+                  </Link>
                   {index !== links.length - 1 && (
                     <Divider bg="brand.400" thickness="2" mx="2" orientation="vertical" />
                   )}

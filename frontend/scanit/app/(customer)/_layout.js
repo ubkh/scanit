@@ -7,7 +7,7 @@ import { Context } from "../../context/GlobalContext";
 import { Ionicons } from '@expo/vector-icons';
 
 const links = [
-    { label: 'Home', url: '/' },
+    { label: 'Home', url: '/home' },
     { label: 'Basket', url: '/Basket' },
     { label: 'Another', url: '/Another' },
 ];
@@ -81,12 +81,10 @@ export default function CustomerLayout() {
   }
   return (
     // Setup the auth context and render our layout inside of it.
-    <ContextProvider>
-        <Navigator router={TabRouter}>
-            <NavBarComponent links={ links } isSmallScreen={ isSmallScreen } />
-            <Slot />
-        </Navigator>
-    </ContextProvider>
+    <Navigator router={TabRouter}>
+        <NavBarComponent links={ links } isSmallScreen={ isSmallScreen } />
+        <Slot />
+    </Navigator>
   );
 }
 
