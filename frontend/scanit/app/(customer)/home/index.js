@@ -6,6 +6,22 @@ import { TouchableOpacity, Alert } from 'react-native';
 import { Context } from '../../../context/GlobalContext';
 import ContainerStyle from '../../../styles/ContainerStyle';
 
+function getTestList(setSampleText, domain) {
+    return fetch(`http://${domain}/api/list`, {
+            method: 'GET'
+        })
+        .then((response) => response.json())
+        .then((json) => {
+            console.log(json);
+            setSampleText(json[0].text);
+            return json;
+        })
+        .catch((error) => {
+            console.error(error);
+        }
+    );
+}
+
 function Home() {
     const [sampleText, setSampleText] = useState("Hello, World!");
     //route = useRoute();
