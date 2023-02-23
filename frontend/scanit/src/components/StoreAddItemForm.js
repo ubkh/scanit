@@ -4,6 +4,7 @@ import { Button, Text, Input } from "@rneui/base";
 import CurrencyInput from "react-native-currency-input";
 import { Formik } from "formik";
 import { Context } from "../GlobalContext";
+import validateForm from "./forms-validations/storeAddItemValidation";
 
 function StoreAddItemForm(props) {
   // const [values, setValues] = useState(null);
@@ -11,56 +12,7 @@ function StoreAddItemForm(props) {
   const { domain } = globalContext;
   const errorStyle = { color: "#c20808" };
 
-  const validateForm = (values) => {
-    const errors = {};
-
-    if (!values.name) {
-      errors.name = "Required";
-    } else if (values.name.length > 100) {
-      errors.name = "Must be 100 characters or less";
-    }
-
-    if (!values.description) {
-      errors.description = "Required";
-    } else if (values.description.length > 750) {
-      errors.description = "Must be 750 characters or less";
-    }
-
-    if (!values.price) {
-      errors.price = "Required";
-    } else if (!/^[0-9.]+/i.test(values.price) || values.price === "0") {
-      errors.price = "Invalid price";
-    }
-
-    if (!values.quantity) {
-      errors.quantity = "Required";
-    } else if (!/^[0-9]+/i.test(values.quantity)) {
-      errors.quantity = "Invalid quantity";
-    }
-
-    if (!values.expiry) {
-      errors.expiry = "Required";
-    } else if (
-      !/((?:20|21)[0-9][0-9])\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])/i.test(
-        values.expiry
-      )
-    ) {
-      errors.expiry = "Invalid expiry date";
-    } else if (new Date(values.expiry) < new Date()) {
-      errors.expiry = "Expiry date cannot be in the past";
-    }
-
-    if (!values.barcode) {
-      errors.barcode = "Required";
-    } else if (!/[0-9]+/i.test(values.barcode)) {
-      errors.barcode = "Invalid barcode number";
-    }
-
-    return errors;
-  };
-
   async function submitHandler(values) {
-    console.log(`price = ${values.price}`);
     const jsonObj = JSON.stringify({
       ...values,
       price: Math.ceil(parseFloat(values.price) * 100), // some inputs like "300.09" becomes 30008.9999999 for some reason, hence Math.ceil
