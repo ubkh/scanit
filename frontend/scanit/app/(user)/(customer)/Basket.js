@@ -1,13 +1,12 @@
 import { View, ScrollView, Platform, TouchableOpacity, StyleSheet, Alert, TouchableHighlight } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import { useState, useContext, useEffect } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { Button, Text } from '@rneui/base';
-import { Context } from '../../GlobalContext';
-import ContainerStyle from '../../styles/ContainerStyle';
+// import { useNavigation, useRoute } from '@react-navigation/native';
+import { Button, Text } from 'native-base';
+import { Context } from '../../../context/GlobalContext';
+import ContainerStyle from '../../../styles/ContainerStyle';
 import { Ionicons } from '@expo/vector-icons';
 
-function BasketScreen(props) {
+function Basket(props) {
     const { basketList, setBasketList } = useContext(Context);
     const [basketItems, setBasketItems] = useState(<Text> Your basket is empty </Text>);
 
@@ -56,7 +55,7 @@ function BasketScreen(props) {
                         >
                           <View
                             style={{
-                              backgroundColor: '#ba190d',
+                              backgroundColor: 'red',
                               borderRadius: 20,
                               padding: 10,
                             }}
@@ -73,13 +72,11 @@ function BasketScreen(props) {
                   <Text>&nbsp;</Text>
               </View>
             ))}
-            <View style={{ flex: 1, justifyContent: 'center' }}>
-              <View style={{width: '90%', alignSelf: "center"}}>
-                <Button onPress= {() => console.log("Checkout button")}>
-                  <Text style={{fontWeight: "bold", color: "white", fontSize: 25}}>Checkout!</Text>
+            <View style={{width: '90%', alignSelf: "center"}}>
+                <Button shadow={2} bg="brand.400" style={{ marginBottom: 10 }}onPress= {() => console.log("Checkout button")}>
+                  <Text style={{fontWeight: "bold", color: "white", fontSize: 20}}>Checkout!</Text>
                 </Button>
               </View>
-            </View>
           </ScrollView>
         </View>
         );
@@ -149,4 +146,4 @@ function BasketScreen(props) {
 //   }
 // };
 
-export default BasketScreen;
+export default Basket;
