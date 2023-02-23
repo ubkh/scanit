@@ -154,3 +154,14 @@ JWT_AUTH = {
 AUTH_USER_MODEL = 'api.User'
 
 SECURE_SSL_REDIRECT = False
+
+# Email backend settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com' # SMTP server address for your email provider
+EMAIL_PORT = 587 # SMTP server port for your email provider
+EMAIL_USE_TLS = True # Use TLS when connecting to the SMTP server
+EMAIL_HOST_USER = 'cr7isdabest11@gmail.com' # Your email address
+EMAIL_HOST_PASSWORD = 'xaxvriclzexvjauv' # Your email password or app password if 2FA is enabled
+
+# Default "from" address for sending emails
+DEFAULT_FROM_EMAIL = 'ScanIt cr7isdabest11@gmail.com'

@@ -2,14 +2,42 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, useWindowDimensions } from 'react-native';
 import CustomInput from '../../components/CustomInput.js';
 import CustomButton from '../../components/CustomButton.js';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 function VerificationScreen(props) {
     const[code, setCode] = useState('');
+    const[ error, setError ] = useState('');
+
+    const route = useRoute();
+    const { user_id } = route.params;
     const navigation = useNavigation();
 
     const onConfirmPressed = () => {
-        navigation.navigate('Home');
+        let body = JSON.stringify({
+            'verification_code': code
+        })
+
+        fetch(`http://192.168.1.253:8000/api/user/verify/${user_id}/`,{
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json'
+            },
+            body:body
+        })
+        .then(res => {
+            if (res.ok) {
+                return res.json()
+            } else {
+                throw res.json()
+            }
+        })
+        .then(json => {
+            console.log("successfully verified!")
+            navigation.navigate('SignIn');
+        })
+        .catch(error => {
+            console.log(error)
+        })
     }
     
     const onSignInPressed = () => {

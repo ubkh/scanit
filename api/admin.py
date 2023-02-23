@@ -4,4 +4,4 @@ from .models import User
 
 @admin.register(User)
 class Users(admin.ModelAdmin):
-    list_display = ["user_id", "email", "first_name","last_name", "number"]
+    list_display = ["user_id", "email", "first_name","last_name", "number","is_verified", "verification_code"]

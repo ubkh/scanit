@@ -11,7 +11,7 @@ const setToken = async(token) => {
 export default function ContextProvider(props) {
     const [ domain, setDomain ] = useState(DJANGO);
     const [ isLoggedIn, setIsLoggedIn ] = useState(false)
-    const [ userObj, setUserObj ] = useState()
+    const [ userID, setUserID ] = useState()
     const [ token, setToken ] = useState()
     const [barcodeData, setBarcodeData] = useState("empty")
     const[barcodeType, setBarcodeType] = useState("empty")
@@ -25,8 +25,8 @@ export default function ContextProvider(props) {
         setIsLoggedIn,
         token,
         setToken,
-        userObj,
-        setUserObj,
+        userID,
+        setUserID,
         setToken,
     }
 

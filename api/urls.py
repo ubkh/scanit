@@ -3,7 +3,8 @@ from .views import (
 	UserRegistrationAPIView,
 	UserLoginAPIView,
 	UserViewAPI,
-	UserLogoutViewAPI
+	UserLogoutViewAPI,
+	UserVerificationAPIView
 )
 
 urlpatterns = [
@@ -11,4 +12,5 @@ urlpatterns = [
 	path('user/login/', UserLoginAPIView.as_view()),
 	path('user/', UserViewAPI.as_view()),
 	path('user/logout/', UserLogoutViewAPI.as_view()),
+	path('user/verify/<int:user_id>/', UserVerificationAPIView.as_view(), name='verify'),
 ]

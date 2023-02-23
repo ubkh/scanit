@@ -8,7 +8,7 @@ import { Context } from '../../GlobalContext.js';
 
 function SignInScreen(props) {
     const globalContext = useContext(Context)
-    const { setIsLoggedIn, domain, userObj, setUserObj, setToken } = globalContext;
+    const { setIsLoggedIn, domain, userID, setUserID, setToken } = globalContext;
  
     const[email, setEmail] = useState('');
     const[password, setPassword] = useState('');
@@ -39,7 +39,6 @@ function SignInScreen(props) {
             }
         })
         .then(json => {
-            setUserObj(json)
             setToken(json.token)
             setIsLoggedIn(true)
             navigation.navigate('Home');

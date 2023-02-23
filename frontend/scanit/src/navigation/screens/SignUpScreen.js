@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, View, Image, useWindowDimensions } from 'react-native';
 import Logo from '../../../assets/ScanItLogo.png';
 import CustomInput from '../../components/CustomInput.js';
 import CustomButton from '../../components/CustomButton.js';
 import { useNavigation } from '@react-navigation/native';
+import { Context } from '../../GlobalContext.js';
 
 function SignUpScreen(props) {
+    const globalContext = useContext(Context)
+    const {domain, userID, setUserID} = globalContext;
+
     const[firstName, setFirstName] = useState('');
     const[lastName, setLastName] = useState('');
     const[email, setEmail] = useState('');
@@ -41,15 +45,14 @@ function SignUpScreen(props) {
             }
         })
         .then(json => {
-            setUserObj(json)
-            setToken(json.token)
-            setIsLoggedIn(true)
-            navigation.navigate('Home');
+            setUserID(json.user_id)
+            console.log(json.user_id)
+            navigation.navigate('Verification', { user_id: json.user_id });
         })
         .catch(error => {
             console.log(error)
         })
-        navigation.navigate('Verification');
+        // navigation.navigate('Verification');
     }
     
     const onAlreadyUserPressed = () => {

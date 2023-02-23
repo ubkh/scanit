@@ -19,3 +19,12 @@ class UserLoginSerializer(serializers.Serializer):
 	email = serializers.CharField(max_length=100)
 	password = serializers.CharField(max_length=100, min_length=8, style={'input_type': 'password'})
 	token = serializers.CharField(max_length=255, read_only=True)
+
+class UserVerificationSerializer(serializers.Serializer):
+    verification_code = serializers.CharField(max_length=6, required=True)
+
+    def validate_verification_code(self, value):
+        if len(value) != 6:
+            raise serializers.ValidationError('Verification code must contain 6 characters')
+
+        return value
