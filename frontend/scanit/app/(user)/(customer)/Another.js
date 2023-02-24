@@ -14,7 +14,7 @@ function Another(props) {
     );
 }
 
-// custome css
+// custom css
 const styles = StyleSheet.create({
     container: {
       flex: 1,
