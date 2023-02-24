@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from 'react';
 // import {useNavigation} from'@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { Context } from '../context/GlobalContext';
-import { Text, View, Button } from 'react-native';
+import { Text, View, Button, Alert, TextInput } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import BarCodeScanStyle from '../styles/BarCodeScanStyle';
 
@@ -15,6 +15,7 @@ function BarCodeScanComponent(props){
     const globalContext = useContext(Context);
     //const { basketList } = globalContext;
     const { isRetailerScanned, setIsRetailerScanned } = globalContext;
+    const [quantityInput, setQuantityInput] = useState(1);
     // const { retailerBarcodeData, retailerBarcodeType } = globalContext;
     // const { setRetailerBarcodeData, setRetailerBarcodeType } = globalContext;
 
@@ -30,12 +31,12 @@ function BarCodeScanComponent(props){
       }, []);
 
 
-      const handleAddItemsPress = () => {
+      const handleAddItemsPress = (type, data) => {
         if (quantityInput !== "") {
             const quantity = parseInt(quantityInput);
             if (quantity > 0) {
-                globalContext.setBasketList([...globalContext.basketList, { 'data': text, 'type': type, 'quantity': quantity }]);
-                router.push({ pathname: '/home', params: { data: text, type: type } });
+                globalContext.setBasketList([...globalContext.basketList, { 'data': data, 'type': type, 'quantity': quantity }]);
+                router.push({ pathname: '/home', params: { data: data, type: type } });
             } else {
                 Alert.alert("Invalid quantity", "Please enter a positive integer.");
             }
@@ -56,37 +57,55 @@ function BarCodeScanComponent(props){
           globalContext.setRetailerBarcodeType(type)
         }
         else {
-          Alert.alert(
-            'Add Scanned Item',
-            'How many of this item do you want to add?',
-            [
-                {
-                    text: 'Cancel',
-                    onPress: () => {
-                        console.log("Cancelled item adding")
-                        router.push({ pathname: '/home' });
-                    },
-                    style: 'cancel',
-                },
-                {
-                    text: 'Add items',
-                    onPress: handleAddItemsPress,
-                    style: 'default',
-                },
-            ],
+        //   Alert.alert(
+        //     'Add Scanned Item',
+        //     'How many of this item do you want to add?',
+        //     [
+        //         {
+        //             text: 'Cancel',
+        //             onPress: () => {
+        //                 console.log("Cancelled item adding")
+        //                 router.push({ pathname: '/home' });
+        //             },
+        //             style: 'cancel',
+        //         },
+        //         {
+        //             text: 'Add items',
+        //             onPress: handleAddItemsPress(type, data),
+        //             style: 'default',
+        //         },
+        //     ],
+        //     {
+        //         component: (
+        //             <View>
+        //                 <TextInput
+        //                     style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10 }}
+        //                     placeholder="Enter quantity"
+        //                     keyboardType="numeric"
+        //                     value={quantityInput}
+        //                     onChangeText={setQuantityInput}
+        //                 />
+        //             </View>
+        //         )
+        //     }
+        // );
+
+        Alert.prompt(
+          'Enter a number',
+          null,
+          [
             {
-                component: (
-                    <View>
-                        <TextInput
-                            style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10 }}
-                            placeholder="Enter quantity"
-                            keyboardType="numeric"
-                            value={quantityInput}
-                            onChangeText={setQuantityInput}
-                        />
-                    </View>
-                )
-            }
+              text: 'Cancel',
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            },
+            {
+              text: 'OK',
+              onPress: (value) => console.log(`Entered value: ${value}`),
+            },
+          ],
+          'plain-text',
+          null,
         );
 
           globalContext.setBasketList([...globalContext.basketList, { 'data': data, 'type': type }])
