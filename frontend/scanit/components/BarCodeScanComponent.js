@@ -23,11 +23,27 @@ function BarCodeScanComponent(props){
           const { status } = await BarCodeScanner.requestPermissionsAsync();
           setHasPermission(status === 'granted');
         })()
-      }
+    }
     
       useEffect(() => {
         askForCameraPermission();
       }, []);
+
+
+      const handleAddItemsPress = () => {
+        if (quantityInput !== "") {
+            const quantity = parseInt(quantityInput);
+            if (quantity > 0) {
+                globalContext.setBasketList([...globalContext.basketList, { 'data': text, 'type': type, 'quantity': quantity }]);
+                router.push({ pathname: '/home', params: { data: text, type: type } });
+            } else {
+                Alert.alert("Invalid quantity", "Please enter a positive integer.");
+            }
+        } else {
+            Alert.alert("No quantity entered", "Please enter a quantity.");
+        }
+      };
+
     
       const handleBarCodeScanned = ({ type, data }) => {
         setScanned(true);
@@ -40,6 +56,39 @@ function BarCodeScanComponent(props){
           globalContext.setRetailerBarcodeType(type)
         }
         else {
+          Alert.alert(
+            'Add Scanned Item',
+            'How many of this item do you want to add?',
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => {
+                        console.log("Cancelled item adding")
+                        router.push({ pathname: '/home' });
+                    },
+                    style: 'cancel',
+                },
+                {
+                    text: 'Add items',
+                    onPress: handleAddItemsPress,
+                    style: 'default',
+                },
+            ],
+            {
+                component: (
+                    <View>
+                        <TextInput
+                            style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10 }}
+                            placeholder="Enter quantity"
+                            keyboardType="numeric"
+                            value={quantityInput}
+                            onChangeText={setQuantityInput}
+                        />
+                    </View>
+                )
+            }
+        );
+
           globalContext.setBasketList([...globalContext.basketList, { 'data': data, 'type': type }])
         }
         
