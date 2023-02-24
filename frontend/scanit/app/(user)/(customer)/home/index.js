@@ -53,7 +53,7 @@ function Home() {
 
     return (
         <View style={ContainerStyle.container}>
-            <Heading size="lg" fontSize={30} bold justifyContent="left" style={{ fontFamily: 'Rubik-Bold' }}>Home</Heading>
+            <Heading size="lg" fontSize={30} bold justifyContent="flex-start" style={{ fontFamily: 'Rubik-Bold' }}>Home</Heading>
             <Text style={{ fontFamily: 'Rubik-Bold' }}>This is some test text using a font!</Text>
             {isRetailerScanned ?
                 <View style={{justifyContent: 'flex-start', padding: 20,}}> 

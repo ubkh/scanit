@@ -6,7 +6,7 @@ import LogOutButton from '../../../components/LogOutButtonComponent';
 function Home() {
     return (
         <View style={ContainerStyle.container}>
-            <Heading size="lg" fontSize={30} bold justifyContent="left">Home</Heading>
+            <Heading size="lg" fontSize={30} bold justifyContent="flex-start">Home</Heading>
             <Text style={{ fontFamily: 'Rubik-Bold' }}>You are in the retailer home!</Text>
             {Platform.OS !== 'web' && <LogOutButton />}
         </View>
