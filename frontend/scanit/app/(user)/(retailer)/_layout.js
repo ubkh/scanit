@@ -1,4 +1,4 @@
-import { Slot, Navigator, Tabs } from "expo-router";
+import { Slot, Navigator, Tabs, useSegments, Redirect } from "expo-router";
 import React, { useState, useEffect, useContext } from "react";
 import { useWindowDimensions, Platform } from "react-native";
 import { TabRouter } from "@react-navigation/native";
@@ -8,10 +8,21 @@ import { Ionicons } from '@expo/vector-icons';
 
 const links = [
     { label: 'Home', url: '/home' },
+    { label: 'Something Else', url: '/other' },
 ];
 
-export default function CustomerLayout() {
-  const { basketList } = useContext(Context);
+export default function RetailerLayout() {
+  const globalContext = useContext(Context);
+  const { userType } = globalContext;
+  const segments = useSegments();
+
+  // TODO: Consider a context here to prevent access
+  // prevent other users from accessing this group of pages
+  if (userType !== "retailer") {
+    return (
+        <Redirect href={`/(${userType})/${segments[2]}`} />
+    )
+  }
 
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const { width } = useWindowDimensions();
@@ -40,7 +51,6 @@ export default function CustomerLayout() {
     )
   }
   return (
-    // Setup the auth context and render our layout inside of it.
     <Navigator router={TabRouter}>
         <NavBarComponent links={ links } isSmallScreen={ isSmallScreen } />
         <Slot />

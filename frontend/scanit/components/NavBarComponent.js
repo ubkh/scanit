@@ -1,10 +1,14 @@
 import React from 'react';
-import { Link, usePathname } from 'expo-router';
+import { Link, usePathname, useRouter } from 'expo-router';
 import { View, Box, HStack, Text, IconButton, Icon, Flex, Divider, Button } from 'native-base';
+import { useAuth } from '../context/AuthContext';
+import LogOutButton from "./LogOutButtonComponent";
 
 const NavBarComponent = ({ links, isSmallScreen }) => {
   const pathname = usePathname();
-  
+  const { signOut } = useAuth();
+  const router = useRouter();
+
   return (
     <View>
       <Box safeAreaTop bg="white" />
@@ -49,15 +53,7 @@ const NavBarComponent = ({ links, isSmallScreen }) => {
                 </React.Fragment>
               ))}
             </Flex>
-            <Button
-              shadow={2}
-              bg="brand.400"
-              ml="2"
-              marginLeft={10}
-              onPress={() => console.log('hello world')}
-            >
-              Login
-            </Button>
+            <LogOutButton style={{marginLeft: 20}} />
           </HStack>
         )}
       </HStack>

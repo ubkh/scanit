@@ -5,12 +5,12 @@ export const Context = createContext();
 
 export default function ContextProvider(props) {
     const [ domain, setDomain ] = useState(DJANGO);
-    const [ isLoggedIn, setIsLoggedIn ] = useState(false)
-    const [retailerBarcodeData, setRetailerBarcodeData] = useState("")
-    const[retailerBarcodeType, setRetailerBarcodeType] = useState("")
-    const[basketList, setBasketList] = useState([])
-    const[isRetailerScanned, setRetailerScanned] = useState(false)
-    const [ userType, setUserType ] = useState('customer')
+    const [ isLoggedIn, setIsLoggedIn ] = useState(false);
+    const [retailerBarcodeData, setRetailerBarcodeData] = useState("");
+    const[retailerBarcodeType, setRetailerBarcodeType] = useState("");
+    const[basketList, setBasketList] = useState([]);
+    const[isRetailerScanned, setRetailerScanned] = useState(false);
+    const [ userType, setUserType ] = useState('customer'); //'customer' or 'retailer'
 
     useEffect(() => {
     }, []);
