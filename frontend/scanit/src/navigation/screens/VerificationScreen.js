@@ -17,7 +17,7 @@ function VerificationScreen(props) {
             'verification_code': code
         })
 
-        fetch(`http://192.168.1.253:8000/api/user/verify/${user_id}/`,{
+        fetch(`http://${domain}/api/user/verify/${user_id}/`,{
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json'

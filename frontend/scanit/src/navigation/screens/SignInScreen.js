@@ -23,7 +23,7 @@ function SignInScreen(props) {
             'password': password
         })
 
-        fetch(`http://192.168.1.253:8000/api/user/login/`,{
+        fetch(`http://${domain}/api/user/login/`,{
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json'
