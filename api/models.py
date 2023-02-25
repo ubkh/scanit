@@ -2,6 +2,10 @@ from django.db import models
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.core.validators import RegexValidator
+from django.core.validators import MinValueValidator
+from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
+import datetime
 
 
 class CustomUserManager(BaseUserManager):
@@ -51,17 +55,40 @@ class User(AbstractBaseUser, PermissionsMixin):
 	def __str__(self):
 		return f'{self.first_name} {self.last_name}'
 
+# Create your models here.
+class Test(models.Model):
+    text = models.CharField(max_length=100)
 
+class Product(models.Model):
+    retailerID = models.PositiveIntegerField()
+    barcodeID = models.CharField(max_length=20, unique=True)
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length=750, blank=True)
+    price = models.PositiveIntegerField(validators=[MinValueValidator(0)]) # accepts ints too. max price is 999.99
+    quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    expiry = models.DateField()
 
+    def is_expiry_date_past(self):
+        if self.expiry < datetime.date.today(): return True
+        else: return False
 
-#     |
-#     |
-#     |
-#  \  |  /
-#   \ | /
-#    \|/
+    def clean(self):
+        if (self.is_expiry_date_past()):
+            raise ValidationError("Expiry date cannot be in the past.")
 
-# can we do this??
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
+# class UserAccount(User):
+    
+#     def __init__(self):
+#         super(self)
+    
+#     name = models.CharField()
+#     # email = models.EmailField()
+#     # password = models.CharField()
+#     dob = models.DateField()
 
 # class RetailerAccount(UserAccount):
 #     retailerID = models.PositiveIntegerField()
@@ -78,3 +105,5 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 # class AdminAccount(UserAccount):
 #     adminID = models.PositiveIntegerField()
+    
+    

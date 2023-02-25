@@ -1,7 +1,8 @@
 import { useState, useContext, useEffect } from 'react';
-import {useNavigation} from'@react-navigation/native';
-import { Context } from '../GlobalContext';
-import { StyleSheet, Text, View, Button } from 'react-native';
+// import {useNavigation} from'@react-navigation/native';
+import { useRouter } from 'expo-router';
+import { Context } from '../context/GlobalContext';
+import { Text, View, Button } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import BarCodeScanStyle from '../styles/BarCodeScanStyle';
 
@@ -9,7 +10,13 @@ function BarCodeScanComponent(props){
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
     const [text, setText] = useState("Not scanned yet");
-    const navigation = useNavigation();
+    //const navigation = useNavigation();
+    const router = useRouter();
+    const globalContext = useContext(Context);
+    //const { basketList } = globalContext;
+    const { isRetailerScanned, setIsRetailerScanned } = globalContext;
+    // const { retailerBarcodeData, retailerBarcodeType } = globalContext;
+    // const { setRetailerBarcodeData, setRetailerBarcodeType } = globalContext;
 
     const askForCameraPermission = () => {
         (async () => {
@@ -26,7 +33,18 @@ function BarCodeScanComponent(props){
         setScanned(true);
         setText(data)
         console.log('Type: ' + type + '\nData: ' + data)
-        navigation.navigate('HomeScreen', { data, type });
+        if (!isRetailerScanned) {
+          globalContext.setRetailerScanned(true)
+          console.log("Retailer Barcode Scanned!")
+          globalContext.setRetailerBarcodeData(data)
+          globalContext.setRetailerBarcodeType(type)
+        }
+        else {
+          globalContext.setBasketList([...globalContext.basketList, { 'data': data, 'type': type }])
+        }
+        
+        //navigation.navigate('HomeScreen', { data, type });
+        router.push({ pathname: '/home', params: { data, type } });
       };
     
       if (hasPermission === null) {
