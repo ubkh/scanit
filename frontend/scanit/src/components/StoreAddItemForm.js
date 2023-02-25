@@ -1,16 +1,40 @@
-import { View } from "react-native";
-import { useState, useContext } from "react";
+import { ScrollView } from "react-native";
+import { useContext } from "react";
 import { Button, Text, Input } from "@rneui/base";
 import CurrencyInput from "react-native-currency-input";
 import { Formik } from "formik";
 import { Context } from "../GlobalContext";
 import validateForm from "./forms-validations/storeAddItemValidation";
 
-function StoreAddItemForm(props) {
-  // const [values, setValues] = useState(null);
+function StoreAddItemForm({ route }) {
+  const { itemData } = route.params || {};
   const globalContext = useContext(Context);
   const { domain } = globalContext;
   const errorStyle = { color: "#c20808" };
+
+  // if item was not found in the db then itemData has only the barcode. This prevents price from becoming a NaN
+  function getItemPrice() {
+    return itemData.price ? (itemData.price / 100).toString() : "0";
+  }
+
+  function getInitialValues() {
+    const vals = {
+      name: "",
+      description: "",
+      price: "0",
+      quantity: "",
+      expiry: "",
+      barcode: "",
+    };
+    if (itemData) {
+      return {
+        ...vals,
+        ...itemData,
+        price: getItemPrice(),
+      };
+    }
+    return vals;
+  }
 
   async function submitHandler(values) {
     const jsonObj = JSON.stringify({
@@ -27,14 +51,7 @@ function StoreAddItemForm(props) {
 
   return (
     <Formik
-      initialValues={{
-        name: "",
-        description: "",
-        price: "0",
-        quantity: "",
-        expiry: "",
-        barcode: "",
-      }}
+      initialValues={getInitialValues()}
       onSubmit={(vals) => submitHandler(vals)}
       validate={validateForm}
     >
@@ -47,8 +64,9 @@ function StoreAddItemForm(props) {
         touched,
         isSubmitting,
       }) => (
-        <View>
+        <ScrollView>
           <Text>Please fill in the details of the item.</Text>
+          <Text>&nbsp;</Text>
           <Input
             label="Name"
             maxLength={100}
@@ -58,7 +76,6 @@ function StoreAddItemForm(props) {
             errorStyle={errorStyle}
             errorMessage={errors.name && touched.name ? errors.name : ""}
           />
-
           <Input
             label="Description"
             multiline
@@ -143,7 +160,7 @@ function StoreAddItemForm(props) {
             onPress={handleSubmit}
             disabled={isSubmitting}
           />
-        </View>
+        </ScrollView>
       )}
     </Formik>
   );

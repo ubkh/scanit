@@ -40,3 +40,13 @@ def storeAddItem(request):
         return HttpResponseBadRequest()
     except:
         return HttpResponseServerError()
+    
+@csrf_exempt
+def storeGetItem(_, barcode):
+    queryset = Product.objects.filter(barcode=barcode)
+    if (queryset.count()):
+        item = queryset.first()
+        return JsonResponse({'name': item.name, 'description': item.description, 'price': item.price, 'barcode': item.barcode})
+    else:
+        return HttpResponseBadRequest() 
+        

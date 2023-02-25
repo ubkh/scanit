@@ -4,7 +4,7 @@ import { Button, Text } from "@rneui/base";
 import ContainerStyle from "../../styles/ContainerStyle";
 import { useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import BarCodeScanComponent from "../../components/BarCodeScanComponent";
+import RetailerBarcodeScanner from "../../components/RetailerBarcodeScanner";
 import StoreAddItemForm from "../../components/StoreAddItemForm";
 
 const Stack = createStackNavigator();
@@ -18,8 +18,9 @@ function StoreAddItem() {
         details will be loaded. Alternatively, you can enter the item's details
         manually.
       </Text>
+      <Text>&nbsp;</Text>
       <Button
-        onPress={() => "Not implemented yet"}
+        onPress={() => navigation.navigate("RetailerBarcodeScanner")}
         title="Scan barcode"
       ></Button>
       <Button
@@ -45,8 +46,8 @@ function StoreAddItemStack() {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="BarCodeScanComponent"
-        component={BarCodeScanComponent}
+        name="RetailerBarcodeScanner"
+        component={RetailerBarcodeScanner}
         options={{ headerTitle: "" }}
       />
       <Stack.Screen
