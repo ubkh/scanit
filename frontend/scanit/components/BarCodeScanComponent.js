@@ -30,21 +30,6 @@ function BarCodeScanComponent(props){
         askForCameraPermission();
       }, []);
 
-
-      const handleAddItemsPress = (type, data) => {
-        if (quantityInput !== "") {
-            const quantity = parseInt(quantityInput);
-            if (quantity > 0) {
-                globalContext.setBasketList([...globalContext.basketList, { 'data': data, 'type': type, 'quantity': quantity }]);
-                router.push({ pathname: '/home', params: { data: data, type: type } });
-            } else {
-                Alert.alert("Invalid quantity", "Please enter a positive integer.");
-            }
-        } else {
-            Alert.alert("No quantity entered", "Please enter a quantity.");
-        }
-      };
-
     
       const handleBarCodeScanned = ({ type, data }) => {
         setScanned(true);
@@ -70,13 +55,28 @@ function BarCodeScanComponent(props){
           }
 
           if (foundObject) {
-            globalContext.basketList[index].quantity++;
-            globalContext.setBasketList([...globalContext.basketList]);
-            console.log(`Updated quantity of item with barcode ${foundObject.data} to ${foundObject.quantity}`);
-          } else {
-            globalContext.setBasketList([...globalContext.basketList, { 'data': data, 'type': type, 'quantity': 1 }])
+            Alert.alert(
+              'Item already in basket',
+              'Adjust the quantity in the basket!',
+              [
+                {
+                  text: 'Ok',
+                  onPress: () => {
+                    console.log("User acknowledged warning")
+                  },
+                  style: 'default',
+                },
+              ],
+            )
+          } 
+          else {
+              globalContext.setBasketList([...globalContext.basketList, { 'data': data, 'type': type, 'quantity': 1 }])
+              // Wanted to have an alert display if 'doneFirstScan' if false to let the user know
+              // that they need to go to the basket to edit quantities, but the alert was causing
+              // the app to crash, works above though...
           }
         }
+
         
         //navigation.navigate('HomeScreen', { data, type });
         router.push({ pathname: '/home', params: { data, type } });

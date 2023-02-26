@@ -33,13 +33,13 @@ export default function CustomerLayout() {
   }, [width]);
 
   function getNumberOfBasketItems() {
-    total = 0
+    let total = 0;
     for (let i = 0; i < basketList.length; i++) {
-        total += basketList[i].quantity
+        total += basketList[i].quantity;
     }
 
-    return total;
-  }
+    return total > 0 ? total.toString() : null;
+}
 
   if (Platform.OS !== "web") {
     return (

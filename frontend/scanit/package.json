@@ -42,10 +42,12 @@
     "react-dom": "18.1.0",
     "react-native": "0.70.5",
     "react-native-dotenv": "^3.4.7",
+    "react-native-numeric-input": "^1.9.1",
     "react-native-pager-view": "6.0.1",
     "react-native-safe-area-context": "4.4.1",
     "react-native-screens": "~3.18.0",
     "react-native-svg": "13.4.0",
+    "react-native-vector-icons": "^9.2.0",
     "react-native-web": "~0.18.9",
     "react-scripts": "4.0.3",
     "react-test-renderer": "^18.1.0"

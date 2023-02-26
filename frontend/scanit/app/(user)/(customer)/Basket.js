@@ -1,10 +1,11 @@
-import { View, ScrollView, Platform, TouchableOpacity, StyleSheet, Alert, TouchableHighlight } from 'react-native';
+import { View, ScrollView, Platform, TouchableOpacity, StyleSheet, Alert, TextInput } from 'react-native';
 import { useState, useContext, useEffect } from 'react';
 // import { useNavigation, useRoute } from '@react-navigation/native';
 import { Button, Text } from 'native-base';
 import { Context } from '../../../context/GlobalContext';
 import ContainerStyle from '../../../styles/ContainerStyle';
 import { Ionicons } from '@expo/vector-icons';
+import NumericInput from 'react-native-numeric-input'; // https://github.com/himelbrand/react-native-numeric-input for props and info
 
 function Basket(props) {
     const { basketList, setBasketList } = useContext(Context);
@@ -35,6 +36,18 @@ function Basket(props) {
             ],)
     }
     
+
+    const handleQuantityChange = (index, newQuantity) => {
+      const updatedBasketList = basketList.map((basketItem, i) => {
+        if (i === index) {
+          return { ...basketItem, quantity: newQuantity };
+        } else {
+          return basketItem;
+        }
+      });
+      setBasketList(updatedBasketList);
+    };
+    
   
     useEffect(() => {
         setBasketList(basketList);
@@ -52,6 +65,64 @@ function Basket(props) {
                       <Text>Barcode ID: {item.data}</Text>
                       <Text>Barcode Type: {item.type}</Text>
                       <Text>Quantity: {item.quantity}</Text>
+
+                      {/* <TextInput
+                        value={item.quantity.toString()}
+                        onChangeText={(text) => {
+                          const newQuantity = parseInt(text);
+                          if (newQuantity > 0) {
+                            handleQuantityChange(index, newQuantity);
+                          }
+                        }}
+                        onSubmitEditing={(event) => {
+                          const newQuantity = parseInt(event.nativeEvent.text);
+                          if (newQuantity <= 0) {
+                            Alert.alert(
+                              'Enter a valid quantity',
+                              'Quantity must be 1 or more!',
+                              [
+                                {
+                                  text: 'Ok',
+                                  onPress: () => {
+                                    console.log("User acknowledged warning")
+                                  },
+                                  style: 'default',
+                                },
+                              ],
+                            )
+                          }
+                        }}
+                        keyboardType="numeric"
+                      /> */}
+
+                      <NumericInput
+                        value={item.quantity}
+                        onChange={value => {
+                          if (value > 0) {
+                            handleQuantityChange(index, value);
+                          }
+                          else {
+                            Alert.alert(
+                              'Enter a valid quantity',
+                              'Quantity must be 1 or more!',
+                              [
+                                {
+                                  text: 'Ok',
+                                  onPress: () => {
+                                    console.log("User acknowledged warning")
+                                  },
+                                  style: 'default',
+                                },
+                              ],
+                            )
+                          }
+                        }} 
+                        minValue={1}
+                        rounded={true}
+                        totalHeight={40}
+                        totalWidth={100}
+                      />
+
                       <View style={{flexDirection: "row", justifyContent: "flex-end"}} key={index}>
                         <TouchableOpacity
                           onPress={() => removeItem(index)}
