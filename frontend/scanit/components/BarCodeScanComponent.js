@@ -57,58 +57,25 @@ function BarCodeScanComponent(props){
           globalContext.setRetailerBarcodeType(type)
         }
         else {
-        //   Alert.alert(
-        //     'Add Scanned Item',
-        //     'How many of this item do you want to add?',
-        //     [
-        //         {
-        //             text: 'Cancel',
-        //             onPress: () => {
-        //                 console.log("Cancelled item adding")
-        //                 router.push({ pathname: '/home' });
-        //             },
-        //             style: 'cancel',
-        //         },
-        //         {
-        //             text: 'Add items',
-        //             onPress: handleAddItemsPress(type, data),
-        //             style: 'default',
-        //         },
-        //     ],
-        //     {
-        //         component: (
-        //             <View>
-        //                 <TextInput
-        //                     style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10 }}
-        //                     placeholder="Enter quantity"
-        //                     keyboardType="numeric"
-        //                     value={quantityInput}
-        //                     onChangeText={setQuantityInput}
-        //                 />
-        //             </View>
-        //         )
-        //     }
-        // );
+          let foundObject = null
+          let index = 0
 
-        Alert.prompt(
-          'Enter a number',
-          null,
-          [
-            {
-              text: 'Cancel',
-              onPress: () => console.log('Cancel Pressed'),
-              style: 'cancel',
-            },
-            {
-              text: 'OK',
-              onPress: (value) => console.log(`Entered value: ${value}`),
-            },
-          ],
-          'plain-text',
-          null,
-        );
+          for (let i = 0; i < globalContext.basketList.length; i++) {
+            const obj = globalContext.basketList[i];
+            if (obj.type === type && obj.data === data) {
+              foundObject = obj;
+              index = i
+              break;
+            }
+          }
 
-          globalContext.setBasketList([...globalContext.basketList, { 'data': data, 'type': type }])
+          if (foundObject) {
+            globalContext.basketList[index].quantity++;
+            globalContext.setBasketList([...globalContext.basketList]);
+            console.log(`Updated quantity of item with barcode ${foundObject.data} to ${foundObject.quantity}`);
+          } else {
+            globalContext.setBasketList([...globalContext.basketList, { 'data': data, 'type': type, 'quantity': 1 }])
+          }
         }
         
         //navigation.navigate('HomeScreen', { data, type });

@@ -37,6 +37,8 @@ function Basket(props) {
     
   
     useEffect(() => {
+        setBasketList(basketList);
+
         if (basketList.length === 0) {
           setBasketItems(<Text> Your basket is empty </Text>);
         } else {
@@ -46,9 +48,10 @@ function Basket(props) {
           <Text style={styles.basketHeader}>{basketList.length} items</Text>
             {basketList.map((item, index) => (
               <View style={styles.basketEntry} key={index}>
-                  <TouchableOpacity key={index}>
+                  <View key={index}>
                       <Text>Barcode ID: {item.data}</Text>
                       <Text>Barcode Type: {item.type}</Text>
+                      <Text>Quantity: {item.quantity}</Text>
                       <View style={{flexDirection: "row", justifyContent: "flex-end"}} key={index}>
                         <TouchableOpacity
                           onPress={() => removeItem(index)}
@@ -68,7 +71,7 @@ function Basket(props) {
                           </View>
                         </TouchableOpacity>
                       </View>
-                  </TouchableOpacity>
+                  </View>
                   <Text>&nbsp;</Text>
               </View>
             ))}
