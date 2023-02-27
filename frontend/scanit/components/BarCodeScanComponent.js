@@ -14,7 +14,7 @@ function BarCodeScanComponent(props){
     const router = useRouter();
     const globalContext = useContext(Context);
     //const { basketList } = globalContext;
-    const { isRetailerScanned, setIsRetailerScanned } = globalContext;
+    const { isRetailerScanned, setRetailerScanned } = globalContext;
     const [quantityInput, setQuantityInput] = useState(1);
     // const { retailerBarcodeData, retailerBarcodeType } = globalContext;
     // const { setRetailerBarcodeData, setRetailerBarcodeType } = globalContext;

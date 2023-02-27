@@ -38,7 +38,16 @@ export default function CustomerLayout() {
         total += basketList[i].quantity;
     }
 
-    return total > 0 ? total.toString() : null;
+    let display = ''
+    
+    if (total > 99) {
+        display = "99+"
+    }
+    else{
+        display = total.toString()
+    }
+
+    return total > 0 ? display : null;
 }
 
   if (Platform.OS !== "web") {

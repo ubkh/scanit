@@ -58,42 +58,13 @@ function Basket(props) {
           setBasketItems(
         <View style={styles.basketList}>
           <ScrollView>
-          <Text style={styles.basketHeader}>{basketList.length} items</Text>
+          <Text style={styles.basketHeader}>{basketList.length} products</Text>
             {basketList.map((item, index) => (
               <View style={styles.basketEntry} key={index}>
                   <View key={index}>
                       <Text>Barcode ID: {item.data}</Text>
                       <Text>Barcode Type: {item.type}</Text>
                       <Text>Quantity: {item.quantity}</Text>
-
-                      {/* <TextInput
-                        value={item.quantity.toString()}
-                        onChangeText={(text) => {
-                          const newQuantity = parseInt(text);
-                          if (newQuantity > 0) {
-                            handleQuantityChange(index, newQuantity);
-                          }
-                        }}
-                        onSubmitEditing={(event) => {
-                          const newQuantity = parseInt(event.nativeEvent.text);
-                          if (newQuantity <= 0) {
-                            Alert.alert(
-                              'Enter a valid quantity',
-                              'Quantity must be 1 or more!',
-                              [
-                                {
-                                  text: 'Ok',
-                                  onPress: () => {
-                                    console.log("User acknowledged warning")
-                                  },
-                                  style: 'default',
-                                },
-                              ],
-                            )
-                          }
-                        }}
-                        keyboardType="numeric"
-                      /> */}
 
                       <NumericInput
                         value={item.quantity}
@@ -191,33 +162,5 @@ function Basket(props) {
         width: '100%'
     }
 });
-
-// VERSION OF BARCODE SCAN THAT DOESN'T ALLOW DUPLICATES IN BASKET
-
-// const handleBarCodeScanned = ({ type, data }) => {
-//   setScanned(true);
-//   setText(data)
-//   console.log('Type: ' + type + '\nData: ' + data)
-//   const check  = basketList.find(obj => obj.data === data)
-//   if (check) {
-//     Alert.alert(
-//     'Item Already in Basket',
-//     'This item is already in your basket!',
-//     [
-//       {
-//         text: 'Ok',
-//         onPress: () => {
-//           console.log("Ok on dialog was pressed")
-//           navigation.navigate('HomeScreen', { data, type });
-//         },
-//         style: 'default',
-//       },
-//     ],)
-//   }
-//   else {
-//     globalContext.setBasketList([...globalContext.basketList, { 'data': data, 'type': type }])
-//     navigation.navigate('HomeScreen', { data, type });
-//   }
-// };
 
 export default Basket;
