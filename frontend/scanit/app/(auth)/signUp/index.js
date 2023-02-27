@@ -1,14 +1,14 @@
 import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, View, Image, useWindowDimensions } from 'react-native';
-import Logo from '../../../assets/ScanItLogo.png';
-import CustomInput from '../../components/CustomInput.js';
-import CustomButton from '../../components/CustomButton.js';
-import { useNavigation } from '@react-navigation/native';
-import { Context } from '../../GlobalContext.js';
+import CustomInput from '../../../components/CustomInput.js';
+import CustomButton from '../../../components/CustomButton.js';
+import { useRouter, Link } from "expo-router";
+import { Context } from '../../../context/GlobalContext.js';
 
 function SignUpScreen(props) {
     const globalContext = useContext(Context)
     const {domain, userID, setUserID} = globalContext;
+    const router = useRouter();
 
     const[firstName, setFirstName] = useState('');
     const[lastName, setLastName] = useState('');
@@ -17,8 +17,6 @@ function SignUpScreen(props) {
     const[password, setPassword] = useState('');
     const[confirmPassword, setConfirmPassword] = useState('');
     const[error, setError] = useState('');
-
-    const navigation = useNavigation();
 
     const onRegisterPressed = () => {
         let body = JSON.stringify({
@@ -47,16 +45,16 @@ function SignUpScreen(props) {
         .then(json => {
             setUserID(json.user_id)
             console.log(json.user_id)
-            navigation.navigate('Verification', { user_id: json.user_id });
+            console.log(userID)
+            router.push({pathname: '/verify', params: {user_id: json.user_id}})
         })
         .catch(error => {
             console.log(error)
         })
-        // navigation.navigate('Verification');
     }
     
     const onAlreadyUserPressed = () => {
-        navigation.navigate('SignIn');
+        router.push("/signIn");
     }
     
     const onTOUPressed = () => {
@@ -69,6 +67,10 @@ function SignUpScreen(props) {
 
     return (
         <View style={styles.container}>
+            <Text>&nbsp;</Text>
+            <Text>&nbsp;</Text>
+            <Text>&nbsp;</Text>
+            
             <Text style={styles.title}>Create an account</Text>
             
             <CustomInput placeholder = "First name" value = {firstName} setValue = {setFirstName}/>
@@ -89,7 +91,6 @@ function SignUpScreen(props) {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#72A114',
       alignItems: 'center',
       padding: 20,
     },

@@ -1,21 +1,23 @@
 import React, { useState, useContext} from 'react';
 import { StyleSheet, Text, View, Image, useWindowDimensions } from 'react-native';
-import Logo from '../../../assets/ScanItLogo.png';
-import CustomInput from '../../components/CustomInput.js';
-import CustomButton from '../../components/CustomButton.js';
-import { useNavigation } from '@react-navigation/native';
-import { Context } from '../../GlobalContext.js';
+import Logo from '../../../assets/ScanItLogoInverted.png';
+import CustomInput from '../../../components/CustomInput.js';
+import CustomButton from '../../../components/CustomButton.js';
+import { useRouter } from "expo-router";
+import { Context } from '../../../context/GlobalContext.js';
+import { useAuth } from "../../../context/AuthContext";
 
 function SignInScreen(props) {
     const globalContext = useContext(Context)
-    const { setIsLoggedIn, domain, userID, setUserID, setToken } = globalContext;
+    const { signIn } = useAuth();
+    const { setIsLoggedIn, domain, setToken } = globalContext;
  
     const[email, setEmail] = useState('');
     const[password, setPassword] = useState('');
     const[ error, setError ] = useState('');
 
     const{height} = useWindowDimensions();
-    const navigation = useNavigation();
+    const router = useRouter();
 
     function onLoginPressed() {
         let body = JSON.stringify({
@@ -39,9 +41,9 @@ function SignInScreen(props) {
             }
         })
         .then(json => {
-            setToken(json.token)
+            setToken(json.access_token)
             setIsLoggedIn(true)
-            navigation.navigate('Home');
+            signIn(json.user)
         })
         .catch(error => {
             console.log(error)
@@ -49,24 +51,28 @@ function SignInScreen(props) {
     }
       
     const onForgotPasswordPressed = () => {
-        navigation.navigate('ForgotPassword')
+        router.push('/forgotPass')
     }
       
     const onSignUpPressed = () => {
-        navigation.navigate('SignUp')
+        router.push("/signUp");
     }
 
     return (
         <View style={styles.container}>
+            <Text>&nbsp;</Text>
+            <Text>&nbsp;</Text>
+            <Text>&nbsp;</Text>
+
             <Image 
                 source={Logo} 
-                style={[styles.logo, {height: height * 0.3}]} 
+                style={[styles.logo, {height: height * 0.2}]} 
                 resizeMode="contain"
                 />
-            
+            <Text>&nbsp;</Text>
             <CustomInput placeholder = "Email" value = {email} setValue = {setEmail}/>
             <CustomInput placeholder = "Password" value = {password} setValue = {setPassword} secureTextEntry/>
-            <Text style={styles.errorLabel }>{error}</Text>
+            <Text style={styles.errorLabel}>{error}</Text>
             <CustomButton text = "Sign In" onPress={onLoginPressed}/>
             <CustomButton text = "Forgot Password?" onPress={onForgotPasswordPressed} type = "SECONDARY"/>
             <CustomButton text = "Dont have an account? Create one" onPress={onSignUpPressed} type = "TERTIARY"/>
@@ -77,7 +83,6 @@ function SignInScreen(props) {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#72A114',
       alignItems: 'center',
       padding: 20,
     },

@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, View, Image, useWindowDimensions } from 'react-native';
-import CustomInput from '../../components/CustomInput.js';
-import CustomButton from '../../components/CustomButton.js';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import CustomInput from '../../../components/CustomInput.js';
+import CustomButton from '../../../components/CustomButton.js';
+import { useRouter, useSearchParams } from "expo-router";
+import { Context } from '../../../context/GlobalContext.js';
 
 function VerificationScreen(props) {
     const[code, setCode] = useState('');
     const[ error, setError ] = useState('');
 
-    const route = useRoute();
-    const { user_id } = route.params;
-    const navigation = useNavigation();
+    const router = useRouter();
+    const { user_id } = useSearchParams();
+    const globalContext = useContext(Context)
+    const {domain} = globalContext;
 
     const onConfirmPressed = () => {
         let body = JSON.stringify({
@@ -33,7 +35,7 @@ function VerificationScreen(props) {
         })
         .then(json => {
             console.log("successfully verified!")
-            navigation.navigate('SignIn');
+            router.push('/signIn')
         })
         .catch(error => {
             console.log(error)
@@ -41,7 +43,7 @@ function VerificationScreen(props) {
     }
     
     const onSignInPressed = () => {
-        navigation.navigate('SignIn');
+        router.push('/signIn')
     }
     
     const onResendPressed = () => {
@@ -50,6 +52,10 @@ function VerificationScreen(props) {
 
     return (
         <View style={styles.container}>
+            <Text>&nbsp;</Text>
+            <Text>&nbsp;</Text>
+            <Text>&nbsp;</Text>
+            
             <Text style={styles.title}>Verify your account</Text>
             
             <CustomInput placeholder = "Code" value = {code} setValue = {setCode}/>
@@ -64,7 +70,6 @@ function VerificationScreen(props) {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#72A114',
       alignItems: 'center',
       padding: 20,
     },

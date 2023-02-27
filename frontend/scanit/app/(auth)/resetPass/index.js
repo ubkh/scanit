@@ -1,26 +1,29 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, useWindowDimensions } from 'react-native';
-import CustomInput from '../../components/CustomInput.js';
-import CustomButton from '../../components/CustomButton.js';
-import { useNavigation } from '@react-navigation/native';
+import CustomInput from '../../../components/CustomInput.js';
+import CustomButton from '../../../components/CustomButton.js';
+import { useRouter } from "expo-router";
 
 function ResetPasswordScreen(props) {
     const[password, setPassword] = useState('');
     const[confirmPassword, setConfirmPassword] = useState('');
-
-    const navigation = useNavigation();
+    const router = useRouter();
     
     const onSignInPressed = () => {
-        navigation.navigate('SignIn');
+        router.push("/signIn");
     }
     
     const onResetPressed = () => {
         console.warn("Reset Successfully")
-        navigation.navigate('SignIn');
+        router.push("/signIn");
     }
 
     return (
         <View style={styles.container}>
+            <Text>&nbsp;</Text>
+            <Text>&nbsp;</Text>
+            <Text>&nbsp;</Text>
+
             <Text style={styles.title}>Reset your password</Text>
             
             <CustomInput placeholder = "New pasword" value = {password} setValue = {setPassword}/>
@@ -35,7 +38,6 @@ function ResetPasswordScreen(props) {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#72A114',
       alignItems: 'center',
       padding: 20,
     },

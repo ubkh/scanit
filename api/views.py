@@ -1,5 +1,11 @@
 from django.shortcuts import render
-from .serializers import UserRegistrationSerializer, UserLoginSerializer, UserVerificationSerializer
+from .serializers import (
+    UserRegistrationSerializer, 
+    UserLoginSerializer, 
+    UserVerificationSerializer,
+    UserPasswordResetSerializer,
+    UserConfirmPasswordResetSerializer,
+    ) 
 from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -20,6 +26,10 @@ from django.conf import settings
 from django.urls import reverse
 from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
+from rest_framework import status
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 class UserRegistrationAPIView(APIView):
     serializer_class = UserRegistrationSerializer
@@ -39,7 +49,7 @@ class UserRegistrationAPIView(APIView):
                 data = { 'user_id': new_user.user_id }
                 response = Response(data, status=status.HTTP_201_CREATED)
                 response.set_cookie(key='access_token', value=access_token, httponly=True)
-                send_verification_code(request)
+                send_account_verification_code(request)
                 return response
                 # return redirect(reverse('verify', args=[new_user.user_id]))
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -63,13 +73,24 @@ class UserLoginAPIView(APIView):
 
         if not user_instance:
             raise AuthenticationFailed('User not found.')
+        
+        if not user_instance.is_verified:
+            raise AuthenticationFailed('User not verified.')
 
-        if user_instance.is_active:
+        if user_instance.is_active and user_instance.is_verified:
             user_access_token = generate_access_token(user_instance)
             response = Response()
             response.set_cookie(key='access_token', value=user_access_token, httponly=True)
             response.data = {
-                'access_token': user_access_token
+                'access_token': user_access_token,
+                'user': {
+                    'user_id': user_instance.user_id,
+                    'email': user_instance.email,
+                    'first_name': user_instance.first_name,
+                    'last_name': user_instance.last_name,
+                    'number': user_instance.number,
+                    'is_staff': user_instance.is_staff,
+                }
             }
             return response
 
@@ -139,9 +160,47 @@ class UserVerificationAPIView(APIView):
                 return Response({'error': 'Invalid verification code'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+# class UserPasswordResetView(APIView):
+#     serializer_class = UserPasswordResetSerializer
+#     authentication_classes = (TokenAuthentication,)
+#     permission_classes = (AllowAny,)
+
+#     def post(self, request, format=None):
+#         email = request.data.get('email')
+#         if email:
+#             try:
+#                 user_model = get_user_model()
+#                 user = user_model.objects.get(email=email)
+#             except user_model.DoesNotExist:
+#                 return Response({'error': 'User does not exist'}, status=status.HTTP_404_NOT_FOUND)
+#             uidb64 = urlsafe_base64_encode(force_bytes(user.user_id))
+#             token = default_token_generator.make_token(user)
+#             reset_url = request.build_absolute_uri(
+#                 '/password-reset/confirm/{uidb64}/{token}/'.format(uidb64=uidb64, token=token))
+#             # send email to user with reset_url
+#             return Response({'success': 'Email sent'})
+#         else:
+#             return Response({'error': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+# def UserPasswordResetConfirmView(request, uidb64, token):
+#     try:
+#         uid = force_str(urlsafe_base64_decode(uidb64))
+#         user_model = get_user_model()
+#         user = user_model.objects.get(user_id=uid)
+#     except (TypeError, ValueError, OverflowError, user_model.DoesNotExist):
+#         user = None
+
+#     if user is not None and default_token_generator.check_token(user, token):
+#         # reset the user's password
+#         # redirect to a confirmation page or login page
+#         return redirect('login')
+#     else:
+#         # invalid token or user, redirect to an error page
+#         return redirect('password_reset_invalid')
 
 @csrf_exempt
-def send_verification_code(request):
+def send_account_verification_code(request):
     if request.method == 'POST':
         email = request.data.get('email')
         if email:
