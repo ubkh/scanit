@@ -4,8 +4,13 @@ from .models import User, Product
 
 @admin.register(User)
 class Users(admin.ModelAdmin):
-    list_display = ["user_id", "email", "first_name","last_name", "number","is_verified", "verification_code"]
+    list_display = ["user_id", "email", "first_name","last_name", "number","store_address","is_verified", "verification_code"]
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ["name", "description", "price", "quantity", "expiry"]
+
+# @admin.register(Retailer)
+# class Retailer(admin.ModelAdmin):
+#     list_display = ["user_id", "email", "first_name","last_name", "number","is_verified", "verification_code"]
+

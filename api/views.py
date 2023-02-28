@@ -40,9 +40,12 @@ class UserRegistrationAPIView(APIView):
         content = { 'message': 'Hello!' }
         return Response(content)
 
-    def post(self, request):
+    def post(self, request, user_id):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
+            # user_model = get_user_model()
+            # current_user = get_object_or_404(user_model, user_id=user_id)
+            
             new_user = serializer.save()
             if new_user:
                 access_token = generate_access_token(new_user)
@@ -89,6 +92,7 @@ class UserLoginAPIView(APIView):
                     'first_name': user_instance.first_name,
                     'last_name': user_instance.last_name,
                     'number': user_instance.number,
+                    'store_address': user_instance.store_address,
                     'is_staff': user_instance.is_staff,
                 }
             }

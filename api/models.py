@@ -44,8 +44,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 	first_name = models.CharField(max_length=32)
 	last_name = models.CharField(max_length=32)
 	number = models.CharField(validators=[phone_regex], max_length=11, blank=True)
+	store_address = models.CharField(max_length=100, blank=True)
 	is_active = models.BooleanField(default=True)
 	is_staff = models.BooleanField(default=False)
+	is_retailer = models.BooleanField(default=False)
 	verification_code = models.CharField(max_length=6)
 	is_verified = models.BooleanField(default=False)
 	date_joined = models.DateField(auto_now_add=True)
@@ -55,6 +57,26 @@ class User(AbstractBaseUser, PermissionsMixin):
 	def __str__(self):
 		return f'{self.first_name} {self.last_name}'
 
+
+# class Retailer(AbstractBaseUser, PermissionsMixin):
+# 	phone_regex = RegexValidator(regex=r'^\0?1?\d{11}$', message="Phone number must have 11 digits.")
+
+# 	user_id = models.AutoField(primary_key=True)
+# 	email = models.EmailField(max_length=100, unique=True)
+# 	first_name = models.CharField(max_length=32)
+# 	last_name = models.CharField(max_length=32)
+# 	number = models.CharField(validators=[phone_regex], max_length=11, blank=True)
+# 	store_address = models.CharField(max_length=100)
+# 	is_active = models.BooleanField(default=True)
+# 	is_staff = models.BooleanField(default=True)
+# 	verification_code = models.CharField(max_length=6)
+# 	is_verified = models.BooleanField(default=False)
+# 	date_joined = models.DateField(auto_now_add=True)
+# 	USERNAME_FIELD = 'email'
+# 	objects = CustomUserManager()
+
+# 	def __str__(self):
+# 		return f'{self.first_name} {self.last_name}'
 # Create your models here.
 class Test(models.Model):
     text = models.CharField(max_length=100)

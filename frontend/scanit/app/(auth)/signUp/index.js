@@ -14,6 +14,7 @@ function SignUpScreen(props) {
     const[lastName, setLastName] = useState('');
     const[email, setEmail] = useState('');
     const[number, setNumber] = useState('');
+    const[storeAddress, setStoreAddress] = useState('');
     const[password, setPassword] = useState('');
     const[confirmPassword, setConfirmPassword] = useState('');
     const[error, setError] = useState('');
@@ -24,6 +25,7 @@ function SignUpScreen(props) {
             'first_name': firstName,
             'last_name': lastName,
             'number': number,
+            'store_address': storeAddress,
             'password': password
         })
 
@@ -64,6 +66,27 @@ function SignUpScreen(props) {
     const onPPPressed = () => {
         console.warn("lol pp")
     }
+
+    if (Platform.OS === 'web') {
+        return (
+            <View style={styles.container}>
+                <Text style={styles.title}>Create an account</Text>
+                
+                <CustomInput placeholder = "First name" value = {firstName} setValue = {setFirstName}/>
+                <CustomInput placeholder = "Last name" value = {lastName} setValue = {setLastName}/>
+                <CustomInput placeholder = "Email" value = {email} setValue = {setEmail}/>
+                <CustomInput placeholder = "Phone number" value = {number} setValue = {setNumber}/>
+                <CustomInput placeholder = "Store Address" value = {storeAddress} setValue = {setStoreAddress}/>
+                <CustomInput placeholder = "Password" value = {password} setValue = {setPassword} secureTextEntry/>
+                <CustomInput placeholder = "Confirm password" value = {confirmPassword} setValue = {setConfirmPassword} secureTextEntry/>
+                <CustomButton text = "Register as Business" onPress={onRegisterPressed}/>
+                <Text style = {styles.text}>
+                    By registering, you confirm that you accept our <Text style = {styles.link} onPress = {onTOUPressed}>Terms of Use</Text> and <Text style = {styles.link} onPress = {onPPPressed}>Privacy Policy</Text>
+                </Text>
+                <CustomButton text = "Already have an account? Sign In" onPress={onAlreadyUserPressed} type = "TERTIARY"/>
+            </View>
+        );
+        }
 
     return (
         <View style={styles.container}>
