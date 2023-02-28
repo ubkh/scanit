@@ -5,7 +5,7 @@ from .views import (
 	UserViewAPI,
 	UserLogoutViewAPI,
 	UserVerificationAPIView,
-    UserPasswordResetView,
+    # UserPasswordResetView,
 )
 
 urlpatterns = [
