@@ -5,10 +5,14 @@ import { Button, Text } from 'native-base';
 import { Context } from '../../../context/GlobalContext';
 import ContainerStyle from '../../../styles/ContainerStyle';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from "expo-router";
+
 
 function Basket(props) {
     const { basketList, setBasketList } = useContext(Context);
     const [basketItems, setBasketItems] = useState(<Text> Your basket is empty </Text>);
+    const router = useRouter();
+
 
     const removeItem = (index) => {
       Alert.alert(
@@ -73,7 +77,7 @@ function Basket(props) {
               </View>
             ))}
             <View style={{width: '90%', alignSelf: "center"}}>
-                <Button shadow={2} bg="brand.400" style={{ marginBottom: 10 }}onPress= {() => console.log("Checkout button")}>
+                <Button shadow={2} bg="brand.400" style={{ marginBottom: 10 }}onPress= {() => router.push("/Another")}>
                   <Text style={{fontWeight: "bold", color: "white", fontSize: 20}}>Checkout!</Text>
                 </Button>
               </View>

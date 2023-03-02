@@ -131,10 +131,10 @@
 
 // export default Another;
 
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useRouter } from "expo-router";
-import { Button } from "native-base";
+import { Context } from '../../../context/GlobalContext';
 
 
 
@@ -144,6 +144,10 @@ export default function CardDetails() {
   const [expiryMonth, setExpiryMonth] = useState('');
   const [expiryYear, setExpiryYear] = useState('');
   const [cvv, setCvv] = useState('');
+  const router = useRouter();
+  const globalContext = useContext(Context);
+
+
 
   const handleNameOnCard = (text) => {
     setName(text.replace(/[^a-z- ]/gi, ''));
@@ -178,14 +182,15 @@ export default function CardDetails() {
       Alert.alert('Invalid Month', 'Please enter a valid Month between 1-12');
     }
     else if(parseInt(expiryYear) < currentYear || parseInt(expiryYear) > 2100){
-      Alert.alert('Invalid Year', 'Please enter a valid Year between 2021-2099');
+      Alert.alert('Invalid Year', 'Please enter a valid Year between 2023-2099');
     }
     else if (cvv.length !== 3) {
       Alert.alert('Invalid CVV', 'Please enter a valid 3-digit CVV');
     } 
     else {
       console.warn('Card details submitted');
-      //router.push("/home");
+      router.push("/home");
+      globalContext.setBasketList([]);
       //resetRetailerBarcode();
     }
   };
@@ -241,16 +246,6 @@ export default function CardDetails() {
         onChangeText={handleCvvChange}
         maxLength={3}
       />
-
-        <Button
-        bg="red.500"
-        style = {[{}, styles.button]}
-        onPress={ (ev) => {
-            handleSubmit();
-            router.push("/login");
-        }}>
-            Pay Out
-        </Button>
 
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
         <Text style={styles.buttonText}>Pay Now</Text>
