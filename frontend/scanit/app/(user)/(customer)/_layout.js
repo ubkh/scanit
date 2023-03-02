@@ -32,6 +32,24 @@ export default function CustomerLayout() {
       setIsSmallScreen(width < 600);
   }, [width]);
 
+  function getNumberOfBasketItems() {
+    let total = 0;
+    for (let i = 0; i < basketList.length; i++) {
+        total += basketList[i].quantity;
+    }
+
+    let display = ''
+    
+    if (total > 99) {
+        display = "99+"
+    }
+    else{
+        display = total.toString()
+    }
+
+    return total > 0 ? display : null;
+}
+
   if (Platform.OS !== "web") {
     return (
             <Tabs screenOptions={{
@@ -54,7 +72,7 @@ export default function CustomerLayout() {
                         tabBarIcon: ({ color, size }) => (
                         <Ionicons name="cart-outline" color={color} size={size} />
                         ),
-                        tabBarBadge: basketList.length > 0 ? basketList.length : null,
+                        tabBarBadge: basketList.length > 0 ? getNumberOfBasketItems() : null,
                         tabBarBadgeStyle: {
                             backgroundColor: 'red',
                             color: 'white',
