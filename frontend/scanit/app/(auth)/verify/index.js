@@ -48,10 +48,6 @@ function VerificationScreen(props) {
     const onSignInPressed = () => {
         router.push('/signIn')
     }
-    
-    const onResendPressed = () => {
-        console.warn("are you that slow schmuck")
-    }
 
     return (
         <View style={styles.container}>
@@ -68,7 +64,6 @@ function VerificationScreen(props) {
                 rules = {{required: 'Code is required'}} 
             />
             <CustomButton text = "Confirm" onPress={handleSubmit(onConfirmPressed)}/>
-            <CustomButton text = "Resend code" onPress={onResendPressed} type = "SECONDARY"/>
             <CustomButton text = "Back to sign in" onPress={onSignInPressed} type = "TERTIARY"/>
             
         </View>

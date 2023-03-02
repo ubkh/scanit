@@ -5,6 +5,7 @@ from django.core.validators import RegexValidator
 from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+
 import datetime
 
 
@@ -55,7 +56,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 	def __str__(self):
 		return f'{self.first_name} {self.last_name}'
 
-# Create your models here.
 class Test(models.Model):
     text = models.CharField(max_length=100)
 

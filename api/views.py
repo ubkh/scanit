@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from .serializers import (
     UserRegistrationSerializer, 
     UserLoginSerializer, 
@@ -6,30 +5,30 @@ from .serializers import (
     UserPasswordResetSerializer,
     UserConfirmPasswordResetSerializer,
     ) 
+
 from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed
-from django.contrib.auth import authenticate
+from rest_framework import status
+
+from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth.tokens import default_token_generator
 from django.conf import settings
-from django.contrib.auth import get_user_model
-from .utils import generate_access_token
-import jwt
+from django.shortcuts import get_object_or_404
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.core.mail import send_mail
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+
+from .utils import generate_access_token
+import jwt
 import random
 import string
-from django.conf import settings
-from django.urls import reverse
-from django.shortcuts import redirect
-from django.shortcuts import get_object_or_404
-from rest_framework import status
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.encoding import force_bytes, force_str
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+
 
 class UserRegistrationAPIView(APIView):
     serializer_class = UserRegistrationSerializer
@@ -145,18 +144,14 @@ class UserVerificationAPIView(APIView):
         if serializer.is_valid():
             input_verification_code = serializer.validated_data['verification_code']
 
-            # Get the current user based on the authenticated request
             user_model = get_user_model()
             current_user = get_object_or_404(user_model, user_id=user_id)
 
-            # Check if the input verification code matches the stored verification code
             if current_user.verification_code == input_verification_code:
-                # If the verification code matches, mark the user as verified
                 current_user.is_verified = True
                 current_user.save()
                 return Response({'message': 'Verification successful!'}, status=status.HTTP_200_OK)
             else:
-                # If the verification code does not match, return an error message
                 return Response({'error': 'Invalid verification code'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -212,14 +207,12 @@ class UserPasswordResetConfirmView(APIView):
 
             user_model = get_user_model()
 
-            # Decode the user ID from the URL
             try:
                 uidb64 = force_str(urlsafe_base64_decode(uidb64))
                 user = user_model.objects.get(user_id=uidb64)
             except (TypeError, ValueError, OverflowError, user_model.DoesNotExist):
                 user = None
 
-            # If the user ID is valid and the token is valid for the user, set a new password
             if user is not None and default_token_generator.check_token(user, token):
                 user.set_password(new_password)
                 user.save()
@@ -248,6 +241,5 @@ def send_account_verification_code(request):
             recipient_list = [email]
             send_mail(subject, message, from_email, recipient_list, fail_silently=False)
 
-            # Return a success response
             return JsonResponse({'message': 'Verification code sent'})
     return JsonResponse({'error': 'Invalid request'})
