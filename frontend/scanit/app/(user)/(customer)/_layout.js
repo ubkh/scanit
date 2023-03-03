@@ -9,7 +9,7 @@ import { Text, View } from "native-base";
 
 const links = [
 ];
-  
+
 export default function CustomerLayout() {
   const globalContext = useContext(Context);
   const { userType } = globalContext;

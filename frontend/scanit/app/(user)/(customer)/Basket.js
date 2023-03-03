@@ -77,7 +77,7 @@ function Basket(props) {
               </View>
             ))}
             <View style={{width: '90%', alignSelf: "center"}}>
-                <Button shadow={2} bg="brand.400" style={{ marginBottom: 10 }}onPress= {() => router.push("/Another")}>
+                <Button shadow={2} bg="brand.400" style={{ marginBottom: 10 }}onPress= {() => router.push("/payment")}>
                   <Text style={{fontWeight: "bold", color: "white", fontSize: 20}}>Checkout!</Text>
                 </Button>
               </View>
