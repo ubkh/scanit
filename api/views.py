@@ -30,6 +30,7 @@ from rest_framework import status
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from .models import User
 
 class UserRegistrationAPIView(APIView):
     serializer_class = UserRegistrationSerializer
@@ -40,13 +41,19 @@ class UserRegistrationAPIView(APIView):
         content = { 'message': 'Hello!' }
         return Response(content)
 
-    def post(self, request, user_id):
+    def post(self, request):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            # user_model = get_user_model()
-            # current_user = get_object_or_404(user_model, user_id=user_id)
-            
             new_user = serializer.save()
+
+            # email = request.data.get('email', None)
+            # user_model = get_user_model()
+            # user = user_model.objects.get(email=email)
+            # if not user.number:
+            #     user.is_staff=True
+            #     user.is_verified=True
+            # user.save()
+
             if new_user:
                 access_token = generate_access_token(new_user)
                 data = { 'user_id': new_user.user_id }
@@ -56,6 +63,38 @@ class UserRegistrationAPIView(APIView):
                 return response
                 # return redirect(reverse('verify', args=[new_user.user_id]))
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class StaffRegistrationAPIView(APIView):
+    serializer_class = UserRegistrationSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (AllowAny,)
+
+    def get(self, request):
+        content = { 'message': 'Hello!' }
+        return Response(content)
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            new_user = serializer.save()
+
+            email = request.data.get('email', None)
+            user_model = get_user_model()
+            user = user_model.objects.get(email=email)
+            user.is_staff=True
+            user.is_verified=True
+            user.save()
+
+            if new_user:
+                access_token = generate_access_token(new_user)
+                data = { 'user_id': new_user.user_id }
+                response = Response(data, status=status.HTTP_201_CREATED)
+                response.set_cookie(key='access_token', value=access_token, httponly=True)
+                send_account_verification_code(request)
+                return response
+                # return redirect(reverse('verify', args=[new_user.user_id]))
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class UserLoginAPIView(APIView):
     serializer_class = UserLoginSerializer
@@ -79,6 +118,8 @@ class UserLoginAPIView(APIView):
         
         if not user_instance.is_verified:
             raise AuthenticationFailed('User not verified.')
+
+        
 
         if user_instance.is_active and user_instance.is_verified:
             user_access_token = generate_access_token(user_instance)
@@ -154,6 +195,17 @@ class UserVerificationAPIView(APIView):
             current_user = get_object_or_404(user_model, user_id=user_id)
 
             # Check if the input verification code matches the stored verification code
+
+            
+
+            if current_user.store_address and current_user.verification_code == input_verification_code:
+                # If the verification code matches, mark the user as verified
+                current_user.is_verified = True
+                current_user.is_staff = True
+                current_user.is_retailer = True
+                current_user.save()
+                return Response({'message': 'Verification successful!'}, status=status.HTTP_200_OK)
+
             if current_user.verification_code == input_verification_code:
                 # If the verification code matches, mark the user as verified
                 current_user.is_verified = True
