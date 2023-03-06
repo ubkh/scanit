@@ -49,8 +49,9 @@ export default function CustomerLayout() {
                     }}>
                 </Tabs.Screen>
                 <Tabs.Screen 
-                    name="Basket"
+                    name="basket"
                     options={{
+                        title: "Basket",
                         tabBarIcon: ({ color, size }) => (
                         <Ionicons name="cart-outline" color={color} size={size} />
                         ),

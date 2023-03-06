@@ -2,8 +2,8 @@ import { View, ScrollView, Platform, TouchableOpacity, StyleSheet, Alert, Toucha
 import { useState, useContext, useEffect } from 'react';
 // import { useNavigation, useRoute } from '@react-navigation/native';
 import { Button, Text } from 'native-base';
-import { Context } from '../../../context/GlobalContext';
-import ContainerStyle from '../../../styles/ContainerStyle';
+import { Context } from '../../../../context/GlobalContext';
+import ContainerStyle from '../../../../styles/ContainerStyle';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from "expo-router";
 
@@ -77,7 +77,7 @@ function Basket(props) {
               </View>
             ))}
             <View style={{width: '90%', alignSelf: "center"}}>
-                <Button shadow={2} bg="brand.400" style={{ marginBottom: 10 }}onPress= {() => router.push("/payment")}>
+                <Button shadow={2} bg="brand.400" style={{ marginBottom: 10 }}onPress= {() => router.push("/basket/payment")}>
                   <Text style={{fontWeight: "bold", color: "white", fontSize: 20}}>Checkout!</Text>
                 </Button>
               </View>

@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useRouter } from "expo-router";
-import { Context } from '../../../context/GlobalContext';
+import { Context } from '../../../../context/GlobalContext';
 
 
 
