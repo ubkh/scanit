@@ -9,6 +9,7 @@ const LogOutButton = ({ style }) => {
     return (
        <Button
         bg="red.500"
+        shadow={2}
         style = {[{}, style]}
         onPress={ (ev) => {
             signOut();

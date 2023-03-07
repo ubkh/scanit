@@ -10,7 +10,7 @@ export default function ContextProvider(props) {
     const[retailerBarcodeType, setRetailerBarcodeType] = useState("");
     const[basketList, setBasketList] = useState([]);
     const[isRetailerScanned, setRetailerScanned] = useState(false);
-    const [ userType, setUserType ] = useState('customer'); //'customer' or 'retailer'
+    const [ userType, setUserType ] = useState('retailer'); //'customer' or 'retailer'
 
     useEffect(() => {
     }, []);

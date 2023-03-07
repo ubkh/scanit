@@ -1,3 +1,11 @@
+
+// import { Text } from "react-native"
+// export default function Index() {
+//     return (
+//         <Text>Index</Text>
+//     )
+// }
+
 import { Redirect } from "expo-router";
 import { useContext } from "react";
 import { Context } from "../../context/GlobalContext";

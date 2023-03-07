@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 const links = [
     { label: 'Home', url: '/home' },
     { label: 'Something Else', url: '/other' },
+    { label: 'Account', url: '/Account' },
 ];
 
 export default function RetailerLayout() {
