@@ -75,7 +75,7 @@ $ npm start
 
 Run all tests with:
 ```
-$ npm run test
+$ npm test
 ```
 
 ## Sources
