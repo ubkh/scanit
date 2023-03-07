@@ -8,13 +8,12 @@ on:
   pull_request:
     branches: [ main ]
     
-defaults:
-  run:
-    working-directory: frontend/scanit
-    
 jobs:
   build:
     runs-on: ${{matrix.os}}
+    defaults:
+      run:
+        working-directory: frontend/scanit
     strategy:
       max-parallel: 24
       matrix:
