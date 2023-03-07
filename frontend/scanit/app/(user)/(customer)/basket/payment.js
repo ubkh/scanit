@@ -56,7 +56,7 @@ export default function CardDetails() {
     } 
     else {
       console.warn('Card details submitted');
-      router.push("/home");
+      router.push("/Basket");
       globalContext.setBasketList([]);
       setName('');
       setCardNumber('');
