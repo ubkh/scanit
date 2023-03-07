@@ -87,9 +87,6 @@ function Home() {
                                 },
                                 {
                                 text: 'Cancel',
-                                onPress: () => {
-                                    console.log("Cancelled retailer reset")
-                                },
                                 style: 'cancel',
                                 },
                             ],
