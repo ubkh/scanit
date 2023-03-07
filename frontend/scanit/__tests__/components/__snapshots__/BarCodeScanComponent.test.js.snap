@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BarCodeScanComponent renders correctly 1`] = `
+<RNCSafeAreaProvider
+  onInsetsChange={[Function]}
+  style={
+    [
+      {
+        "flex": 1,
+      },
+      undefined,
+    ]
+  }
+>
+  <View
+    style={
+      {
+        "alignItems": "center",
+        "backgroundColor": "#fff",
+        "flex": 1,
+        "justifyContent": "center",
+      }
+    }
+  >
+    <Text>
+      Requesting for camera permission
+    </Text>
+  </View>
+</RNCSafeAreaProvider>
+`;

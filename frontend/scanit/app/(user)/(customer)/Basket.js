@@ -1,10 +1,11 @@
-import { View, ScrollView, Platform, TouchableOpacity, StyleSheet, Alert, TouchableHighlight } from 'react-native';
+import { View, ScrollView, Platform, TouchableOpacity, StyleSheet, Alert, TextInput } from 'react-native';
 import { useState, useContext, useEffect } from 'react';
 // import { useNavigation, useRoute } from '@react-navigation/native';
 import { Button, Text } from 'native-base';
 import { Context } from '../../../context/GlobalContext';
 import ContainerStyle from '../../../styles/ContainerStyle';
 import { Ionicons } from '@expo/vector-icons';
+import NumericInput from 'react-native-numeric-input'; // https://github.com/himelbrand/react-native-numeric-input for props and info
 
 function Basket(props) {
     const { basketList, setBasketList } = useContext(Context);
@@ -35,20 +36,64 @@ function Basket(props) {
             ],)
     }
     
+
+    const handleQuantityChange = (index, newQuantity) => {
+      const updatedBasketList = basketList.map((basketItem, i) => {
+        if (i === index) {
+          return { ...basketItem, quantity: newQuantity };
+        } else {
+          return basketItem;
+        }
+      });
+      setBasketList(updatedBasketList);
+    };
+    
   
     useEffect(() => {
+        setBasketList(basketList);
+
         if (basketList.length === 0) {
           setBasketItems(<Text> Your basket is empty </Text>);
         } else {
           setBasketItems(
         <View style={styles.basketList}>
           <ScrollView>
-          <Text style={styles.basketHeader}>{basketList.length} items</Text>
+          <Text style={styles.basketHeader}>{basketList.length} products</Text>
             {basketList.map((item, index) => (
               <View style={styles.basketEntry} key={index}>
-                  <TouchableOpacity key={index}>
+                  <View key={index}>
                       <Text>Barcode ID: {item.data}</Text>
                       <Text>Barcode Type: {item.type}</Text>
+                      <Text>Quantity: {item.quantity}</Text>
+
+                      <NumericInput
+                        value={item.quantity}
+                        onChange={value => {
+                          if (value > 0) {
+                            handleQuantityChange(index, value);
+                          }
+                          else {
+                            Alert.alert(
+                              'Enter a valid quantity',
+                              'Quantity must be 1 or more!',
+                              [
+                                {
+                                  text: 'Ok',
+                                  onPress: () => {
+                                    console.log("User acknowledged warning")
+                                  },
+                                  style: 'default',
+                                },
+                              ],
+                            )
+                          }
+                        }} 
+                        minValue={1}
+                        rounded={true}
+                        totalHeight={40}
+                        totalWidth={100}
+                      />
+
                       <View style={{flexDirection: "row", justifyContent: "flex-end"}} key={index}>
                         <TouchableOpacity
                           onPress={() => removeItem(index)}
@@ -68,7 +113,7 @@ function Basket(props) {
                           </View>
                         </TouchableOpacity>
                       </View>
-                  </TouchableOpacity>
+                  </View>
                   <Text>&nbsp;</Text>
               </View>
             ))}
@@ -117,33 +162,5 @@ function Basket(props) {
         width: '100%'
     }
 });
-
-// VERSION OF BARCODE SCAN THAT DOESN'T ALLOW DUPLICATES IN BASKET
-
-// const handleBarCodeScanned = ({ type, data }) => {
-//   setScanned(true);
-//   setText(data)
-//   console.log('Type: ' + type + '\nData: ' + data)
-//   const check  = basketList.find(obj => obj.data === data)
-//   if (check) {
-//     Alert.alert(
-//     'Item Already in Basket',
-//     'This item is already in your basket!',
-//     [
-//       {
-//         text: 'Ok',
-//         onPress: () => {
-//           console.log("Ok on dialog was pressed")
-//           navigation.navigate('HomeScreen', { data, type });
-//         },
-//         style: 'default',
-//       },
-//     ],)
-//   }
-//   else {
-//     globalContext.setBasketList([...globalContext.basketList, { 'data': data, 'type': type }])
-//     navigation.navigate('HomeScreen', { data, type });
-//   }
-// };
 
 export default Basket;
