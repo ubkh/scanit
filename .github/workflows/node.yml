@@ -8,6 +8,10 @@ on:
   pull_request:
     branches: [ main ]
     
+defaults:
+  run:
+    working-directory: frontend/scanit
+    
 jobs:
   build:
     runs-on: ${{matrix.os}}
