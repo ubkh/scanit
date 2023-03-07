@@ -78,6 +78,11 @@ Run all tests with:
 $ npm test
 ```
 
+Run tests and watch changes:
+```
+$ npm test -- --watch
+```
+
 ## Sources
 The packages used by this application are specified in `requirements.txt` for the backend and in the `dependencies` section of `frontend/scanit/package.json` for the frontend.
 
