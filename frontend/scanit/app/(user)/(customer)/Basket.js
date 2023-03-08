@@ -1,5 +1,5 @@
 import { View, ScrollView, Platform, TouchableOpacity, StyleSheet, Alert, TextInput } from 'react-native';
-import { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 // import { useNavigation, useRoute } from '@react-navigation/native';
 import { Button, Text } from 'native-base';
 import { Context } from '../../../context/GlobalContext';
@@ -65,6 +65,7 @@ function Basket(props) {
 
                       <NumericInput
                         key={`${item.data}`}
+                        testID={`numeric-input-${index}`}
                         value={item.quantity}
                         onChange={value => {
                           if (value > 0) {
@@ -91,6 +92,7 @@ function Basket(props) {
 
                       <View style={{flexDirection: "row", justifyContent: "flex-end"}} key={index}>
                         <TouchableOpacity
+                          testID={`remove-button-${index}`}
                           onPress={() => removeItem(index)}
                         >
                           <View
