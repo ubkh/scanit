@@ -9,7 +9,6 @@ import NumericInput from 'react-native-numeric-input'; // https://github.com/him
 
 function Basket(props) {
     const { basketList, setBasketList } = useContext(Context);
-    const [basketItems, setBasketItems] = useState(<Text> Your basket is empty </Text>);
 
     const removeItem = (index) => {
       Alert.alert(
@@ -44,53 +43,49 @@ function Basket(props) {
       });
       setBasketList(updatedBasketList);
     };
-    
+      
   
-    useEffect(() => {
-        setBasketList(basketList);
-
-        if (basketList.length === 0) {
-          setBasketItems(<Text> Your basket is empty </Text>);
-        } else {
-          setBasketItems(
-        <View style={styles.basketList}>
-          <ScrollView>
-          <Text style={styles.basketHeader}>{basketList.length} products</Text>
-            {basketList.map((item, index) => (
-              <View style={styles.basketEntry} key={index}>
-                  <View key={index}>
+      return (
+        <View style={ContainerStyle.container}>
+          {basketList.length === 0 ? (
+            <Text> Your basket is empty </Text>
+          ) : (
+            <View style={styles.basketList}>
+              <ScrollView>
+                <Text style={styles.basketHeader}>{basketList.length} products</Text>
+                {basketList.map((item, index) => (
+                  <View style={styles.basketEntry} key={index}>
+                    <View key={index}>
                       <Text>Barcode ID: {item.data}</Text>
                       <Text>Barcode Type: {item.type}</Text>
                       <Text>Quantity: {item.quantity}</Text>
-
+      
                       <NumericInput
                         key={`${item.data}`}
                         testID={`numeric-input-${index}`}
                         value={item.quantity}
-                        onChange={value => {
+                        onChange={(value) => {
                           if (value > 0) {
                             handleQuantityChange(index, value);
+                          } else {
+                            Alert.alert('Enter a valid quantity', 'Quantity must be 1 or more!', [
+                              {
+                                text: 'Ok',
+                                style: 'default',
+                              },
+                            ]);
                           }
-                          else {
-                            Alert.alert(
-                              'Enter a valid quantity',
-                              'Quantity must be 1 or more!',
-                              [
-                                {
-                                  text: 'Ok',
-                                  style: 'default',
-                                },
-                              ],
-                            )
-                          }
-                        }} 
+                        }}
                         minValue={1}
                         rounded={true}
                         totalHeight={40}
                         totalWidth={100}
                       />
-
-                      <View style={{flexDirection: "row", justifyContent: "flex-end"}} key={index}>
+      
+                      <View
+                        style={{ flexDirection: 'row', justifyContent: 'flex-end' }}
+                        key={index}
+                      >
                         <TouchableOpacity
                           testID={`remove-button-${index}`}
                           onPress={() => removeItem(index)}
@@ -102,36 +97,32 @@ function Basket(props) {
                               padding: 10,
                             }}
                           >
-                            <Ionicons
-                              name="trash-outline"
-                              size={25}
-                              color="white"
-                            />
+                            <Ionicons name="trash-outline" size={25} color="white" />
                           </View>
                         </TouchableOpacity>
                       </View>
+                    </View>
+                    <Text>&nbsp;</Text>
                   </View>
-                  <Text>&nbsp;</Text>
-              </View>
-            ))}
-            <View style={{width: '90%', alignSelf: "center"}}>
-                <Button shadow={2} bg="brand.400" style={{ marginBottom: 10 }}onPress= {() => console.log("Checkout button")}>
-                  <Text style={{fontWeight: "bold", color: "white", fontSize: 20}}>Checkout!</Text>
-                </Button>
-              </View>
-          </ScrollView>
+                ))}
+                <View style={{ width: '90%', alignSelf: 'center' }}>
+                  <Button
+                    shadow={2}
+                    bg="brand.400"
+                    style={{ marginBottom: 10 }}
+                    onPress={() => console.log('Checkout button')}
+                  >
+                    <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 20 }}>
+                      Checkout!
+                    </Text>
+                  </Button>
+                </View>
+              </ScrollView>
+            </View>
+          )}
         </View>
-        );
-        }
-      }, [basketList]);
+      );
       
-  
-    return (
-      <View style={ContainerStyle.container}>
-        {basketItems}
-      </View>
-      
-    );
   }
 
   // CSS
