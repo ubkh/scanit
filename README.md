@@ -70,12 +70,17 @@ This IP must be in the form ```192.168.X.X``` - found in Network Settings.
 To start the development server:
 
 ```
-$ npx expo start
+$ npm start
 ```
 
 Run all tests with:
 ```
-$ npm run test
+$ npm test
+```
+
+Run tests and watch changes:
+```
+$ npm test -- --watch
 ```
 
 ## Sources

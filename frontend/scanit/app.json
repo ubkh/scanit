@@ -1,9 +1,9 @@
 {
   "expo": {
     "name": "scanit",
+    "scheme": "scanit",
     "slug": "scanit",
     "version": "1.0.0",
-    "entryPoint": "./src/App.js",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -28,7 +28,8 @@
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
     }
   }
 }

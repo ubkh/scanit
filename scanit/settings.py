@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import datetime
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -133,11 +134,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ),
 }
 
@@ -147,3 +150,18 @@ JWT_AUTH = {
     # allow refreshing of tokens
     'JWT_ALLOW_REFRESH': True,
 }
+
+AUTH_USER_MODEL = 'api.User'
+
+SECURE_SSL_REDIRECT = False
+
+# Email backend settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com' # SMTP server address for your email provider
+EMAIL_PORT = 587 # SMTP server port for your email provider
+EMAIL_USE_TLS = True # Use TLS when connecting to the SMTP server
+EMAIL_HOST_USER = 'cr7isdabest11@gmail.com' # Your email address
+EMAIL_HOST_PASSWORD = 'xaxvriclzexvjauv' # Your email password or app password if 2FA is enabled
+
+# Default "from" address for sending emails
+DEFAULT_FROM_EMAIL = 'ScanIt cr7isdabest11@gmail.com'
