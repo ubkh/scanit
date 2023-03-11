@@ -4,19 +4,19 @@ import { Button, Text, Input } from "native-base";
 import CurrencyInput from "react-native-currency-input";
 import { Formik } from "formik";
 import { Context } from "../context/GlobalContext";
-import validateForm from "./forms-validations/storeAddItemValidation";
+import validateForm from "./forms-validations/RetailerAddProduct";
 import { useSearchParams } from "expo-router";
 
-function StoreAddItemForm() {
+function RetailerAddProductForm() {
   const params = useSearchParams();
-  const { itemData } = params || {};
+  const { productData } = params || {};
   const globalContext = useContext(Context);
   const { domain } = globalContext;
   const errorStyle = { color: "#c20808" };
 
-  // if item was not found in the db then itemData has only the barcode. This prevents price from becoming a NaN
-  function getItemPrice() {
-    return itemData.price ? (itemData.price / 100).toString() : "0";
+  // if product was not found in the db then productData has only the barcode. This prevents price from becoming a NaN
+  function getProductPrice() {
+    return productData.price ? (productData.price / 100).toString() : "0";
   }
 
   function getInitialValues() {
@@ -28,11 +28,11 @@ function StoreAddItemForm() {
       expiry: "",
       barcode: "",
     };
-    if (itemData) {
+    if (productData) {
       return {
         ...vals,
-        ...itemData,
-        price: getItemPrice(),
+        ...productData,
+        price: getProductPrice(),
       };
     }
     return vals;
@@ -44,7 +44,7 @@ function StoreAddItemForm() {
       price: Math.ceil(parseFloat(values.price) * 100), // some inputs like "300.09" becomes 30008.9999999 for some reason, hence Math.ceil
       quantity: parseInt(values.quantity),
     });
-    await fetch(`http://${domain}/api/store-add-item/`, {
+    await fetch(`http://${domain}/api/store-add-product/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: jsonObj,
@@ -67,7 +67,7 @@ function StoreAddItemForm() {
         isSubmitting,
       }) => (
         <ScrollView>
-          <Text>Please fill in the details of the item.</Text>
+          <Text>Please fill in the details of the product.</Text>
           <Text>&nbsp;</Text>
           <Input
             label="Name"
@@ -158,7 +158,7 @@ function StoreAddItemForm() {
           />
 
           <Button
-            title={"Add item"}
+            title={"Add product"}
             onPress={handleSubmit}
             disabled={isSubmitting}
           />
@@ -168,4 +168,4 @@ function StoreAddItemForm() {
   );
 }
 
-export default StoreAddItemForm;
+export default RetailerAddProductForm;

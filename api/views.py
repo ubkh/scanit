@@ -250,7 +250,7 @@ def send_account_verification_code(request):
     return JsonResponse({'error': 'Invalid request'})
 
 @csrf_exempt
-def storeAddItem(request):
+def storeAddProduct(request):
     productData = json.loads(request.body)
     try:
         # Same product with same expiry date and retailer is in the db, i.e: same batch. Update quantity and do not create new entries.
@@ -264,7 +264,7 @@ def storeAddItem(request):
         return HttpResponseServerError()
     
 @csrf_exempt
-def storeGetItem(_, barcode):
+def storeGetProduct(_, barcode):
     queryset = Product.objects.filter(barcode=barcode)
     if (queryset.count()):
         item = queryset.first()

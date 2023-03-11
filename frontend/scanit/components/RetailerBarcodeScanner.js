@@ -26,33 +26,32 @@ function RetailerBarcodeScanner() {
   const handleBarCodeScanned = async ({ data }) => {
     setScanned(true);
     try {
-      // Retailer Auth not implemented yet. Retailer ID with barcode to find the item.
+      // Retailer Auth not implemented yet. Retailer ID with barcode to find the product.
       // const res = await fetch(
-      //   `http://${domain}/api/get-item/${retailerId}/${data}`
+      //   `http://${domain}/api/get-product/${retailerId}/${data}`
       // );
-      const res = await fetch(`http://${domain}/api/store-get-item/${data}`);
+      const res = await fetch(`http://${domain}/api/store-get-product/${data}`);
       if (res.ok) {
         const resData = await res.json();
-        Alert.alert("Item found", "Please fill in the quantity and expiry.");
+        Alert.alert("Product found", "Please fill in the quantity and expiry.");
         router.back();
-        // router.push("StoreAddItemForm", { itemData: resData });
-        router.push({ pathname: "/Form", params: { itemData: resData } });
+        router.push({ pathname: "/Form", params: { productData: resData } });
       } else if (res.status === 400) {
         Alert.alert(
           "Not found",
-          "The scanned item was not found in the system. Please fill in the item's data manually."
+          "The scanned product was not found in the system. Please fill in the product's data manually."
         );
         router.back();
         router.push({
           pathname: "/Form",
-          params: { itemData: { barcode: data } },
+          params: { productData: { barcode: data } },
         });
       }
       setScanned(false);
     } catch (error) {
       Alert.alert(
         "Failed",
-        "Could not search the system for the scanned item. Please try again."
+        "Could not search the system for the scanned product. Please try again."
       );
       router.back();
     }
