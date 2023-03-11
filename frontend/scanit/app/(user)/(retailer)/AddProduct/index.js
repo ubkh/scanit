@@ -16,19 +16,17 @@ function AddProduct() {
         details manually.
       </Text>
       <Text>&nbsp;</Text>
+      <Button bg="brand.400" onPress={() => router.push("AddProduct/Scanner")}>
+        Scan barcode
+      </Button>
+      <Text>&nbsp;</Text>
       <Button
-        onPress={() => router.push("/Scanner")}
-        title="Scan barcode"
-      ></Button>
-      <Button
-        containerStyle={{
-          width: 200,
-          margin: 10,
-        }}
-        title="Enter details manually"
-        type="clear"
-        onPress={() => router.push("/Form")}
-      />
+        variant="outline"
+        colorScheme="emerald"
+        onPress={() => router.push("AddProduct/Form")}
+      >
+        <Text color="brand.400">Enter details manually</Text>
+      </Button>
       <StatusBar style="auto" />
     </View>
   );

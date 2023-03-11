@@ -1,6 +1,12 @@
-import { ScrollView } from "react-native";
 import { useContext } from "react";
-import { Button, Text, Input } from "native-base";
+import {
+  Button,
+  Text,
+  Input,
+  ScrollView,
+  FormControl,
+  VStack,
+} from "native-base";
 import CurrencyInput from "react-native-currency-input";
 import { Formik } from "formik";
 import { Context } from "../context/GlobalContext";
@@ -12,7 +18,7 @@ function RetailerAddProductForm() {
   const { productData } = params || {};
   const globalContext = useContext(Context);
   const { domain } = globalContext;
-  const errorStyle = { color: "#c20808" };
+  // const errorStyle = { color: "#c20808" };
 
   // if product was not found in the db then productData has only the barcode. This prevents price from becoming a NaN
   function getProductPrice() {
@@ -66,10 +72,108 @@ function RetailerAddProductForm() {
         touched,
         isSubmitting,
       }) => (
-        <ScrollView>
+        <ScrollView width="100%">
           <Text>Please fill in the details of the product.</Text>
           <Text>&nbsp;</Text>
-          <Input
+          <VStack space={4}>
+            <FormControl isInvalid={"name" in errors}>
+              <FormControl.Label>Name</FormControl.Label>
+              <Input
+                maxLength={100}
+                onChangeText={handleChange("name")}
+                onBlur={handleBlur("name")}
+                value={values.name}
+              />
+              <FormControl.ErrorMessage>
+                {errors.name && touched.name ? errors.name : ""}
+              </FormControl.ErrorMessage>
+            </FormControl>
+            <FormControl isInvalid={"description" in errors}>
+              <FormControl.Label>Description</FormControl.Label>
+              <Input
+                multiline
+                maxLength={750}
+                onChangeText={handleChange("description")}
+                onBlur={handleBlur("description")}
+                value={values.description}
+              />
+              <FormControl.ErrorMessage>
+                {errors.description && touched.description
+                  ? errors.description
+                  : ""}
+              </FormControl.ErrorMessage>
+            </FormControl>
+            <FormControl isInvalid={"price" in errors}>
+              <FormControl.Label>Price</FormControl.Label>
+              <CurrencyInput
+                label="Price"
+                onChangeValue={(val) => {
+                  handleChange("price")((val || 0).toString());
+                }}
+                onBlur={handleBlur("price")}
+                value={values.price}
+                keyboardType="numeric"
+                separator="."
+                delimiter=""
+                minValue={0}
+                precision={2}
+                renderTextInput={(textInputProps) => (
+                  <Input {...textInputProps} />
+                )}
+              />
+              <FormControl.ErrorMessage>
+                {errors.price && touched.price ? errors.price : ""}
+              </FormControl.ErrorMessage>
+            </FormControl>
+            <FormControl isInvalid={"quantity" in errors}>
+              <FormControl.Label>Quantity</FormControl.Label>
+              <Input
+                maxLength={5}
+                keyboardType="numeric"
+                onChangeText={(text) =>
+                  handleChange("quantity")(text.replace(/([^0-9])|(\b0+)/g, ""))
+                }
+                onBlur={handleBlur("quantity")}
+                value={values.quantity}
+              />
+              <FormControl.ErrorMessage>
+                {errors.quantity && touched.quantity ? errors.quantity : ""}
+              </FormControl.ErrorMessage>
+            </FormControl>
+            <FormControl isInvalid={"expiry" in errors}>
+              <FormControl.Label>Expiry</FormControl.Label>
+              <Input
+                placeholder="YYYY-MM-DD"
+                keyboardType="numeric"
+                maxLength={10}
+                onChangeText={(val) =>
+                  handleChange("expiry")(val.replace(/([^0-9-])/g, ""))
+                }
+                onBlur={handleBlur("expiry")}
+                value={values.expiry}
+              />
+              <FormControl.ErrorMessage>
+                {errors.expiry && touched.expiry ? errors.expiry : ""}
+              </FormControl.ErrorMessage>
+            </FormControl>
+            <FormControl isInvalid={"barcode" in errors}>
+              <FormControl.Label>Barcode</FormControl.Label>
+              <Input
+                placeholder="##############"
+                keyboardType="numeric"
+                onChangeText={(val) =>
+                  handleChange("barcode")(val.replace(/([^0-9])/g, ""))
+                }
+                onBlur={handleBlur("barcode")}
+                value={values.barcode}
+                maxLength={13}
+              />
+              <FormControl.ErrorMessage>
+                {errors.barcode && touched.barcode ? errors.barcode : ""}
+              </FormControl.ErrorMessage>
+            </FormControl>
+
+            {/* <Input
             label="Name"
             maxLength={100}
             onChangeText={handleChange("name")}
@@ -155,13 +259,17 @@ function RetailerAddProductForm() {
               errors.barcode && touched.barcode ? errors.barcode : ""
             }
             maxLength={13}
-          />
+          /> */}
 
-          <Button
-            title={"Add product"}
-            onPress={handleSubmit}
-            disabled={isSubmitting}
-          />
+            <Button
+              bg="brand.400"
+              borderRadius="0"
+              onPress={handleSubmit}
+              disabled={isSubmitting}
+            >
+              Add product
+            </Button>
+          </VStack>
         </ScrollView>
       )}
     </Formik>
