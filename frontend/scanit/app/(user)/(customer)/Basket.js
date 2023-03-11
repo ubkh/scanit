@@ -59,28 +59,29 @@ function Basket(props) {
                       <Text>Barcode ID: {item.data}</Text>
                       <Text>Barcode Type: {item.type}</Text>
                       <Text>Quantity: {item.quantity}</Text>
-      
-                      <NumericInput
-                        key={`${item.data}`}
-                        testID={`numeric-input-${index}`}
-                        value={item.quantity}
-                        onChange={(value) => {
-                          if (value > 0) {
-                            handleQuantityChange(index, value);
-                          } else {
-                            Alert.alert('Enter a valid quantity', 'Quantity must be 1 or more!', [
-                              {
-                                text: 'Ok',
-                                style: 'default',
-                              },
-                            ]);
-                          }
-                        }}
-                        minValue={1}
-                        rounded={true}
-                        totalHeight={40}
-                        totalWidth={100}
-                      />
+
+                      <View testID={`numeric-input-${index}`}>
+                        <NumericInput
+                          key={`${item.data}`}
+                          value={item.quantity}
+                          onChange={(value) => {
+                            if (value > 0) {
+                              handleQuantityChange(index, value);
+                            } else {
+                              Alert.alert('Enter a valid quantity', 'Quantity must be 1 or more!', [
+                                {
+                                  text: 'Ok',
+                                  style: 'default',
+                                },
+                              ]);
+                            }
+                          }}
+                          minValue={1}
+                          rounded={true}
+                          totalHeight={40}
+                          totalWidth={100}
+                        />
+                      </View>
       
                       <View
                         style={{ flexDirection: 'row', justifyContent: 'flex-end' }}
