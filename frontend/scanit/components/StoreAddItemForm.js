@@ -1,13 +1,15 @@
 import { ScrollView } from "react-native";
 import { useContext } from "react";
-import { Button, Text, Input } from "@rneui/base";
+import { Button, Text, Input } from "native-base";
 import CurrencyInput from "react-native-currency-input";
 import { Formik } from "formik";
-import { Context } from "../GlobalContext";
+import { Context } from "../context/GlobalContext";
 import validateForm from "./forms-validations/storeAddItemValidation";
+import { useSearchParams } from "expo-router";
 
-function StoreAddItemForm({ route }) {
-  const { itemData } = route.params || {};
+function StoreAddItemForm() {
+  const params = useSearchParams();
+  const { itemData } = params || {};
   const globalContext = useContext(Context);
   const { domain } = globalContext;
   const errorStyle = { color: "#c20808" };

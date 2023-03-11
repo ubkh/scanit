@@ -1,14 +1,14 @@
 import { useState, useEffect, useContext } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { Text, View, Button, Alert } from "react-native";
+import { Text, View, Button, Alert } from "native-base";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import BarCodeScanStyle from "../styles/BarCodeScanStyle";
-import { Context } from "../GlobalContext";
+import { Context } from "../context/GlobalContext";
+import { useRouter } from "expo-router";
 
 function RetailerBarcodeScanner() {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-  const navigation = useNavigation();
+  const router = useRouter();
   const globalContext = useContext(Context);
   const { domain } = globalContext;
 
@@ -34,16 +34,18 @@ function RetailerBarcodeScanner() {
       if (res.ok) {
         const resData = await res.json();
         Alert.alert("Item found", "Please fill in the quantity and expiry.");
-        navigation.goBack();
-        navigation.navigate("StoreAddItemForm", { itemData: resData });
+        router.back();
+        // router.push("StoreAddItemForm", { itemData: resData });
+        router.push({ pathname: "/Form", params: { itemData: resData } });
       } else if (res.status === 400) {
         Alert.alert(
           "Not found",
           "The scanned item was not found in the system. Please fill in the item's data manually."
         );
-        navigation.goBack();
-        navigation.navigate("StoreAddItemForm", {
-          itemData: { barcode: data },
+        router.back();
+        router.push({
+          pathname: "/Form",
+          params: { itemData: { barcode: data } },
         });
       }
       setScanned(false);
@@ -52,7 +54,7 @@ function RetailerBarcodeScanner() {
         "Failed",
         "Could not search the system for the scanned item. Please try again."
       );
-      navigation.goBack();
+      router.back();
     }
   };
 

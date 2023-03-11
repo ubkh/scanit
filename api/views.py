@@ -1,5 +1,4 @@
 from .models import Product
-from .serializers import TestSerializer
 from rest_framework import generics
 import json
 from .serializers import (
