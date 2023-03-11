@@ -27,6 +27,7 @@ function SignInScreen(props) {
 
         fetch(`http://${domain}/api/user/login/`,{
             method: 'POST',
+            credentials: "same-origin",
             headers: { 
                 'Content-Type': 'application/json'
             },
@@ -44,6 +45,10 @@ function SignInScreen(props) {
             setToken(json.access_token)
             setIsLoggedIn(true)
             signIn(json.user)
+            localStorage.removeItem('user')
+            localStorage.setItem('user', JSON.stringify(json.retailer_id))
+            
+            document.cookie="retid="+JSON.stringify(json.retailer_id)
         })
         .catch(error => {
             console.log(error)

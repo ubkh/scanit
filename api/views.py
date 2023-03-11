@@ -31,6 +31,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .models import User
+# import uniqueRandom from 'unique-random';
 
 class UserRegistrationAPIView(APIView):
     serializer_class = UserRegistrationSerializer
@@ -69,6 +70,14 @@ class StaffRegistrationAPIView(APIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (AllowAny,)
 
+    def getretailid(self):
+        retailid = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+        if User.objects.filter(retailer_id = retailid).exists():
+            getretailid()
+        else:
+            return retailid
+        
+
     def get(self, request):
         content = { 'message': 'Hello!' }
         return Response(content)
@@ -77,12 +86,16 @@ class StaffRegistrationAPIView(APIView):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
             new_user = serializer.save()
+            # retid = request.COOKIES.get('retid')
 
+         
             email = request.data.get('email', None)
             user_model = get_user_model()
             user = user_model.objects.get(email=email)
             user.is_staff=True
             user.is_verified=True
+            user.retailer_id=request.data.get('retailer_id')
+            # user.retailer_id = current_user.retailer_id
             user.save()
 
             if new_user:
@@ -90,7 +103,6 @@ class StaffRegistrationAPIView(APIView):
                 data = { 'user_id': new_user.user_id }
                 response = Response(data, status=status.HTTP_201_CREATED)
                 response.set_cookie(key='access_token', value=access_token, httponly=True)
-                send_account_verification_code(request)
                 return response
                 # return redirect(reverse('verify', args=[new_user.user_id]))
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -127,6 +139,7 @@ class UserLoginAPIView(APIView):
             response.set_cookie(key='access_token', value=user_access_token, httponly=True)
             response.data = {
                 'access_token': user_access_token,
+                'retailer_id':user_instance.retailer_id,
                 'user': {
                     'user_id': user_instance.user_id,
                     'email': user_instance.email,
@@ -184,8 +197,16 @@ class UserVerificationAPIView(APIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (AllowAny,)
 
+    def getretailid(self):
+        retailid = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+        if User.objects.filter(retailer_id = retailid).exists():
+            getretailid()
+        else:
+            return retailid
+
     def post(self, request, user_id):
         serializer = self.serializer_class(data=request.data)
+        # const random = uniqueRandom(10000000, 99999999);
 
         if serializer.is_valid():
             input_verification_code = serializer.validated_data['verification_code']
@@ -203,6 +224,7 @@ class UserVerificationAPIView(APIView):
                 current_user.is_verified = True
                 current_user.is_staff = True
                 current_user.is_retailer = True
+                current_user.retailer_id = self.getretailid()
                 current_user.save()
                 return Response({'message': 'Verification successful!'}, status=status.HTTP_200_OK)
 

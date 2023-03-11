@@ -2,10 +2,11 @@ import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, View, Image, useWindowDimensions } from 'react-native';
 import CustomInput from '../../../components/CustomInput.js';
 import CustomButton from '../../../components/CustomButton.js';
-import { useRouter, Link } from "expo-router";
+import { useRouter, useSearchParams } from "expo-router";
 import { Context } from '../../../context/GlobalContext.js';
 
 function assignStaffPage(props) {
+    const { user_id } = useSearchParams();
     const globalContext = useContext(Context)
     const {domain, userID, setUserID} = globalContext;
     const router = useRouter();
@@ -26,11 +27,13 @@ function assignStaffPage(props) {
             'last_name': lastName,
             'number': number,
             'store_address': storeAddress,
-            'password': password
+            'password': password,
+            'retailer_id':JSON.parse(localStorage.getItem('user'))
         })
 
         fetch(`http://${domain}/api/staff/register/`,{
             method: 'POST',
+            credentials: "same-origin",
             headers: { 
                 'Content-Type': 'application/json'
             },
@@ -48,7 +51,6 @@ function assignStaffPage(props) {
             setUserID(json.user_id)
             console.log(json.user_id)
             console.log(userID)
-            router.push({pathname: '/verify', params: {user_id: json.user_id}})
         })
         .catch(error => {
             console.log(error)

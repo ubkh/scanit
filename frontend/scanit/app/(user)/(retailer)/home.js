@@ -10,8 +10,11 @@ import { useRouter,Navigator, Link } from "expo-router";
 function Home() {
 
     const router = useRouter();
-    const assignStaff = () => {
+    const barcode = () => {
         router.push("/Barcode");
+    }
+    const assignStaff = () => {
+        router.push("/assignStaffPage");
     }
     if (Platform.OS === 'web') {
         return (
@@ -19,6 +22,7 @@ function Home() {
                 <Heading size="lg" fontSize={30} bold justifyContent="flex-start">Home</Heading>
                 <Text style={{ fontFamily: 'Rubik-Bold' }}>You are in the retailer home!</Text>
                 <CustomButton text = "Assign Staff" onPress={assignStaff}/>
+                <CustomButton text = "My Barcode" onPress={barcode}/>
                 {Platform.OS !== 'web' && <LogOutButton />}
             </View>
         );
