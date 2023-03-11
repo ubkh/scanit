@@ -1,33 +1,35 @@
-import { View, Platform, TouchableOpacity, Alert } from "react-native";
-import { StatusBar } from "expo-status-bar";
-import { useState, useContext, useEffect } from "react";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { Button, Text } from "@rneui/base";
-import { Context } from "../../GlobalContext";
-import ContainerStyle from "../../styles/ContainerStyle";
+import { View, Text, Button, Box, Heading, StatusBar } from "native-base";
+import LogOutButton from "../../../../components/LogOutButtonComponent";
+import { Link, useRouter, useSearchParams } from "expo-router";
+import { useState, useContext } from "react";
+import { TouchableOpacity, Alert, Platform } from "react-native";
+import { Context } from "../../../../context/GlobalContext";
+import ContainerStyle from "../../../../styles/ContainerStyle";
 
-// function getTestList(setSampleText, domain) {
-//     return fetch(`http://${domain}/api/list`, {
-//             method: 'GET'
-//         })
-//         .then((response) => response.json())
-//         .then((json) => {
-//             console.log(json);
-//             setSampleText(json[0].text);
-//             return json;
-//         })
-//         .catch((error) => {
-//             console.error(error);
-//         }
-//     );
-// }
+function getTestList(setSampleText, domain) {
+  return fetch(`http://${domain}/api/list`, {
+    method: "GET",
+  })
+    .then((response) => response.json())
+    .then((json) => {
+      console.log(json);
+      setSampleText(json[0].text);
+      return json;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
 
-function HomeScreen(props, route) {
-  const [sampleText, setSampleText] = useState("Hello, World!");
-  route = useRoute();
-  const { data, type } = route.params || {};
+function Home() {
   const globalContext = useContext(Context);
-  const navigation = useNavigation();
+
+  const [sampleText, setSampleText] = useState("Hello, World!");
+  //route = useRoute();
+  const router = useRouter();
+  const params = useSearchParams();
+  const { data, type } = params || {};
+  //const navigation = useNavigation();
   const { domain } = globalContext;
   const { basketList } = globalContext;
   const { isRetailerScanned } = globalContext;
@@ -43,13 +45,25 @@ function HomeScreen(props, route) {
     // console.log("Reset retailer and basket");
   };
 
-  // console.log(data);
-  // console.log(type);
-  // console.log(basketList);
-  // console.log(isRetailerScanned);
+  console.log(`Most recent barcode data: ${data}`);
+  console.log(`Most recent barcode type: ${type}`);
+  console.log(basketList);
+  console.log(`Has retailer been scanned? ${isRetailerScanned}`);
 
   return (
     <View style={ContainerStyle.container}>
+      <Heading
+        size="lg"
+        fontSize={30}
+        bold
+        justifyContent="flex-start"
+        style={{ fontFamily: "Rubik-Bold" }}
+      >
+        Home
+      </Heading>
+      <Text style={{ fontFamily: "Rubik-Bold" }}>
+        This is some test text using a font!
+      </Text>
       {isRetailerScanned ? (
         <View style={{ justifyContent: "flex-start", padding: 20 }}>
           <Text style={{ fontWeight: "bold" }}>
@@ -59,16 +73,18 @@ function HomeScreen(props, route) {
       ) : null}
       <Text>{sampleText}</Text>
       <Text>&nbsp;</Text>
-      <Button
-        onPress={() => getTestList(setSampleText, domain)}
-        title="GET data"
-      ></Button>
+      <Button onPress={() => getTestList(setSampleText, domain)} bg="brand.400">
+        GET data
+      </Button>
       <Text>&nbsp;</Text>
       <Button
-        onPress={() => navigation.navigate("BarCodeScanComponent")}
-        title="Scan Retailer Barcode!"
+        onPress={() => router.push("/home/Scan")}
         disabled={isRetailerScanned}
-      ></Button>
+        shadow={2}
+        bg={isRetailerScanned ? "#b3b3b3" : "brand.400"}
+      >
+        Scan Retailer Barcode!
+      </Button>
       {isRetailerScanned ? (
         <View>
           <TouchableOpacity
@@ -84,9 +100,6 @@ function HomeScreen(props, route) {
                   },
                   {
                     text: "Cancel",
-                    onPress: () => {
-                      //   console.log("Cancelled retailer reset");
-                    },
                     style: "cancel",
                   },
                 ]
@@ -117,10 +130,12 @@ function HomeScreen(props, route) {
       )}
       <Text>&nbsp;</Text>
       <Button
-        onPress={() => navigation.navigate("BarCodeScanComponent")}
-        title="Scan Product Barcode!"
+        bg={!isRetailerScanned ? "#b3b3b3" : "brand.400"}
+        onPress={() => router.push("/home/Scan")}
         disabled={!isRetailerScanned}
-      ></Button>
+      >
+        Scan Product Barcode!
+      </Button>
       <Text>&nbsp;</Text>
       <Text>Info on most recent barcode scanned (retailer/product):</Text>
       <Text>&nbsp;</Text>
@@ -134,9 +149,12 @@ function HomeScreen(props, route) {
       ) : (
         <Text>Nothing yet</Text>
       )}
+
+      <Text>&nbsp;</Text>
+      {Platform.OS !== "web" && <LogOutButton />}
       <StatusBar style="auto" />
     </View>
   );
 }
 
-export default HomeScreen;
+export default Home;
