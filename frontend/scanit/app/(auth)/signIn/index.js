@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Image, useWindowDimensions, TextInput } from 'r
 import Logo from '../../../assets/ScanItLogoInverted.png';
 import CustomInput from '../../../components/CustomInput.js';
 import CustomButton from '../../../components/CustomButton.js';
+import ItemLoader from '../../../components/ItemLoader';
 import { useRouter } from "expo-router";
 import { Context } from '../../../context/GlobalContext.js';
 import { useAuth } from "../../../context/AuthContext";
@@ -97,6 +98,7 @@ function SignInScreen(props) {
             <CustomButton text = "Sign In" onPress={handleSubmit(onLoginPressed)}/>
             <CustomButton text = "Forgot Password?" onPress={onForgotPasswordPressed} type = "SECONDARY"/>
             <CustomButton text = "Dont have an account? Create one" onPress={onSignUpPressed} type = "TERTIARY"/>
+            <ItemLoader/>
         </View>
     );
 }

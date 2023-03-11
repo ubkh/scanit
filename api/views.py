@@ -243,3 +243,5 @@ def send_account_verification_code(request):
 
             return JsonResponse({'message': 'Verification code sent'})
     return JsonResponse({'error': 'Invalid request'})
+
+
