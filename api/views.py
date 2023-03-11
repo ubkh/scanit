@@ -86,7 +86,6 @@ class StaffRegistrationAPIView(APIView):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
             new_user = serializer.save()
-            # retid = request.COOKIES.get('retid')
 
          
             email = request.data.get('email', None)
