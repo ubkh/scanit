@@ -1,7 +1,7 @@
-import { View, ScrollView, Platform, TouchableOpacity, StyleSheet, Alert, TextInput } from 'react-native';
+import { ScrollView, Platform, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Container, Text, Heading, Button, StatusBar, Center } from 'native-base';
 import { useState, useContext, useEffect } from 'react';
 // import { useNavigation, useRoute } from '@react-navigation/native';
-import { Button, Text } from 'native-base';
 import { Context } from '../../../context/GlobalContext';
 import ContainerStyle from '../../../styles/ContainerStyle';
 import { Ionicons } from '@expo/vector-icons';
@@ -125,10 +125,15 @@ function Basket(props) {
       
   
     return (
-      <View style={ContainerStyle.container}>
+      <View style={{flex: 1}} _dark={{bg: "black"}}>
+      <StatusBar barStyle={'light-content'} animated={true}/>
+      <Container flex={1} alignSelf="center" safeAreaTop>
+          <Heading size="lg" fontSize={30} bold justifyContent="flex-start" style={{ fontFamily: 'Rubik-Bold' }}>Basket</Heading>
+      </Container>
+      <Container flex={1} alignSelf="center">
         {basketItems}
-      </View>
-      
+      </Container>
+      </View>      
     );
   }
 

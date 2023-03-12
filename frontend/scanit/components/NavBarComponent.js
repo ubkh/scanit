@@ -1,19 +1,25 @@
 import React from 'react';
 import { Link, usePathname, useRouter } from 'expo-router';
-import { View, Box, HStack, Text, IconButton, Icon, Flex, Divider, Button } from 'native-base';
+import { View, Box, HStack, Text, IconButton, Icon, Flex, Divider, Button, useColorMode } from 'native-base';
 import { useAuth } from '../context/AuthContext';
 import LogOutButton from "./LogOutButtonComponent";
+import ThemeButton from './ThemeButton';
 
 const NavBarComponent = ({ links, isSmallScreen }) => {
   const pathname = usePathname();
   const { signOut } = useAuth();
   const router = useRouter();
 
+  const { toggleColorMode } = useColorMode();
+
   return (
     <View>
-      <Box safeAreaTop bg="white" />
+      <Box safeAreaTop bg="white" _dark={{bg: "black"}}/>
       <HStack
         bg="white"
+        _dark={{
+          bg: "black",
+        }}
         px="1"
         py="3"
         justifyContent="space-between"
@@ -23,7 +29,8 @@ const NavBarComponent = ({ links, isSmallScreen }) => {
         flex={1}
         paddingLeft={20}
         paddingRight={20}
-        marginBottom={1}
+        elevation={4}
+        //marginBottom={1}
       >
         <HStack alignItems="center">
           <Text color="brand.400" fontSize="20" fontWeight="bold">
@@ -53,6 +60,8 @@ const NavBarComponent = ({ links, isSmallScreen }) => {
                 </React.Fragment>
               ))}
             </Flex>
+          {/* <Button onPress={toggleColorMode}>Toggle Color</Button> */}
+            <ThemeButton />
             <LogOutButton style={{marginLeft: 20}} />
           </HStack>
         )}

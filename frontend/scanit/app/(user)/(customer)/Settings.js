@@ -1,6 +1,8 @@
 import { useContext } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import ThemeButton from '../../../components/ThemeButton';
 import { Context } from '../../../context/GlobalContext';
+import LogOutButton from '../../../components/LogOutButtonComponent';
 
 function Another(props) {
     const globalContext = useContext(Context);
@@ -10,6 +12,8 @@ function Another(props) {
         <View style={styles.container}>
             <Text>Another screen!</Text>
             <Text>You are {(isLoggedIn)? '' : "not "}logged in</Text>
+            <ThemeButton />
+            {Platform.OS !== 'web' && <LogOutButton />}
         </View>
     );
 }

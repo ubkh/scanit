@@ -1,7 +1,7 @@
 import { Slot } from "expo-router";
 import { AuthProvider } from "../context/AuthContext";
 import { extendTheme, NativeBaseProvider } from "native-base";
-import { ColorTheme } from "../Theme.js";
+import { ColorTheme, Config } from "../Theme.js";
 import { useFonts } from "expo-font";
 import ContextProvider from "../context/GlobalContext";
 
@@ -20,7 +20,7 @@ export default function RootLayout() {
   }
   return (
     // Setup the auth context and render our layout inside of it.
-    <NativeBaseProvider theme={theme}>
+    <NativeBaseProvider theme={theme} config={Config}>
         <AuthProvider>
         <ContextProvider>
             <Slot />

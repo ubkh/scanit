@@ -32,8 +32,8 @@
     "native-base": "^3.4.25",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-native": "0.71.3",
     "react-hook-form": "^7.43.2",
+    "react-native": "0.71.3",
     "react-native-dotenv": "^3.4.7",
     "react-native-numeric-input": "^1.9.1",
     "react-native-pager-view": "6.1.2",
@@ -43,7 +43,8 @@
     "react-native-vector-icons": "^9.2.0",
     "react-native-web": "~0.18.9",
     "react-scripts": "4.0.3",
-    "react-test-renderer": "^18.2.0"
+    "react-test-renderer": "^18.2.0",
+    "expo-linear-gradient": "~12.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

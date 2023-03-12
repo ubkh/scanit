@@ -18,6 +18,7 @@ export default function CustomerLayout() {
   // TODO: Consider a context here to prevent access
   // prevent other users from accessing this group of pages
   if (userType !== "customer") {
+    console.log("USER " + userType);
     return (
         <Redirect href={`/(${userType})/${segments[2]}`} />
     )
@@ -48,13 +49,13 @@ export default function CustomerLayout() {
     }
 
     return total > 0 ? display : null;
-}
+  }
 
   if (Platform.OS !== "web") {
     return (
             <Tabs screenOptions={{
-                tabBarActiveTintColor: '#34d399'
-                
+                tabBarActiveTintColor: '#34d399',
+                tabBarStyle: { backgroundColor: 'black' },
             }}>
                 <Tabs.Screen 
                     name="home"
@@ -69,6 +70,7 @@ export default function CustomerLayout() {
                 <Tabs.Screen 
                     name="Basket"
                     options={{
+                        headerShown: false,
                         tabBarIcon: ({ color, size }) => (
                         <Ionicons name="cart-outline" color={color} size={size} />
                         ),
@@ -89,11 +91,12 @@ export default function CustomerLayout() {
                     }}>
                 </Tabs.Screen>
                 <Tabs.Screen 
-                    name="Another"
+                    name="Settings"
                     options={{
                         tabBarIcon: ({ color, size }) => (
                         <Ionicons name="settings-outline" color={color} size={size} />
                         ),
+                        backgroundColor: '#0f0f0f',
                     }}>
                 </Tabs.Screen>
                 {/* <Tabs.Screen 
@@ -109,7 +112,7 @@ export default function CustomerLayout() {
   return (
     <Navigator router={TabRouter}>
         <NavBarComponent links={ links } isSmallScreen={ isSmallScreen } />
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <View _dark={{bg: "#0f0f0f"}} style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
              <Text bold>The customer side is not supported on web.</Text>
              <Text>&nbsp;</Text>
          </View>
