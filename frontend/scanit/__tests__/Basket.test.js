@@ -2,6 +2,7 @@ import React from 'react';
 import { render, waitFor } from "test-utils";
 import { Context } from '../context/GlobalContext';
 import Basket from '../app/(user)/(customer)/Basket';
+import { fireEvent, act } from "@testing-library/react-native";
 
 import NumericInput from 'react-native-numeric-input';
 
@@ -70,58 +71,111 @@ describe('Basket', () => {
   //   });
   // });
 
+  // test('calls handleQuantityChange when numeric input value is changed', async () => {
+  //   const screen = render(
+  //     <Context.Provider value={{ basketList: basketList, setBasketList }}>
+  //       <Basket />
+  //     </Context.Provider>
+  //   );
+
+  //   await waitFor(async () => {
+  //     //const numericInput = screen.getByTestId('numeric-input-0');
+  //     const numericInput = screen.getByTestId('numeric-input-0').find(
+  //       (child) => child.type === NumericInput
+  //     );
+      
+  //     console.debug(numericInput.props.value);
+  //     //fireEvent.changeText(numericInput.props.value, '3'); // this doesn't work or maybe we need to rerender
+  //     await act(async () => {
+  //       await numericInput.props.onChange(3);
+  //     });
+  //     console.debug(numericInput.props.value);
+  //     //fireEvent(numericInput, 'onChange', { value: 5 });
+  //     //fireEvent.input(numericInput, { target: { value: '10' } });
+
+  //     expect(numericInput.props.value).toBe(3);
+
+  //     // expect(setBasketList).toHaveBeenCalledWith([
+  //     //   {
+  //     //     data: '1234567890',
+  //     //     type: '512',
+  //     //     quantity: 3,
+  //     //   },
+  //     //   {
+  //     //     data: '0987654321',
+  //     //     type: '32',
+  //     //     quantity: 1,
+  //     //   },
+  //     // ]);
+  //   })
+  // });
+
   test('calls handleQuantityChange when numeric input value is changed', async () => {
+    const handleQuantityChange = jest.fn();
     const screen = render(
-      <Context.Provider value={{ basketList: basketList, setBasketList }}>
+      <Context.Provider value={{ basketList, setBasketList }}>
         <Basket />
       </Context.Provider>
     );
-
-    await waitFor(async () => {
-      //const numericInput = screen.getByTestId('numeric-input-0');
-      const numericInput = screen.getByTestId('numeric-input-0').find(
-        (child) => child.type === NumericInput
-      );
-      
-      console.debug(numericInput.props.value);
-      fireEvent.changeText(numericInput.value, '3'); // this doesn't work or maybe we need to rerender
-      console.debug(numericInput.props.value);
-      //fireEvent(numericInput, 'onChange', { value: 5 });
-      //fireEvent.input(numericInput, { target: { value: '10' } });
-
+  
+    const numericInput = screen.getByTestId('numeric-input-0').find(
+      (child) => child.type === NumericInput
+    );
+  
+    fireEvent.changeText(numericInput, '3');
+  
+    await waitFor(() => {
       expect(numericInput.props.value).toBe(3);
-
-      // expect(setBasketList).toHaveBeenCalledWith([
-      //   {
-      //     data: '1234567890',
-      //     type: '512',
-      //     quantity: 3,
-      //   },
-      //   {
-      //     data: '0987654321',
-      //     type: '32',
-      //     quantity: 1,
-      //   },
-      // ]);
-    })
+    });
+  
+    screen.update(
+      <Context.Provider value={{ basketList, setBasketList }}>
+        <Basket />
+      </Context.Provider>
+    );
+  
+    expect(handleQuantityChange).toHaveBeenCalledWith(0, 3);
+  
+    // expect(setBasketList).toHaveBeenCalledWith([
+    //   {
+    //     data: '1234567890',
+    //     type: '512',
+    //     quantity: 3,
+    //   },
+    // ]);
   });
+  
+  
 
   // it('calls removeItem when remove button is pressed', async () => {
-  //   const removeItem = jest.fn();
-  //   const screen = render(
-  //   <NativeBaseProvider>
-  //     <Context.Provider value={{ basketList: basketList, setBasketList, removeItem}}>
-  //       <Basket />
-  //     </Context.Provider>
-  //   </NativeBaseProvider>,
-  //   );
-  //   screen.debug();
-  //   await waitFor(async () => {
-  //     const removeButton = screen.getByTestId('remove-button-0');
-  //     fireEvent.press(removeButton);
-  //     expect(removeItem).toHaveBeenCalledWith(0);
-  //   })
-  // });
+  //     const removeItem = jest.fn();
+  //     const screen = render(
+  //       <Context.Provider value={{ basketList: basketList, setBasketList, removeItem}}>
+  //         <Basket />
+  //       </Context.Provider>
+  //     );
+      //screen.debug();
+      // await waitFor(async () => {
+      //   const removeButton = screen.getByTestId('remove-button-0');
+      //   fireEvent.press(removeButton);
+      //   console.log('removeItem calls', removeItem.mock.calls);
+      //   expect(removeItem).toHaveBeenCalledWith(0);
+
+        // const screen = render(
+        //   <Context.Provider value={{ basketList, removeItem }}>
+        //     <Basket />
+        //   </Context.Provider>
+        // );
+        // screen.debug()
+        // const button = screen.getByTestId('remove-button-0')
+        // console.log('before button press:', removeItem.mock.calls);
+        // fireEvent.press(button);
+        // console.log(removeItem.mock.calls)
+        // expect(removeItem).toHaveBeenCalledWith(0);
+  //       }
+  //     )
+  //   }
+  // );
 
   // it('shows alert when quantity input is less than 1', async () => {
   //   jest.spyOn(Alert, 'alert');
