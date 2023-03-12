@@ -70,7 +70,7 @@ function Home() {
             </Button>
             <Text>&nbsp;</Text>
             <Button onPress={() => router.push('/home/Scan')}
-                disabled={isRetailerScanned} shadow={2} bg="brand.400">
+                disabled={isRetailerScanned} shadow={2} bg={isRetailerScanned ? "#b3b3b3" : "brand.400"}>
                 Scan Retailer Barcode!
             </Button>
             {isRetailerScanned ?
@@ -87,9 +87,6 @@ function Home() {
                                 },
                                 {
                                 text: 'Cancel',
-                                onPress: () => {
-                                    console.log("Cancelled retailer reset")
-                                },
                                 style: 'cancel',
                                 },
                             ],
@@ -107,7 +104,7 @@ function Home() {
             {retailerBarcodeData ? <Text>Data: {JSON.stringify(retailerBarcodeData)}</Text> : <Text>Nothing yet</Text>}
             {retailerBarcodeType ? <Text>Type: {JSON.stringify(retailerBarcodeType)}</Text> : <Text>Nothing yet</Text>}
             <Text>&nbsp;</Text>
-            <Button bg="brand.400" onPress={() => router.push('/home/Scan')}
+            <Button bg={!isRetailerScanned ? "#b3b3b3" : "brand.400"} onPress={() => router.push('/home/Scan')}
                 disabled={!isRetailerScanned}>
                     Scan Product Barcode!
             </Button>
