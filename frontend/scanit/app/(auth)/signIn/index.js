@@ -1,28 +1,28 @@
 import React, { useState, useContext} from 'react';
-import { StyleSheet, Text, View, Image, useWindowDimensions, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Image, useWindowDimensions } from 'react-native';
 import Logo from '../../../assets/ScanItLogoInverted.png';
 import CustomInput from '../../../components/CustomInput.js';
 import CustomButton from '../../../components/CustomButton.js';
 import { useRouter } from "expo-router";
 import { Context } from '../../../context/GlobalContext.js';
 import { useAuth } from "../../../context/AuthContext";
-import { useForm } from 'react-hook-form';
 
 function SignInScreen(props) {
     const globalContext = useContext(Context)
     const { signIn } = useAuth();
     const { setIsLoggedIn, domain, setToken } = globalContext;
  
+    const[email, setEmail] = useState('');
+    const[password, setPassword] = useState('');
     const[ error, setError ] = useState('');
 
-    const {control, handleSubmit, formState: {errors}} = useForm();
     const{height} = useWindowDimensions();
     const router = useRouter();
 
-    const onLoginPressed = async data =>  {
+    function onLoginPressed() {
         let body = JSON.stringify({
-            'email': data.email.toLowerCase(),
-            'password': data.password
+            'email': email.toLowerCase(),
+            'password': password
         })
 
         fetch(`http://${domain}/api/user/login/`,{
@@ -74,32 +74,11 @@ function SignInScreen(props) {
                 style={[styles.logo, {height: height * 0.2}]} 
                 resizeMode="contain"
                 />
-
             <Text>&nbsp;</Text>
-
-            <CustomInput 
-                name='email'
-                placeholder='Email'
-                control = {control}
-                rules = {{required: 'Email is required'}} 
-            />
-            
-            <CustomInput 
-                name = 'password'
-                placeholder = 'Password' 
-                control={control} 
-                rules = {{
-                    required: 'Password is required', 
-                    minLength: {
-                        value: 8, 
-                        message: 'Password should contain atleast 8 characters'
-                    }
-                }} 
-                secureTextEntry
-            />
-
+            <CustomInput placeholder = "Email" value = {email} setValue = {setEmail}/>
+            <CustomInput placeholder = "Password" value = {password} setValue = {setPassword} secureTextEntry/>
             <Text style={styles.errorLabel}>{error}</Text>
-            <CustomButton text = "Sign In" onPress={handleSubmit(onLoginPressed)}/>
+            <CustomButton text = "Sign In" onPress={onLoginPressed}/>
             <CustomButton text = "Forgot Password?" onPress={onForgotPasswordPressed} type = "SECONDARY"/>
             <CustomButton text = "Dont have an account? Create one" onPress={onSignUpPressed} type = "TERTIARY"/>
         </View>

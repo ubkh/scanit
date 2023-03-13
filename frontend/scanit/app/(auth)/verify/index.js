@@ -1,25 +1,23 @@
+
 import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, View, Image, useWindowDimensions } from 'react-native';
 import CustomInput from '../../../components/CustomInput.js';
 import CustomButton from '../../../components/CustomButton.js';
 import { useRouter, useSearchParams } from "expo-router";
 import { Context } from '../../../context/GlobalContext.js';
-import { useForm } from 'react-hook-form';
 
 function VerificationScreen(props) {
     const[code, setCode] = useState('');
     const[ error, setError ] = useState('');
-
-    const {control, handleSubmit} = useForm();
 
     const router = useRouter();
     const { user_id } = useSearchParams();
     const globalContext = useContext(Context)
     const {domain} = globalContext;
 
-    const onConfirmPressed = async data =>  {
+    const onConfirmPressed = () => {
         let body = JSON.stringify({
-            'verification_code': data.code
+            'verification_code': code
         })
 
         fetch(`http://${domain}/api/user/verify/${user_id}/`,{
@@ -48,6 +46,10 @@ function VerificationScreen(props) {
     const onSignInPressed = () => {
         router.push('/signIn')
     }
+    
+    const onResendPressed = () => {
+        console.warn("are you that slow schmuck")
+    }
 
     return (
         <View style={styles.container}>
@@ -57,13 +59,9 @@ function VerificationScreen(props) {
             
             <Text style={styles.title}>Verify your account</Text>
             
-            <CustomInput 
-                name='code'
-                placeholder='Code'
-                control = {control}
-                rules = {{required: 'Code is required'}} 
-            />
-            <CustomButton text = "Confirm" onPress={handleSubmit(onConfirmPressed)}/>
+            <CustomInput placeholder = "Code" value = {code} setValue = {setCode}/>
+            <CustomButton text = "Confirm" onPress={onConfirmPressed}/>
+            <CustomButton text = "Resend code" onPress={onResendPressed} type = "SECONDARY"/>
             <CustomButton text = "Back to sign in" onPress={onSignInPressed} type = "TERTIARY"/>
             
         </View>

@@ -2,8 +2,8 @@ from .serializers import (
     UserRegistrationSerializer, 
     UserLoginSerializer, 
     UserVerificationSerializer,
-    # UserPasswordResetSerializer,
-    # UserConfirmPasswordResetSerializer,
+    UserPasswordResetSerializer,
+    UserConfirmPasswordResetSerializer,
     ) 
 
 from rest_framework.views import APIView
