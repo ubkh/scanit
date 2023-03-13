@@ -4,17 +4,20 @@ import { useRouter } from "expo-router";
 import { Context } from '../../../../context/GlobalContext';
 
 
+  function CardDetails(props) {
 
-export default function CardDetails() {
   const [name, setName] = useState('');
   const [cardNumber, setCardNumber] = useState('');
   const [expiryMonth, setExpiryMonth] = useState('');
   const [expiryYear, setExpiryYear] = useState('');
   const [cvv, setCvv] = useState('');
+  const { basketList, setBasketList } = useContext(Context);
+  const { previousPurchases, setPreviousPurchases } = useContext(Context);
+  const { retailerBarcodeData, setRetailerBarcodeData } = useContext(Context);
+
+
   const router = useRouter();
   const globalContext = useContext(Context);
-
-
 
   const handleNameOnCard = (text) => {
     setName(text.replace(/[^a-z- ]/gi, ''));
@@ -57,6 +60,22 @@ export default function CardDetails() {
     else {
       console.warn('Card details submitted');
       router.push("/Basket");
+      var today = new Date();
+      var dd = String(today.getDate()).padStart(2, '0');
+      var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+      var yyyy = today.getFullYear();
+      today = dd + '/' + mm + '/' + yyyy;
+      //globalContext.setPreviousPurchases([...previousPurchases,basketList]);
+      //console.warn(previousPurchases);
+      console.warn(basketList);
+      console.warn(today);
+      setPreviousPurchases([
+
+        ...previousPurchases,
+        {tripName: 'trip5', date: today, location: retailerBarcodeData , items: basketList }
+      ])
+      console.warn(previousPurchases)
+
       globalContext.setBasketList([]);
       setName('');
       setCardNumber('');
@@ -65,6 +84,7 @@ export default function CardDetails() {
       setExpiryYear('');
       //resetRetailerBarcode();
     }
+  
   };
 
   return (
@@ -172,6 +192,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
+
+export default CardDetails;
 
 
 
