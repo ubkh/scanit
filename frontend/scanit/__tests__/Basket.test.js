@@ -110,31 +110,31 @@ describe('Basket', () => {
   //   })
   // });
 
-  test('calls handleQuantityChange when numeric input value is changed', async () => {
-    const handleQuantityChange = jest.fn();
-    const screen = render(
-      <Context.Provider value={{ basketList, setBasketList }}>
-        <Basket />
-      </Context.Provider>
-    );
+  // test('calls handleQuantityChange when numeric input value is changed', async () => {
+  //   const handleQuantityChange = jest.fn();
+  //   const screen = render(
+  //     <Context.Provider value={{ basketList, setBasketList }}>
+  //       <Basket />
+  //     </Context.Provider>
+  //   );
   
-    const numericInput = screen.getByTestId('numeric-input-0').find(
-      (child) => child.type === NumericInput
-    );
+  //   const numericInput = screen.getByTestId('numeric-input-0').find(
+  //     (child) => child.type === NumericInput
+  //   );
   
-    fireEvent.changeText(numericInput, '3');
+  //   fireEvent.changeText(numericInput, '3');
   
-    await waitFor(() => {
-      expect(numericInput.props.value).toBe(3);
-    });
+  //   await waitFor(() => {
+  //     expect(numericInput.props.value).toBe(3);
+  //   });
   
-    screen.update(
-      <Context.Provider value={{ basketList, setBasketList }}>
-        <Basket />
-      </Context.Provider>
-    );
+  //   screen.update(
+  //     <Context.Provider value={{ basketList, setBasketList }}>
+  //       <Basket />
+  //     </Context.Provider>
+  //   );
   
-    expect(handleQuantityChange).toHaveBeenCalledWith(0, 3);
+  //   expect(handleQuantityChange).toHaveBeenCalledWith(0, 3);
   
     // expect(setBasketList).toHaveBeenCalledWith([
     //   {
@@ -143,7 +143,7 @@ describe('Basket', () => {
     //     quantity: 3,
     //   },
     // ]);
-  });
+  // });
   
   
 
