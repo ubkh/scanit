@@ -28,9 +28,6 @@ function Basket(props) {
               },
               {
                 text: 'Cancel',
-                onPress: () => {
-                  console.log("Cancelled item remove")
-                },
                 style: 'cancel',
               },
             ],)
@@ -67,6 +64,7 @@ function Basket(props) {
                       <Text>Quantity: {item.quantity}</Text>
 
                       <NumericInput
+                        key={`${item.data}`}
                         value={item.quantity}
                         onChange={value => {
                           if (value > 0) {
@@ -79,9 +77,6 @@ function Basket(props) {
                               [
                                 {
                                   text: 'Ok',
-                                  onPress: () => {
-                                    console.log("User acknowledged warning")
-                                  },
                                   style: 'default',
                                 },
                               ],
