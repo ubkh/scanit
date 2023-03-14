@@ -16,11 +16,8 @@ export default function ContextProvider(props) {
     const[basketList, setBasketList] = useState([]);
     const[isRetailerScanned, setRetailerScanned] = useState(false);
     const [ userType, setUserType ] = useState('retailer'); //'customer' or 'retailer'
-<<<<<<< HEAD
-=======
     const [ userID, setUserID ] = useState()
     const [ token, setToken ] = useState()
->>>>>>> main
 
     useEffect(() => {
     }, []);
