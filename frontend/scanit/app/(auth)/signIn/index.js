@@ -58,6 +58,7 @@ function SignInScreen(props) {
         router.push("/signUp");
     }
 
+    
     return (
         <View style={styles.container}>
             <Text>&nbsp;</Text>
@@ -87,7 +88,7 @@ function SignInScreen(props) {
                     required: 'Password is required', 
                     minLength: {
                         value: 8, 
-                        message: 'Password should contain atleast 8 characters'
+                        message: 'Password should contain at least 8 characters'
                     }
                 }} 
                 secureTextEntry
@@ -96,7 +97,7 @@ function SignInScreen(props) {
             <Text style={styles.errorLabel}>{error}</Text>
             <CustomButton text = "Sign In" onPress={handleSubmit(onLoginPressed)}/>
             <CustomButton text = "Forgot Password?" onPress={onForgotPasswordPressed} type = "SECONDARY"/>
-            <CustomButton text = "Dont have an account? Create one" onPress={onSignUpPressed} type = "TERTIARY"/>
+            <CustomButton text = "Don't have an account? Create one" onPress={onSignUpPressed} type = "TERTIARY"/>
         </View>
     );
 }
