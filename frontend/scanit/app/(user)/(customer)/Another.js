@@ -47,13 +47,42 @@
 
 
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Context } from '../../../context/GlobalContext';
+import { Ionicons } from '@expo/vector-icons';
+
 
 
 
 const GroceryTrips = () => {
   const { previousPurchases, setPreviousPurchases } = useContext(Context);
+  const { basketList, setBasketList } = useContext(Context);
+
+
+  const removeItem = (index) => {
+    Alert.alert(
+          'Remove Item',
+          'Are you sure you want to delete this item?',
+          [
+            {
+              text: 'Ok',
+              onPress: () => {
+                console.warn(`Removing item at index ${index} of the basket. Bros too poor lmao`)
+                const newList = [...basketList];
+                newList.splice(index, 1);
+                setBasketList(newList);
+              },
+              style: 'default',
+            },
+            {
+              text: 'Cancel',
+              onPress: () => {
+                console.log("Cancelled item remove")
+              },
+              style: 'cancel',
+            },
+          ],)
+  }
 
 
   useEffect(() => {
@@ -66,14 +95,32 @@ const GroceryTrips = () => {
       <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Previous Grocery Trips:</Text>
       {previousPurchases.map((trip, index) => (
         <View key={index} style={{ paddingVertical: 5 }}>
-          <Text style={{ fontWeight: 'bold' }}>{trip.tripName}</Text>
           <Text>Date: {trip.date}</Text>
+          <Text>Time: {trip.time}</Text>
           <Text>Location: {trip.location}</Text>
           <Text>Items:</Text>
           <View style={{ marginLeft: 20 }}>
             {trip.items.map((item, index) => (
-              <Text key={index}>{item.data}</Text>
+              <><Text key={index}>{item.data}</Text><View style={{ flexDirection: "row", justifyContent: "flex-end" }} key={index}>
+                <TouchableOpacity
+                  onPress={() => removeItem(index)}
+                >
+                  <View
+                    style={{
+                      backgroundColor: 'red',
+                      borderRadius: 20,
+                      padding: 10,
+                    }}
+                  >
+                    <Ionicons
+                      name="trash-outline"
+                      size={25}
+                      color="white" />
+                  </View>
+                </TouchableOpacity>
+              </View></>
             ))}
+ 
           </View>
         </View>
       ))}

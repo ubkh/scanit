@@ -2,6 +2,8 @@ import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useRouter } from "expo-router";
 import { Context } from '../../../../context/GlobalContext';
+import PaymentStyle from '../../../../styles/PaymentPageStyle';
+
 
 
   function CardDetails(props) {
@@ -14,10 +16,42 @@ import { Context } from '../../../../context/GlobalContext';
   const { basketList, setBasketList } = useContext(Context);
   const { previousPurchases, setPreviousPurchases } = useContext(Context);
   const { retailerBarcodeData, setRetailerBarcodeData } = useContext(Context);
+  const { retailerBarcodeType, setRetailerBarcodeType } = useContext(Context);
+  const { isRetailerScanned, setRetailerScanned } = useContext(Context);
+
 
 
   const router = useRouter();
-  const globalContext = useContext(Context);
+
+  const getFullDate = () => {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+    var yyyy = today.getFullYear();
+    return dd + '/' + mm + '/' + yyyy;
+
+  };
+
+  const getFullTime = () => {
+ 
+    var d = new Date(),
+    h = (d.getHours()<10?'0':'') + d.getHours(),
+    m = (d.getMinutes()<10?'0':'') + d.getMinutes();
+    return  h + ':' + m;
+
+  };
+
+  const resetFields =() => {
+    setBasketList([]);
+    setRetailerScanned(false);
+    setRetailerBarcodeData(null);
+    setRetailerBarcodeType(null);
+    setName('');
+    setCardNumber('');
+    setCvv('');
+    setExpiryMonth('');
+    setExpiryYear('');
+  };
 
   const handleNameOnCard = (text) => {
     setName(text.replace(/[^a-z- ]/gi, ''));
@@ -58,58 +92,44 @@ import { Context } from '../../../../context/GlobalContext';
       Alert.alert('Invalid CVV', 'Please enter a valid 3-digit CVV');
     } 
     else {
-      console.warn('Card details submitted');
+      //console.warn('Card details submitted');
       router.push("/Basket");
-      var today = new Date();
-      var dd = String(today.getDate()).padStart(2, '0');
-      var mm = String(today.getMonth() + 1).padStart(2, '0'); 
-      var yyyy = today.getFullYear();
-      today = dd + '/' + mm + '/' + yyyy;
-      //globalContext.setPreviousPurchases([...previousPurchases,basketList]);
-      //console.warn(previousPurchases);
-      console.warn(basketList);
-      console.warn(today);
+      //console.warn(basketList);
       setPreviousPurchases([
 
         ...previousPurchases,
-        {tripName: 'trip5', date: today, location: retailerBarcodeData , items: basketList }
+        {date: getFullDate(), time: getFullTime(), location: retailerBarcodeData , items: basketList }
       ])
       console.warn(previousPurchases)
-
-      globalContext.setBasketList([]);
-      setName('');
-      setCardNumber('');
-      setCvv('');
-      setExpiryMonth('');
-      setExpiryYear('');
-      //resetRetailerBarcode();
+      resetFields();
     }
   
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>Name on Card</Text>
+    <View style={PaymentStyle.container}>
+      <Text style={PaymentStyle.label}>Name on Card</Text>
       <TextInput
-        style={styles.input}
+        style={PaymentStyle.input}
         placeholder="Enter Name on Card"
         value={name}
         onChangeText={handleNameOnCard}
+        maxLength={30}
       />
-      <Text style={styles.label}>Card Number</Text>
+      <Text style={PaymentStyle.label}>Card Number</Text>
       <TextInput
-        style={styles.input}
+        style={PaymentStyle.input}
         placeholder="Enter card number"
         keyboardType="numeric"
         value={cardNumber}
         onChangeText={handleCardNumberChange}
         maxLength={16}
       />
-      <Text style={styles.label}>Expiry Date</Text>
+      <Text style={PaymentStyle.label}>Expiry Date</Text>
         <View style = {{flexDirection: "row"}}>
           <View style={{flex:1}}>
             <TextInput
-              style={styles.inputt}
+              style={PaymentStyle.inputMonth}
               placeholder="MM"
               keyboardType="numeric"
               value={expiryMonth}
@@ -119,7 +139,7 @@ import { Context } from '../../../../context/GlobalContext';
           </View>
           <View style={{flex:1}}>
             <TextInput
-              style={styles.inputtt}
+              style={PaymentStyle.inputYear}
               placeholder="YYYY"
               keyboardType="numeric"
               value={expiryYear}
@@ -129,9 +149,9 @@ import { Context } from '../../../../context/GlobalContext';
           </View>
         </View>
 
-      <Text style={styles.label}>CVV</Text>
+      <Text style={PaymentStyle.label}>CVV</Text>
       <TextInput
-        style={styles.input}
+        style={PaymentStyle.input}
         placeholder="Enter CVV"
         keyboardType="numeric"
         value={cvv}
@@ -139,59 +159,59 @@ import { Context } from '../../../../context/GlobalContext';
         maxLength={3}
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Pay Now</Text>
+      <TouchableOpacity style={PaymentStyle.button} onPress={handleSubmit}>
+        <Text style={PaymentStyle.buttonText}>Pay Now</Text>
       </TouchableOpacity>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-  },
-  label: {
-    fontSize: 16,
-    marginBottom: 5,
-  },
-  input: {
-    height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 10,
-  },
-  inputt: {
-    height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 10,
-    justifyContent: 'flex-start',
-  },
-  inputtt: {
-    height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 10,
-    justifyContent: 'flex-end',
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    borderRadius: 5,
-    padding: 10,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-  },
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     padding: 20,
+//   },
+//   label: {
+//     fontSize: 16,
+//     marginBottom: 5,
+//   },
+//   input: {
+//     height: 40,
+//     borderColor: '#ccc',
+//     borderWidth: 1,
+//     borderRadius: 5,
+//     paddingHorizontal: 10,
+//     marginBottom: 10,
+//   },
+//   inputMonth: {
+//     height: 40,
+//     borderColor: '#ccc',
+//     borderWidth: 1,
+//     borderRadius: 5,
+//     paddingHorizontal: 10,
+//     marginBottom: 10,
+//     justifyContent: 'flex-start',
+//   },
+//   inputYear: {
+//     height: 40,
+//     borderColor: '#ccc',
+//     borderWidth: 1,
+//     borderRadius: 5,
+//     paddingHorizontal: 10,
+//     marginBottom: 10,
+//     justifyContent: 'flex-end',
+//   },
+//   button: {
+//     backgroundColor: '#50C878',
+//     borderRadius: 5,
+//     padding: 10,
+//     alignItems: 'center',
+//   },
+//   buttonText: {
+//     color: '#fff',
+//     fontSize: 16,
+//   },
+// });
 
 export default CardDetails;
 

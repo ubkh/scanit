@@ -12,25 +12,6 @@ export default function ContextProvider(props) {
     const[isRetailerScanned, setRetailerScanned] = useState(false);
     const [ userType, setUserType ] = useState('customer'); //'customer' or 'retailer'
     const[previousPurchases, setPreviousPurchases] = useState([]);
-    //     {
-    //       tripName: 'Trip 1',
-    //       date: '2022-03-01',
-    //       location: 'London',
-    //       items: ['Milk', 'Bread', 'Eggs']
-    //     },
-    //     {
-    //       tripName: 'Trip 2',
-    //       date: '2022-02-15',
-    //       location: 'Paris',
-    //       items: ['Butter', 'Cheese', 'Yogurt']
-    //     },
-    //     {
-    //       tripName: 'Trip 3',
-    //       date: '2022-01-27',
-    //       location: 'New York',
-    //       items: ['Apples', 'Oranges', 'Bananas']
-    //     },
-    //   ]);
 
     useEffect(() => {
     }, []);
