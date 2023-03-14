@@ -16,7 +16,6 @@ const SignUpScreen = () =>  {
     const router = useRouter();
     const {control, handleSubmit, watch} = useForm();
 
-
     // const[storeAddress, setStoreAddress] = useState('');
   
     // const[error, setError] = useState('');
