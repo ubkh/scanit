@@ -1,146 +1,123 @@
+
+
+
 // import React, { useState } from 'react';
-// import { View, Text, StyleSheet, TouchableOpacity, Alert, Button } from 'react-native';
-// import DocumentPicker, {DirectoryPickerResponse,DocumentPickerResponse,isInProgress,types} from 'react-native-document-picker';
-// import * as Progress from 'react-native-progress';
+// import Product from './Product';
 
 // const ItemLoader = () => {
-//   const [file, setFile] = useState(null);
-//   const [progress, setProgress] = useState(0);
+//   const [selectedFile, setSelectedFile] = useState(undefined);
 
-//   const pickFile = async () => {
-//     try {
-//       const result = await DocumentPicker.pick({
-//         type: [DocumentPicker.types.allFiles],
-//       });
+//   const handleFileSelection = (event) => {
+//     const file = event.target.files[0];
+  
+//     if (file && (file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file.type === 'text/csv')) {
+//       setSelectedFile(file);
 
-//       setFile(result);
-//     } catch (err) {
-//       if (DocumentPicker.isCancel(err)) {
-//         // User cancelled the picker
-//       } else {
-//         Alert.alert('Error', err.message);
-//       }
-//     }
-//   };
+//       const reader = new FileReader();
 
-//   const onDrop = async (event) => {
-//     const result = await DocumentPicker.pick({
-//       type: [DocumentPicker.types.allFiles],
-//     });
+//       reader.onload = (e) => {
+//         const contents = e.target.result;
+//         console.log(contents);
+//       };
 
-//     setFile(result);
-//     console.log("Complete");
-//     console.log(file);
-//   };
-//   const handleError = (err) => {
-//     if (DocumentPicker.isCancel(err)) {
-//       console.warn('cancelled')
-//       // User cancelled the picker, exit any dialogs or menus and move on
-//     } else if (isInProgress(err)) {
-//       console.warn('multiple pickers were opened, only the last will be considered')
+
+//       // console.log(file);
 //     } else {
-//       throw err
+//       event.target.value = null; // reset the input element
+//       setSelectedFile(undefined);
+//       alert('Please select a valid file');
 //     }
-//   }
+//   };
+
+//   // const handleFileDrop = (event) => {
+//   //   // event.preventDefault();
+//   //   const file = event.dataTransfer.items[0].getAsFile();
+
+//   //   if (file && (file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file.type === 'text/csv')) {
+//   //     setSelectedFile(file);
+//   //   } else {
+//   //     alert('Please drop a valid file');
+//   //   }
+//   // };
 
 //   return (
-//     <View style={styles.container}>
-//       {file ? (
-//         <View style={styles.file}>
-//           <Text>{file.name}</Text>
-//           <Progress.Bar progress={progress} width={200} />
-//         </View>
-//       ) : (
-//         <TouchableOpacity onPress={pickFile} onDrop={onDrop}>
-//           <View style={styles.dropZone}>
-//             <Text style={styles.text}>Drag and drop a file here</Text>
-//           </View>
-//         </TouchableOpacity>
-//       )}
-//       <Button
-//         title="open picker for single selection of pdf file"
-//         onPress={() => {
-//           DocumentPicker.pick({
-//             type: types.pdf,
-//           })
-//             .then(setFile)
-//             .catch(handleError)
-//         }}
+//     <div>
+//       <input
+//         type="file"
+//         //onDragOver={(event) => event.preventDefault()}
+//         //onDrop={handleFileDrop}   
+//         onChange={handleFileSelection}
+//         accept=".xlsx, .csv"
 //       />
-
-
-//     </View>
+//     </div>
 //   );
 // };
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-//   dropZone: {
-//     width: 200,
-//     height: 200,
-//     borderRadius: 10,
-//     borderWidth: 2,
-//     borderColor: '#ccc',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-//   text: {
-//     fontSize: 16,
-//     color: '#999',
-//   },
-//   file: {
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });
+
 
 // export default ItemLoader;
 
-
-import React, { useState } from 'react';
+import csv from 'csv-parser';
+import { useEffect, useState } from 'react';
+import Product from './Product';
 
 const ItemLoader = () => {
   const [selectedFile, setSelectedFile] = useState(undefined);
+  const [productData, setProductData] = useState([]);
 
   const handleFileSelection = (event) => {
     const file = event.target.files[0];
-
-    if (file && (file.type === 'application/vnd.ms-excel' || file.type === 'text/csv')) {
+  
+    if (file && (file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file.type === 'text/csv')) {
       setSelectedFile(file);
+
+      console.log(file);
     } else {
+      event.target.value = null; // reset the input element
+      setSelectedFile(undefined);
       alert('Please select a valid file');
     }
   };
 
-  const handleFileDrop = (event) => {
-    event.preventDefault();
-    const file = event.dataTransfer.items[0].getAsFile();
+  useEffect(() => {
+    if (selectedFile) {
+      const reader = new FileReader();
 
-    if (file && (file.type === 'application/vnd.ms-excel' || file.type === 'text/csv')) {
-      setSelectedFile(file);
-    } else {
-      alert('Please drop a valid file');
+      reader.onload = function(event) {
+        const csvData = event.target.result;
+
+        // Use csv-parser to convert CSV data to JSON object
+        csv({ headers: ['name', 'description', 'price', 'quantity', 'expiry'] })
+          .fromString(csvData)
+          .then((parsedData) => {
+            setProductData(parsedData);
+          });
+      };
+
+      reader.readAsText(selectedFile);
     }
-  };
+  }, [selectedFile]);
 
   return (
-    <div
-      onDragOver={(event) => event.preventDefault()}
-      onDrop={handleFileDrop}
-    >
+    <div>
       <input
         type="file"
         onChange={handleFileSelection}
         accept=".xlsx, .csv"
       />
+
+      {productData.map((product, index) => (
+        <Product
+          key={index}
+          name={product.name}
+          description={product.description}
+          price={product.price}
+          quantity={product.quantity}
+          expiry={product.expiry}
+        />
+      ))}
     </div>
   );
 };
-
-
 
 export default ItemLoader;

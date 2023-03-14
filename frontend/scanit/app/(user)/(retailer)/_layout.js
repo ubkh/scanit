@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 const links = [
     { label: 'Home', url: '/home' },
     { label: 'Something Else', url: '/other' },
+    { label: 'Add Item', url: '/addItem' },
 ];
 
 export default function RetailerLayout() {
@@ -17,7 +18,7 @@ export default function RetailerLayout() {
   const segments = useSegments();
 
   // TODO: Consider a context here to prevent access
-  // prevent other users from accessing this group of pages
+  // prevent other users from accessing this group of page/s
   if (userType !== "retailer") {
     return (
         <Redirect href={`/(${userType})/${segments[2]}`} />
