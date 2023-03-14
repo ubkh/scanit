@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
-import { StyleSheet, Text, View, Image, useWindowDimensions } from 'react-native';
+import { StyleSheet, Text, View, Image,Button, useWindowDimensions } from 'react-native';
 import CustomInput from '../../../components/CustomInput.js';
-import CustomButton from '../../../components/CustomButton.js';
 import { useRouter, useSearchParams } from "expo-router";
 import { Context } from '../../../context/GlobalContext.js';
 import { useForm } from 'react-hook-form';
@@ -13,6 +12,7 @@ function assignStaffPage(props) {
     const {domain, userID, setUserID} = globalContext;
     const {control, handleSubmit, watch} = useForm();
     const[number, setNumber] = useState('');
+    const[store_address, setStoreAddress] = useState('');
     const router = useRouter();
  
     // const[firstName, setFirstName] = useState('');
@@ -30,7 +30,7 @@ function assignStaffPage(props) {
             'first_name': data.first_name,
             'last_name': data.last_name,
             'number': number,
-            'store_address': data.store_address,
+            'store_address': store_address,
             'password': data.password
         })
 
@@ -103,7 +103,7 @@ function assignStaffPage(props) {
                 secureTextEntry
             />
         
-            <CustomButton text = "Assign Staff" onPress={handleSubmit(onRegisterPressed)}/>
+            <Button bg="brand.400" width="100%" maxWidth="300px" onPress={handleSubmit(onRegisterPressed)}>Assign staff</Button>
             <Text style = {styles.text}>
             </Text>
         </View>

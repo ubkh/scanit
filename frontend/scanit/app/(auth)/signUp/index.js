@@ -1,6 +1,6 @@
 import React, { useState, useContext, useRef, useEffect } from 'react';
 import { Platform } from 'react-native';
-import { StyleSheet, Text, View} from 'react-native';
+import { StyleSheet} from 'react-native';
 import { View, Text, StatusBar, Flex, Spacer, Button, Box, Heading, useColorMode, Center, KeyboardAvoidingView } from 'native-base';
 import CustomInput from '../../../components/CustomInput.js';
 import { useRouter, Link } from "expo-router";
@@ -63,12 +63,12 @@ const SignUpScreen = () =>  {
 
     if (Platform.OS === 'web') {
         return (
-            <View style={styles.container}>
+            <View >
             <Text>&nbsp;</Text>
             <Text>&nbsp;</Text>
             <Text>&nbsp;</Text>
             
-            <Text style={styles.title}>Create an account</Text>
+            <Text >Create an account</Text>
             
             <CustomInput 
                 name='first_name'
@@ -141,11 +141,11 @@ const SignUpScreen = () =>  {
                 }} 
                 secureTextEntry
             />
-            <CustomButton text = "Register as Business" onPress={handleSubmit(onRegisterPressed)}/>
-            <Text style = {styles.text}>
+            <Button bg="brand.400" width="100%" maxWidth="300px" onPress={handleSubmit(onRegisterPressed)}>Register as business</Button>
+            {/* <Text style = {styles.text}>
                 By registering, you confirm that you accept our <Text style = {styles.link} onPress = {onTOUPressed}>Terms of Use</Text> and <Text style = {styles.link} onPress = {onPPPressed}>Privacy Policy</Text>
-            </Text>
-            <CustomButton text = "Already have an account? Sign In" onPress={onAlreadyUserPressed} type = "TERTIARY"/>
+            </Text> */}
+            <Text>Already have an account? <Link style={{fontWeight:"bold"}} href="/signIn">Sign in</Link></Text>
         </View>
         );
         }

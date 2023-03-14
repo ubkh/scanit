@@ -27,18 +27,10 @@
     "expo-linking": "~4.0.1",
     "expo-modules-core": "~1.2.4",
     "expo-router": "^1.0.1",
-<<<<<<< HEAD
-    "expo-secure-store": "^12.1.1",
-    "expo-status-bar": "~1.4.2",
-    "jest": "^26.6.3",
-    "jest-expo": "^47.0.1",
-    "lottie-react-native": "^5.1.5",
-=======
     "expo-secure-store": "~12.1.1",
     "expo-splash-screen": "^0.18.1",
     "expo-status-bar": "~1.4.4",
     "lottie-react-native": "5.1.4",
->>>>>>> bdff447829d8c6c103a30c48560b8efd8cbf1d1e
     "native-base": "^3.4.25",
     "react": "18.2.0",
     "react-dom": "18.2.0",
