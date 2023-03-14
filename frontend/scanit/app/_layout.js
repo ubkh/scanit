@@ -1,10 +1,9 @@
-import { Slot } from "expo-router";
+import { Slot, SplashScreen } from "expo-router";
 import { AuthProvider } from "../context/AuthContext";
 import { extendTheme, NativeBaseProvider } from "native-base";
 import { ColorTheme, Config } from "../Theme.js";
 import { useFonts } from "expo-font";
 import ContextProvider from "../context/GlobalContext";
-
 
 const theme = extendTheme({ colors: ColorTheme });
 
@@ -15,8 +14,9 @@ export default function RootLayout() {
     'Rubik-Medium': require('../assets/fonts/Rubik-Medium.ttf'),
   });
         
+
   if (!fontsLoaded) {
-    return null;
+    return <SplashScreen />;
   }
   return (
     // Setup the auth context and render our layout inside of it.

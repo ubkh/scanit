@@ -1,16 +1,16 @@
 import React from 'react';
 import { Link, usePathname, useRouter } from 'expo-router';
-import { View, Box, HStack, Text, IconButton, Icon, Flex, Divider, Button, useColorMode } from 'native-base';
+import { View, Box, HStack, Text, IconButton, Icon, Flex, Divider, useColorMode } from 'native-base';
 import { useAuth } from '../context/AuthContext';
 import LogOutButton from "./LogOutButtonComponent";
 import ThemeButton from './ThemeButton';
+import ScanitLogo from './ScanitLogoComponent';
 
 const NavBarComponent = ({ links, isSmallScreen }) => {
   const pathname = usePathname();
   const { signOut } = useAuth();
   const router = useRouter();
-
-  const { toggleColorMode } = useColorMode();
+  const { colorMode } = useColorMode();
 
   return (
     <View>
@@ -30,12 +30,16 @@ const NavBarComponent = ({ links, isSmallScreen }) => {
         paddingLeft={20}
         paddingRight={20}
         elevation={4}
-        //marginBottom={1}
+        zIndex={4}
+        marginBottom={colorMode === 'dark' ? 0 : 1} // temporary fix - need better solution
+        borderBottomColor="muted.700"
+        borderBottomWidth={colorMode === 'dark' ? 1 : 0}
       >
         <HStack alignItems="center">
-          <Text color="brand.400" fontSize="20" fontWeight="bold">
+          {/* <Text color="brand.400" fontSize="20" fontWeight="bold">
             ScanIt
-          </Text>
+          </Text> */}
+          <ScanitLogo transform={`scale(0.82)`}/>
         </HStack>
         {isSmallScreen ? (
           <HStack alignItems="center">
@@ -49,20 +53,21 @@ const NavBarComponent = ({ links, isSmallScreen }) => {
             <Flex direction="row" h="9" p="2">
               {links.map((link, index) => (
                 <React.Fragment key={index}>
-                  <Link 
-                    href={link.url}
-                    style={[pathname === link.url && { fontWeight: 'bold' }]}>
-                      {link.label}
-                  </Link>
+                  <Text>
+                    <Link 
+                      href={link.url}
+                      style={[link.url.endsWith(pathname) && { fontWeight: 'bold' }]}>
+                        {link.label}
+                    </Link>
+                  </Text>
                   {index !== links.length - 1 && (
                     <Divider bg="brand.400" thickness="2" mx="2" orientation="vertical" />
                   )}
                 </React.Fragment>
               ))}
             </Flex>
-          {/* <Button onPress={toggleColorMode}>Toggle Color</Button> */}
             <ThemeButton />
-            <LogOutButton style={{marginLeft: 20}} />
+            <LogOutButton style={{marginLeft: 10}} />
           </HStack>
         )}
       </HStack>

@@ -1,13 +1,13 @@
 import { ScrollView, Platform, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { View, Container, Text, Heading, Button, StatusBar, Center } from 'native-base';
+import { View, Container, Text, Heading, Button, StatusBar, Center, Flex, Divider, Spacer, useColorMode } from 'native-base';
 import { useState, useContext, useEffect } from 'react';
 // import { useNavigation, useRoute } from '@react-navigation/native';
 import { Context } from '../../../context/GlobalContext';
-import ContainerStyle from '../../../styles/ContainerStyle';
 import { Ionicons } from '@expo/vector-icons';
 import NumericInput from 'react-native-numeric-input'; // https://github.com/himelbrand/react-native-numeric-input for props and info
 
 function Basket(props) {
+    const { colorMode } = useColorMode();
     const { basketList, setBasketList } = useContext(Context);
     const [basketItems, setBasketItems] = useState(<Text> Your basket is empty </Text>);
 
@@ -45,7 +45,6 @@ function Basket(props) {
       setBasketList(updatedBasketList);
     };
     
-  
     useEffect(() => {
         setBasketList(basketList);
 
@@ -85,6 +84,7 @@ function Basket(props) {
                         }} 
                         minValue={1}
                         rounded={true}
+                        textColor={colorMode === 'light' ? 'black' : 'white'}
                         totalHeight={40}
                         totalWidth={100}
                       />
@@ -121,18 +121,24 @@ function Basket(props) {
         </View>
         );
         }
-      }, [basketList]);
+      }, [basketList, colorMode]);
       
   
     return (
-      <View style={{flex: 1}} _dark={{bg: "black"}}>
-      <StatusBar barStyle={'light-content'} animated={true}/>
-      <Container flex={1} alignSelf="center" safeAreaTop>
+      <View style={{flex: 1}} _dark={{bg: "black"}} _light={{bg: "white"}}>
+      <StatusBar barStyle={colorMode === 'light' ? 'dark-content' : 'light-content'} animated={true}/>
+      <Flex flex={1} alignItems="center" safeAreaTop>
           <Heading size="lg" fontSize={30} bold justifyContent="flex-start" style={{ fontFamily: 'Rubik-Bold' }}>Basket</Heading>
-      </Container>
-      <Container flex={1} alignSelf="center">
-        {basketItems}
-      </Container>
+          <Divider my="2" _light={{
+              bg: "muted.200"
+          }} _dark={{
+              bg: "muted.500"
+          }} />
+
+          <Spacer />
+          {basketItems}
+          <Spacer />
+      </Flex>
       </View>      
     );
   }

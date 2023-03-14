@@ -5,7 +5,7 @@ import { TabRouter } from "@react-navigation/native";
 import NavBarComponent from "../../../components/NavBarComponent";
 import { Context } from "../../../context/GlobalContext";
 import { Ionicons } from '@expo/vector-icons';
-import { Text, View } from "native-base";
+import { Text, View, useColorMode } from "native-base";
 
 const links = [
 ];
@@ -14,6 +14,7 @@ export default function CustomerLayout() {
   const globalContext = useContext(Context);
   const { userType } = globalContext;
   const segments = useSegments();
+  const { colorMode } = useColorMode();
   
   // TODO: Consider a context here to prevent access
   // prevent other users from accessing this group of pages
@@ -55,7 +56,7 @@ export default function CustomerLayout() {
     return (
             <Tabs screenOptions={{
                 tabBarActiveTintColor: '#34d399',
-                tabBarStyle: { backgroundColor: 'black' },
+                tabBarStyle: { backgroundColor: colorMode == "dark" ? "black" : "white" },
             }}>
                 <Tabs.Screen 
                     name="home"
@@ -93,6 +94,7 @@ export default function CustomerLayout() {
                 <Tabs.Screen 
                     name="Settings"
                     options={{
+                        headerShown: false,
                         tabBarIcon: ({ color, size }) => (
                         <Ionicons name="settings-outline" color={color} size={size} />
                         ),
@@ -112,7 +114,7 @@ export default function CustomerLayout() {
   return (
     <Navigator router={TabRouter}>
         <NavBarComponent links={ links } isSmallScreen={ isSmallScreen } />
-        <View _dark={{bg: "#0f0f0f"}} style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <View _dark={{bg: "black"}} style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
              <Text bold>The customer side is not supported on web.</Text>
              <Text>&nbsp;</Text>
          </View>

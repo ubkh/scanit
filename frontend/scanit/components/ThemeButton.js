@@ -19,7 +19,7 @@ const ThemeButton = () => {
 
   const backgroundColor = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: isDarkMode ? ['#fff', '#fff'] : ['#f1c40f', '#f1c40f'],
+    outputRange: isDarkMode ? ['#fff', '#fff'] : ['#000', '#000'],
   });
 
   return (
