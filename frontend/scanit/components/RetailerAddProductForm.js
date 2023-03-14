@@ -2,6 +2,8 @@ import { useContext } from "react";
 import {
   Button,
   Text,
+  TextArea,
+  KeyboardAvoidingView,
   Input,
   ScrollView,
   FormControl,
@@ -72,11 +74,12 @@ function RetailerAddProductForm() {
         touched,
         isSubmitting,
       }) => (
-        <ScrollView width="100%">
+        <ScrollView width="100%" flex={1} alignSelf="center" paddingLeft={10} paddingRight={10}>
+          <Text>&nbsp;</Text>
           <Text>Please fill in the details of the product.</Text>
           <Text>&nbsp;</Text>
           <VStack space={4}>
-            <FormControl isInvalid={"name" in errors}>
+            <FormControl isRequired isInvalid={"name" in errors && touched.name}>
               <FormControl.Label>Name</FormControl.Label>
               <Input
                 maxLength={100}
@@ -85,25 +88,22 @@ function RetailerAddProductForm() {
                 value={values.name}
               />
               <FormControl.ErrorMessage>
-                {errors.name && touched.name ? errors.name : ""}
+                {touched.name && errors.name}
               </FormControl.ErrorMessage>
             </FormControl>
-            <FormControl isInvalid={"description" in errors}>
+            <FormControl isInvalid={"description" in errors && touched.description}>
               <FormControl.Label>Description</FormControl.Label>
-              <Input
-                multiline
+              <TextArea
                 maxLength={750}
                 onChangeText={handleChange("description")}
                 onBlur={handleBlur("description")}
                 value={values.description}
               />
               <FormControl.ErrorMessage>
-                {errors.description && touched.description
-                  ? errors.description
-                  : ""}
+                {touched.description && errors.description}
               </FormControl.ErrorMessage>
             </FormControl>
-            <FormControl isInvalid={"price" in errors}>
+            <FormControl isRequired isInvalid={"price" in errors && touched.price}>
               <FormControl.Label>Price</FormControl.Label>
               <CurrencyInput
                 label="Price"
@@ -122,10 +122,10 @@ function RetailerAddProductForm() {
                 )}
               />
               <FormControl.ErrorMessage>
-                {errors.price && touched.price ? errors.price : ""}
+                {touched.price && errors.price}
               </FormControl.ErrorMessage>
             </FormControl>
-            <FormControl isInvalid={"quantity" in errors}>
+            <FormControl isRequired isInvalid={"quantity" in errors && touched.quantity}>
               <FormControl.Label>Quantity</FormControl.Label>
               <Input
                 maxLength={5}
@@ -137,10 +137,10 @@ function RetailerAddProductForm() {
                 value={values.quantity}
               />
               <FormControl.ErrorMessage>
-                {errors.quantity && touched.quantity ? errors.quantity : ""}
+                {touched.quantity && errors.quantity}
               </FormControl.ErrorMessage>
             </FormControl>
-            <FormControl isInvalid={"expiry" in errors}>
+            <FormControl isRequired isInvalid={"expiry" in errors && touched.expiry}>
               <FormControl.Label>Expiry</FormControl.Label>
               <Input
                 placeholder="YYYY-MM-DD"
@@ -153,10 +153,10 @@ function RetailerAddProductForm() {
                 value={values.expiry}
               />
               <FormControl.ErrorMessage>
-                {errors.expiry && touched.expiry ? errors.expiry : ""}
+                {touched.expiry && errors.expiry}
               </FormControl.ErrorMessage>
             </FormControl>
-            <FormControl isInvalid={"barcode" in errors}>
+            <FormControl isRequired isInvalid={"barcode" in errors && touched.barcode}>
               <FormControl.Label>Barcode</FormControl.Label>
               <Input
                 placeholder="##############"
@@ -169,7 +169,7 @@ function RetailerAddProductForm() {
                 maxLength={13}
               />
               <FormControl.ErrorMessage>
-                {errors.barcode && touched.barcode ? errors.barcode : ""}
+                {touched.barcode && errors.barcode}
               </FormControl.ErrorMessage>
             </FormControl>
 
@@ -263,12 +263,12 @@ function RetailerAddProductForm() {
 
             <Button
               bg="brand.400"
-              borderRadius="0"
               onPress={handleSubmit}
               disabled={isSubmitting}
             >
               Add product
             </Button>
+            <Text>&nbsp;</Text>
           </VStack>
         </ScrollView>
       )}
