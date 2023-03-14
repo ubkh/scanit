@@ -17,5 +17,9 @@ module.exports = {
   ],
   setupFiles: [
     "./jest.setup.js"
-  ]
+  ],
+  moduleNameMapper: {
+    "\\.(jpg|jpeg|png|gif|svg)$": "identity-obj-proxy",
+    "\\.(woff|woff2|ttf|otf|eot)$": "identity-obj-proxy"
+  }
 }

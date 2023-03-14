@@ -28,7 +28,7 @@ describe("Home (example)", () => {
   test("renders correctly", async () => {
     // render
     render(<Home />);
-
+    screen.debug()
     await waitFor(async () => {
       // make assertion  using global 'screen'
       expect(screen.getByText("Home")).toBeDefined();
