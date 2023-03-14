@@ -44,11 +44,11 @@ class UserRegistrationAPIView(APIView):
         if serializer.is_valid(raise_exception=True):
             new_user = serializer.save()
 
-            email = request.data.get('email', None)
-            user_model = get_user_model()
-            user = user_model.objects.get(email=email)
-            user.store_address=request.data.get('store_address', None)
-            user.save()
+            # email = request.data.get('email', None)
+            # user_model = get_user_model()
+            # user = user_model.objects.get(email=email)
+            # user.store_address=request.data.get('store_address', None)
+            # user.save()
             if new_user:
                 access_token = generate_access_token(new_user)
                 data = { 'user_id': new_user.user_id }

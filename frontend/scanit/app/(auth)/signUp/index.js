@@ -17,7 +17,7 @@ const SignUpScreen = () =>  {
     const {control, handleSubmit, watch} = useForm();
 
 
-    const[storeAddress, setStoreAddress] = useState('');
+    // const[storeAddress, setStoreAddress] = useState('');
   
     // const[error, setError] = useState('');
     const pwd = watch('password');
@@ -29,7 +29,7 @@ const SignUpScreen = () =>  {
             'first_name': data.first_name,
             'last_name': data.last_name,
             'number': data.number,
-            'store_address': storeAddress,
+            'store_address': data.store_address,
             'password': data.password
         })
 
