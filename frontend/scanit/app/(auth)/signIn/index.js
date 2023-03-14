@@ -60,6 +60,7 @@ function SignInScreen(props) {
         router.push("/signUp");
     }
 
+    
     return (
         <KeyboardAvoidingView h={{
             base: "400px",
@@ -82,6 +83,32 @@ function SignInScreen(props) {
                         rules = {{required: 'Email is required'}} 
                     />
 
+            {/* <CustomInput 
+                name='email'
+                placeholder='Email'
+                control = {control}
+                rules = {{required: 'Email is required'}} 
+            />
+            
+            <CustomInput 
+                name = 'password'
+                placeholder = 'Password' 
+                control={control} 
+                rules = {{
+                    required: 'Password is required', 
+                    minLength: {
+                        value: 8, 
+                        message: 'Password should contain at least 8 characters'
+                    }
+                }} 
+                secureTextEntry
+            />
+
+            <Text style={styles.errorLabel}>{error}</Text>
+            <CustomButton text = "Sign In" onPress={handleSubmit(onLoginPressed)}/>
+            <CustomButton text = "Forgot Password?" onPress={onForgotPasswordPressed} type = "SECONDARY"/>
+            <CustomButton text = "Don't have an account? Create one" onPress={onSignUpPressed} type = "TERTIARY"/>
+        </View> */}
                     <CustomInput 
                         name = 'password'
                         placeholder = 'Password' 
