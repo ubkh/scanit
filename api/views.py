@@ -58,12 +58,12 @@ class StaffRegistrationAPIView(APIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (AllowAny,)
 
-    def getretailid(self):
-        retailid = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
-        if User.objects.filter(retailer_id = retailid).exists():
-            getretailid()
-        else:
-            return retailid
+    # def getretailid(self):
+    #     retailid = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+    #     if User.objects.filter(retailer_id = retailid).exists():
+    #         getretailid()
+    #     else:
+    #         return retailid
         
 
     def get(self, request):
@@ -81,7 +81,7 @@ class StaffRegistrationAPIView(APIView):
             user = user_model.objects.get(email=email)
             user.is_staff=True
             user.is_verified=True
-            user.retailer_id=request.data.get('retailer_id')
+            # user.retailer_id=request.data.get('retailer_id')
             # user.retailer_id = current_user.retailer_id
             user.save()
 
@@ -189,6 +189,15 @@ class UserVerificationAPIView(APIView):
 
             user_model = get_user_model()
             current_user = get_object_or_404(user_model, user_id=user_id)
+
+             if current_user.store_address and current_user.verification_code == input_verification_code:
+                # If the verification code matches, mark the user as verified
+                current_user.is_verified = True
+                current_user.is_staff = True
+                current_user.is_retailer = True
+                # current_user.retailer_id = self.getretailid()
+                current_user.save()
+                return Response({'message': 'Verification successful!'}, status=status.HTTP_200_OK)
 
             if current_user.verification_code == input_verification_code:
                 current_user.is_verified = True
