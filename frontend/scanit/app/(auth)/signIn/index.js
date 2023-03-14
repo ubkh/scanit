@@ -1,14 +1,16 @@
 import React, { useState, useContext} from 'react';
-import { StyleSheet, Text, View, Image, useWindowDimensions, TextInput } from 'react-native';
-import Logo from '../../../assets/ScanItLogoInverted.png';
+import { StyleSheet, useWindowDimensions } from 'react-native';
+import { View, Text, StatusBar, Flex, Spacer, Button, Box, useColorMode, Center, KeyboardAvoidingView } from 'native-base';
 import CustomInput from '../../../components/CustomInput.js';
-import CustomButton from '../../../components/CustomButton.js';
-import { useRouter } from "expo-router";
+import { useRouter, Link } from "expo-router";
 import { Context } from '../../../context/GlobalContext.js';
 import { useAuth } from "../../../context/AuthContext";
 import { useForm } from 'react-hook-form';
+import ThemeButton from '../../../components/ThemeButton';
+import ScanitLogo from '../../../components/ScanitLogoComponent';
 
 function SignInScreen(props) {
+    const { colorMode } = useColorMode();
     const globalContext = useContext(Context)
     const { signIn } = useAuth();
     const { setIsLoggedIn, domain, setToken } = globalContext;
@@ -51,7 +53,7 @@ function SignInScreen(props) {
     }
       
     const onForgotPasswordPressed = () => {
-        router.push('/forgotPass')
+        router.push('/signIn/forgotPass')
     }
       
     const onSignUpPressed = () => {
@@ -60,20 +62,28 @@ function SignInScreen(props) {
 
     
     return (
-        <View style={styles.container}>
-            <Text>&nbsp;</Text>
-            <Text>&nbsp;</Text>
-            <Text>&nbsp;</Text>
+        <KeyboardAvoidingView h={{
+            base: "400px",
+            lg: "auto"
+          }} behavior={Platform.OS === "ios" ? "padding" : "height"} style={{flex: 1}} _dark={{bg: "black"}} _light={{bg: "white"}}>
+        <StatusBar barStyle={colorMode === 'light' ? 'dark-content' : 'light-content'} animated={true}/>
+        <Flex flex={1} alignItems="center" safeAreaTop>
+            <Spacer />
 
-            <Image 
-                source={Logo} 
-                style={[styles.logo, {height: height * 0.2}]} 
-                resizeMode="contain"
-                />
+            <Box borderWidth={1} borderColor="gray.200" width={"90%"} maxWidth="340px" borderRadius={8} p={4}
+                marginTop={1} _dark={{borderColor:"muted.700"}}>
+                <Center>
+                    <ScanitLogo />
+                    <Text>&nbsp;</Text>
 
-            <Text>&nbsp;</Text>
+                    <CustomInput 
+                        name='email'
+                        placeholder='Email'
+                        control = {control}
+                        rules = {{required: 'Email is required'}} 
+                    />
 
-            <CustomInput 
+            {/* <CustomInput 
                 name='email'
                 placeholder='Email'
                 control = {control}
@@ -98,21 +108,41 @@ function SignInScreen(props) {
             <CustomButton text = "Sign In" onPress={handleSubmit(onLoginPressed)}/>
             <CustomButton text = "Forgot Password?" onPress={onForgotPasswordPressed} type = "SECONDARY"/>
             <CustomButton text = "Don't have an account? Create one" onPress={onSignUpPressed} type = "TERTIARY"/>
-        </View>
+        </View> */}
+                    <CustomInput 
+                        name = 'password'
+                        placeholder = 'Password' 
+                        control={control} 
+                        rules = {{
+                            required: 'Password is required', 
+                            minLength: {
+                                value: 8, 
+                                message: 'Password should contain atleast 8 characters'
+                            }
+                        }} 
+                        secureTextEntry
+                    />
+
+                    <Text style={styles.errorLabel}>{error}</Text>
+                    <Text>&nbsp;</Text>
+                    <Button bg="brand.400" width="100%" maxWidth="300px" onPress={handleSubmit(onLoginPressed)}>Sign In</Button>
+                    <Text>&nbsp;</Text>
+                    <Button variant="outline" width="100%" maxWidth="300px" onPress={onForgotPasswordPressed}>
+                        <Text>Forgot Password?</Text>
+                    </Button>
+                    <Text>&nbsp;</Text>
+                    <Text>Don't have an account? <Link style={{fontWeight:"bold"}} href="/signUp">Create one</Link></Text>
+                </Center>
+            </Box>
+
+            <ThemeButton />
+            <Spacer />
+        </Flex>
+        </KeyboardAvoidingView>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      alignItems: 'center',
-      padding: 20,
-    },
-    logo: {
-        width: '70%',
-        maxWidth: 300,
-        maxHeight: 200,
-    },
     errorLabel: {
         width: "100%",
         textAlign: "center",

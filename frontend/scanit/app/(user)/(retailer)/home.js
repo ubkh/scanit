@@ -1,6 +1,5 @@
-import { View, Text, Heading } from 'native-base';
+import { View, Text, Heading, Flex, StatusBar, Spacer, useColorMode } from 'native-base';
 import { Platform } from 'react-native';
-import ContainerStyle from '../../../styles/ContainerStyle';
 import LogOutButton from '../../../components/LogOutButtonComponent';
 import CustomButton from '../../../components/CustomButton.js';
 import { useRouter,Navigator, Link } from "expo-router";
@@ -10,9 +9,7 @@ import { useRouter,Navigator, Link } from "expo-router";
 function Home() {
 
     const router = useRouter();
-    // const barcode = () => {
-    //     router.push("/Barcode");
-    // }
+    
     const assignStaff = () => {
         router.push("/assignStaffPage");
     }
@@ -28,13 +25,18 @@ function Home() {
         );
     }
     return (
-        
-            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                 <Text bold>The retail side is not supported on mobile.</Text>
-                 <Text>&nbsp;</Text>
-             </View>
-       
-      );
+        <View style={{flex: 1}} _dark={{bg: "black"}} _light={{bg: "white"}}>
+        <StatusBar barStyle={colorMode === 'light' ? 'dark-content' : 'light-content'} animated={true}/>
+        <Flex flex={1} alignItems="center">
+            <Spacer />
+            <Heading size="lg" fontSize={30} bold justifyContent="flex-start" style={{ fontFamily: 'Rubik-Bold' }}>Home</Heading>
+            <Text style={{ fontFamily: 'Rubik-Bold' }}>You are in the retailer home!</Text>
+            {Platform.OS !== 'web' && <LogOutButton />}
+
+            <Spacer />
+        </Flex>
+        </View>
+    );
 }
 
 export default Home;
