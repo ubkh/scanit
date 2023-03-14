@@ -25,7 +25,7 @@ function useProtectedRoute(user) {
       rootSegment !== "(auth)"
     ) {
       // Redirect to the sign-in page.
-      router.replace("/login");
+      router.replace("/signIn");
     } else if (user && rootSegment !== "(user)") {
       // Redirect away from the sign-in page.
       router.replace("/");
@@ -56,8 +56,8 @@ export function AuthProvider(props) {
   return (
     <AuthContext.Provider
       value={{
-        signIn: () => {
-          setAuth({});
+        signIn: (user) => {
+          setAuth(user);
           setItem(JSON.stringify({}));
         },
         signOut: () => {

@@ -1,14 +1,21 @@
-import { View, Text, Heading } from 'native-base';
+import { View, Text, Heading, Flex, StatusBar, Spacer, useColorMode } from 'native-base';
 import { Platform } from 'react-native';
-import ContainerStyle from '../../../styles/ContainerStyle';
 import LogOutButton from '../../../components/LogOutButtonComponent';
 
 function Home() {
+    const { colorMode } = useColorMode();
+
     return (
-        <View style={ContainerStyle.container}>
-            <Heading size="lg" fontSize={30} bold justifyContent="flex-start">Home</Heading>
+        <View style={{flex: 1}} _dark={{bg: "black"}} _light={{bg: "white"}}>
+        <StatusBar barStyle={colorMode === 'light' ? 'dark-content' : 'light-content'} animated={true}/>
+        <Flex flex={1} alignItems="center">
+            <Spacer />
+            <Heading size="lg" fontSize={30} bold justifyContent="flex-start" style={{ fontFamily: 'Rubik-Bold' }}>Home</Heading>
             <Text style={{ fontFamily: 'Rubik-Bold' }}>You are in the retailer home!</Text>
             {Platform.OS !== 'web' && <LogOutButton />}
+
+            <Spacer />
+        </Flex>
         </View>
     );
 }

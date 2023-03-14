@@ -1,7 +1,12 @@
 import React, { useEffect, useState, useRef, createContext } from 'react';
 import { DJANGO } from '@env'
+import * as SecureStore from 'expo-secure-store';
 
 export const Context = createContext();
+
+const setToken = async(token) => {
+    await SecureStore.setItemAsync('token', token);
+}
 
 export default function ContextProvider(props) {
     const [ domain, setDomain ] = useState(DJANGO);
@@ -11,6 +16,11 @@ export default function ContextProvider(props) {
     const[basketList, setBasketList] = useState([]);
     const[isRetailerScanned, setRetailerScanned] = useState(false);
     const [ userType, setUserType ] = useState('retailer'); //'customer' or 'retailer'
+<<<<<<< HEAD
+=======
+    const [ userID, setUserID ] = useState()
+    const [ token, setToken ] = useState()
+>>>>>>> main
 
     useEffect(() => {
     }, []);
@@ -28,6 +38,10 @@ export default function ContextProvider(props) {
         retailerBarcodeType,
         setRetailerBarcodeType,
         userType,
+        token,
+        setToken,
+        userID,
+        setUserID,
     }
 
     return (

@@ -3,7 +3,6 @@ import { StyleSheet } from 'react-native';
 const BarCodeScanStyle = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fff',
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -17,7 +16,7 @@ const BarCodeScanStyle = StyleSheet.create({
       backgroundColor: 'tomato'
     },
     subtitle: {
-      fontSize: 20,
+      fontSize: 18,
       fontWeight: "bold",
     }
   });

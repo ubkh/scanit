@@ -23,6 +23,8 @@
 //     }
 // });
 
+import { LinearGradient } from "expo-linear-gradient";
+
 const ColorTheme = {
     brand: {
         400: "#34d399",
@@ -31,4 +33,10 @@ const ColorTheme = {
     },
 };
 
-export { ColorTheme };
+const Config = {
+    dependencies: {
+        'linear-gradient': LinearGradient
+    }
+}
+
+export { ColorTheme, Config };

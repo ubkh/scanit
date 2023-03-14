@@ -17,7 +17,6 @@ function Index() {
     // TODO: Implement correctly!
     // maybe use the AuthContext to check if the user is a customer or retailer using a hook
     // or store directly in the user object in AuthContext?
-
     // if user is a customer redirect to their home
     if (userType === "customer") {
         return (
