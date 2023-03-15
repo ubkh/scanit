@@ -11,13 +11,13 @@ const links = [
     { label: 'Home', url: '/(retailer)/home' },
     { label: 'Something Else', url: '/other' },
     { label: 'Add Item', url: '/addItem' },
+    { label: 'Assign Staff', url: '/assignStaffPage' },
 ];
 
 export default function RetailerLayout() {
   const globalContext = useContext(Context);
   const { userType } = globalContext;
   const segments = useSegments();
-
   const { colorMode } = useColorMode();
 
   // TODO: Consider a context here to prevent access

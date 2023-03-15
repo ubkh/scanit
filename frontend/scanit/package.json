@@ -45,7 +45,8 @@
     "react-native-vector-icons": "^9.2.0",
     "react-native-web": "~0.18.9",
     "react-scripts": "4.0.3",
-    "react-test-renderer": "^18.2.0"
+    "react-test-renderer": "^18.2.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

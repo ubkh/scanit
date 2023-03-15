@@ -1,11 +1,12 @@
 import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, View, Image, useWindowDimensions } from 'react-native';
 import CustomInput from '../../../components/CustomInput.js';
-import CustomButton from '../../../components/CustomButton.js';
+// import CustomButton from '../../../../components/CustomButton.js';
 import ItemLoader from '../../../components/ItemLoader.js';
 import { useRouter, useSearchParams } from "expo-router";
 import { Context } from '../../../context/GlobalContext.js';
 import { useForm } from 'react-hook-form';
+// import * as XLSX from "xlsx";
 
 function addItems(props) {
 
@@ -30,7 +31,7 @@ function addItems(props) {
             <Text>&nbsp;banana</Text>
             
             <ItemLoader/>
-            <CustomButton text = "Submit" onPress={handleSubmit(onSubmit())}/>
+            {/* <CustomButton text = "Submit" onPress={handleSubmit(onSubmit())}/> */}
         </View>
     );
 
@@ -92,6 +93,7 @@ function addItems(props) {
     
 
 }
+
 
 const styles = StyleSheet.create({
     container: {
