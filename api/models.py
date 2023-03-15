@@ -1,4 +1,3 @@
-import json
 from django.db import models
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
@@ -7,7 +6,7 @@ from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.core.serializers.json import DjangoJSONEncoder
-
+import uuid
 import datetime
 
 
@@ -47,7 +46,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 	first_name = models.CharField(max_length=32)
 	last_name = models.CharField(max_length=32)
 	number = models.CharField(validators=[phone_regex], max_length=11, blank=True)
-	store_address = models.CharField(max_length=100, blank=True)
+	store_address = models.CharField(max_length=100, blank=True, null=True)
 	is_active = models.BooleanField(default=True)
 	is_staff = models.BooleanField(default=False)
 	is_retailer = models.BooleanField(default=False)
@@ -86,7 +85,9 @@ class Product(models.Model):
         super().save(*args, **kwargs)
 
 class Transaction(models.Model):
-	retailer = models.ForeignKey(User, related_name='transactions_as_retailer', on_delete=models.CASCADE) # use retailer barcode here when available, to_field='...'
+	transaction_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+	retailer = models.ForeignKey(User, related_name='transactions_as_retailer', on_delete=models.CASCADE)
+	# use retailer barcode here when available, to_field='...'
 	customer = models.ForeignKey(User, related_name='transactions_as_customer', on_delete=models.CASCADE)
 	products = models.JSONField(encoder=DjangoJSONEncoder)
 	date = models.DateField(auto_now_add=True)
