@@ -86,6 +86,9 @@ function Basket(props) {
                         minValue={1}
                         rounded={true}
                         textColor={colorMode === 'light' ? 'black' : 'white'}
+                        rightButtonBackgroundColor={colorMode === 'light' ? 'white' : 'black'}
+                        leftButtonBackgroundColor={colorMode === 'light' ? 'white' : 'black'}
+                        iconStyle={colorMode === 'light' ? { fontSize: 18, color: 'black' } : {fontSize: 18, color: 'white'}}
                         totalHeight={40}
                         totalWidth={100}
                       />
