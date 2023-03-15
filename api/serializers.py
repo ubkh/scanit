@@ -1,6 +1,7 @@
 # Translates models into JSON objects
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from .models import Transaction
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(max_length=100, min_length=8, style={'input_type': 'password'})
@@ -41,3 +42,18 @@ class UserConfirmPasswordResetSerializer(serializers.Serializer):
         if data['password'] != data['confirm_password']:
             raise serializers.ValidationError("Passwords do not match.")
         return data
+
+class UserSerializer(serializers.Serializer):
+    class Meta:
+        model = get_user_model()
+        fields = ['user_id', 'email', 'first_name', 'last_name', 'number', 'store_address', 
+                  'is_active', 'is_staff', 'is_retailer', 'retailer_id', 'verification_code', 
+                  'is_verified', 'date_joined']
+
+class TransactionSerializer(serializers.ModelSerializer):
+    retailer = UserSerializer()
+    customer = UserSerializer()
+
+    class Meta:
+        model = Transaction
+        fields = ['id', 'retailer', 'customer', 'products', 'date']

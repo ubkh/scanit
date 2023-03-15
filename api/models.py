@@ -1,3 +1,4 @@
+import json
 from django.db import models
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
@@ -5,6 +6,7 @@ from django.core.validators import RegexValidator
 from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+from django.core.serializers.json import DjangoJSONEncoder
 
 import datetime
 
@@ -82,6 +84,12 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         self.full_clean()
         super().save(*args, **kwargs)
+
+class Transaction(models.Model):
+	retailer = models.ForeignKey(User, related_name='transactions_as_retailer', on_delete=models.CASCADE) # use retailer barcode here when available, to_field='...'
+	customer = models.ForeignKey(User, related_name='transactions_as_customer', on_delete=models.CASCADE)
+	products = models.JSONField(encoder=DjangoJSONEncoder)
+	date = models.DateField(auto_now_add=True)
 
 # class UserAccount(User):
     
