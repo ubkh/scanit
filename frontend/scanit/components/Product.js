@@ -2,9 +2,13 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 // const Product = ({ retailerID, barcodeID, name, description, price, quantity, expiry }) => {
-    const Product = ({ name, description, price, quantity, expiry }) => {
+    const Product = ({ barcodeID, name, description, price, quantity, expiry }) => {
         return (
           <View style={styles.container}>
+            <View style={styles.column}>
+              <Text style={styles.label}>BarcodeID:</Text>
+              <Text style={styles.value}>{barcodeID}</Text>
+            </View>
             <View style={styles.column}>
               <Text style={styles.label}>Name:</Text>
               <Text style={styles.value}>{name}</Text>

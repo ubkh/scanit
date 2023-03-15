@@ -7,13 +7,13 @@ from .views import (
 	UserLogoutViewAPI,
 	UserVerificationAPIView,
     UserPasswordResetView,
-	UserPasswordResetConfirmView
+	UserPasswordResetConfirmView,
+    RetailerUploadItemAPIView
 )
 
 urlpatterns = [
 	# USER URL PATHS
 	path('user/register/', UserRegistrationAPIView.as_view()),
-	path('staff/register/', StaffRegistrationAPIView.as_view()),
 	path('user/login/', UserLoginAPIView.as_view()),
 	path('user/', UserViewAPI.as_view()),
 	path('user/logout/', UserLogoutViewAPI.as_view()),
@@ -23,4 +23,8 @@ urlpatterns = [
 	
 	# ADMIN (RETAILER) URL PATHS
 	# path('retailer/dashboard'),
+	path('retailer/uploadItems', RetailerUploadItemAPIView.as_view()),
+	
+	# ADMIN (DIRECTOR) URL PATHS
+	path('staff/register/', StaffRegistrationAPIView.as_view()),
 ]

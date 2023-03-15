@@ -4,6 +4,7 @@ from .serializers import (
     UserVerificationSerializer,
     UserPasswordResetSerializer,
     UserConfirmPasswordResetSerializer,
+    RetailerUploadItemSerializer,
     ) 
 
 from rest_framework.views import APIView
@@ -305,4 +306,52 @@ def send_account_verification_code(request):
             return JsonResponse({'message': 'Verification code sent'})
     return JsonResponse({'error': 'Invalid request'})
 
+
+class RetailerUploadItemAPIView(APIView):
+    # serializer_class = UserRegistrationSerializer
+    serializer_class = RetailerUploadItemSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (AllowAny,)
+
+    # def getretailid(self):
+    #     retailid = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+    #     if User.objects.filter(retailer_id = retailid).exists():
+    #         getretailid()
+    #     else:
+    #         return retailid
+        
+
+    def get(self, request):
+        content = { 'message': 'Hello!' }
+        return Response(content)
+
+
+    def post(self, request):
+        
+        data = request.data 
+        return Response(data, status=status.HTTP_201_CREATED)
+
+    # def post(self, request):
+    #     serializer = self.serializer_class(data=request.data)
+    #     if serializer.is_valid(raise_exception=True):
+    #         new_user = serializer.save()
+
+         
+    #         email = request.data.get('email', None)
+    #         user_model = get_user_model()
+    #         user = user_model.objects.get(email=email)
+    #         user.is_staff=True
+    #         user.is_verified=True
+    #         # user.retailer_id=request.data.get('retailer_id')
+    #         # user.retailer_id = current_user.retailer_id
+    #         user.save()
+
+    #         if new_user:
+    #             access_token = generate_access_token(new_user)
+    #             data = { 'user_id': new_user.user_id }
+    #             response = Response(data, status=status.HTTP_201_CREATED)
+    #             response.set_cookie(key='access_token', value=access_token, httponly=True)
+    #             return response
+    #             # return redirect(reverse('verify', args=[new_user.user_id]))
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
