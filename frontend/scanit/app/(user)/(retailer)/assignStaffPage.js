@@ -1,7 +1,9 @@
 import React, { useState, useContext } from 'react';
-import { StyleSheet, Text, View, Image,Button, useWindowDimensions } from 'react-native';
+import { StyleSheet} from 'react-native';
+
+import { View, Text, StatusBar, Flex, Spacer, Button, Box, Heading, useColorMode, Center, KeyboardAvoidingView } from 'native-base';
 import CustomInput from '../../../components/CustomInput.js';
-import { useRouter, useSearchParams } from "expo-router";
+import { useRouter, useSearchParams, Link } from "expo-router";
 import { Context } from '../../../context/GlobalContext.js';
 import { useForm } from 'react-hook-form';
 
@@ -15,13 +17,7 @@ function assignStaffPage(props) {
     const[store_address, setStoreAddress] = useState('');
     const router = useRouter();
  
-    // const[firstName, setFirstName] = useState('');
-    // const[lastName, setLastName] = useState('');
-    // const[email, setEmail] = useState('');
-    // const[number, setNumber] = useState('');
-    // const[storeAddress, setStoreAddress] = useState('');
-    // const[password, setPassword] = useState('');
-    // const[confirmPassword, setConfirmPassword] = useState('');
+
     const[error, setError] = useState('');
 
     const onRegisterPressed = async data =>  {
@@ -54,6 +50,7 @@ function assignStaffPage(props) {
             setUserID(json.user_id)
             console.log(json.user_id)
             console.log(userID)
+            router.push("/home");
         })
         .catch(error => {
             console.log(error)
@@ -61,52 +58,59 @@ function assignStaffPage(props) {
     }
 
     return (
-        <View style={styles.container}>
-            <Text>&nbsp;</Text>
-            <Text>&nbsp;</Text>
-            <Text>&nbsp;</Text>
+        <KeyboardAvoidingView h={{
+            base: "400px",
+            lg: "auto"
+          }} style={{flex: 1}} _dark={{bg: "black"}} _light={{bg: "white"}}>
+        {/* <StatusBar barStyle={colorMode === 'light' ? 'dark-content' : 'light-content'} animated={true}/> */}
+        <Flex flex={1} alignItems="center" safeAreaTop>
+            <Spacer />
+
+            <Box borderWidth={1} borderColor="gray.200" width={"90%"} maxWidth="400px" borderRadius={8} p={4}
+                marginTop={1} _dark={{borderColor:"muted.700"}}>
+                <Center>
+                    <Heading bold>Create an account</Heading>
+                    <Text>&nbsp;</Text>
+                    <CustomInput 
+                        name='first_name'
+                        placeholder='First name'
+                        control = {control}
+                        rules = {{required: 'First name is required'}} 
+                    />
+                    <CustomInput 
+                        name='last_name'
+                        placeholder='Last name'
+                        control = {control}
+                        rules = {{required: 'Last name is required'}} 
+                    />
+                    <CustomInput 
+                        name='email'
+                        placeholder='Email'
+                        control = {control}
+                        rules = {{
+                            required: 'Email is required',
+                        }} 
+                    />
             
-            <Text style={styles.title}>Create an account</Text>
-            
-            <CustomInput 
-                name='first_name'
-                placeholder='First name'
-                control = {control}
-                rules = {{required: 'First name is required'}} 
-            />
-            <CustomInput 
-                name='last_name'
-                placeholder='Last name'
-                control = {control}
-                rules = {{required: 'Last name is required'}} 
-            />
-            <CustomInput 
-                name='email'
-                placeholder='Email'
-                control = {control}
-                rules = {{
-                    required: 'Email is required',
-                }} 
-            />
-      
-            <CustomInput 
-                name = 'password'
-                placeholder = 'Password' 
-                control={control} 
-                rules = {{
-                    required: 'Password is required', 
-                    // pattern: {
-                    //     value: PASSWORD_REGEX, 
-                    //     message: 'Password should contain atleast 8 characters \n - An uppercase character \n - A lower case character \n - A number \n - A special character'
-                    // }
-                }} 
-                secureTextEntry
-            />
+                    <CustomInput 
+                        name = 'password'
+                        placeholder = 'Password' 
+                        control={control} 
+                        rules = {{
+                            required: 'Password is required', 
+                        }} 
+                        secureTextEntry
+                    />
         
-            <Button bg="brand.400" width="100%" maxWidth="300px" onPress={handleSubmit(onRegisterPressed)}>Assign staff</Button>
-            <Text style = {styles.text}>
-            </Text>
-        </View>
+        <Text>&nbsp;</Text>
+                    <Button bg="brand.400" width="100%" maxWidth="300px" onPress={handleSubmit(onRegisterPressed)}>Assign Staff</Button>
+                    <Text>&nbsp;</Text>
+                </Center>
+            </Box>
+            {/* <ThemeButton /> */}
+            <Spacer />
+        </Flex>
+        </KeyboardAvoidingView>  
         
     )
 }

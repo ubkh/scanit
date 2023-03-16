@@ -70,7 +70,7 @@ function SignInScreen(props) {
         <Flex flex={1} alignItems="center" safeAreaTop>
             <Spacer />
 
-            <Box borderWidth={1} borderColor="gray.200" width={"90%"} maxWidth="340px" borderRadius={8} p={4}
+            <Box borderWidth={1} borderColor="gray.200" width={"90%"} maxWidth="400px" borderRadius={8} p={4}
                 marginTop={1} _dark={{borderColor:"muted.700"}}>
                 <Center>
                     <ScanitLogo />
@@ -82,33 +82,6 @@ function SignInScreen(props) {
                         control = {control}
                         rules = {{required: 'Email is required'}} 
                     />
-
-            {/* <CustomInput 
-                name='email'
-                placeholder='Email'
-                control = {control}
-                rules = {{required: 'Email is required'}} 
-            />
-            
-            <CustomInput 
-                name = 'password'
-                placeholder = 'Password' 
-                control={control} 
-                rules = {{
-                    required: 'Password is required', 
-                    minLength: {
-                        value: 8, 
-                        message: 'Password should contain at least 8 characters'
-                    }
-                }} 
-                secureTextEntry
-            />
-
-            <Text style={styles.errorLabel}>{error}</Text>
-            <CustomButton text = "Sign In" onPress={handleSubmit(onLoginPressed)}/>
-            <CustomButton text = "Forgot Password?" onPress={onForgotPasswordPressed} type = "SECONDARY"/>
-            <CustomButton text = "Don't have an account? Create one" onPress={onSignUpPressed} type = "TERTIARY"/>
-        </View> */}
                     <CustomInput 
                         name = 'password'
                         placeholder = 'Password' 
@@ -117,7 +90,7 @@ function SignInScreen(props) {
                             required: 'Password is required', 
                             minLength: {
                                 value: 8, 
-                                message: 'Password should contain atleast 8 characters'
+                                message: 'Password should contain at least 8 characters'
                             }
                         }} 
                         secureTextEntry

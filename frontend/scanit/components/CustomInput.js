@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
 const webstyles = StyleSheet.create({
     container: {
         backgroundColor:  '#e8e8e8',
-        width: '50%',
+        width: '70%',
 
         borderRadius: 5,
 
