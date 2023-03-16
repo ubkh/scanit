@@ -1,13 +1,14 @@
 import { Slot, Navigator, Tabs, useSegments, Redirect } from "expo-router";
 import React, { useState, useEffect, useContext } from "react";
 import { useWindowDimensions, Platform } from "react-native";
+import { useColorMode } from "native-base";
 import { TabRouter } from "@react-navigation/native";
 import NavBarComponent from "../../../components/NavBarComponent";
 import { Context } from "../../../context/GlobalContext";
 import { Ionicons } from "@expo/vector-icons";
 
 const links = [
-  { label: "Home", url: "/home" },
+  { label: "Home", url: "/(retailer)/home" },
   { label: "Something Else", url: "/other" },
 ];
 
@@ -16,9 +17,13 @@ export default function RetailerLayout() {
   const { userType } = globalContext;
   const segments = useSegments();
 
+  const { colorMode } = useColorMode();
+
   // TODO: Consider a context here to prevent access
   // prevent other users from accessing this group of pages
-  if (userType !== "retailer") {
+  if (userType === undefined) {
+    return <Redirect href={`/(auth)/signIn`} />;
+  } else if (userType !== "retailer") {
     return <Redirect href={`/(${userType})/${segments[2]}`} />;
   }
 
@@ -34,6 +39,9 @@ export default function RetailerLayout() {
       <Tabs
         screenOptions={{
           tabBarActiveTintColor: "#34d399",
+          tabBarStyle: {
+            backgroundColor: colorMode == "dark" ? "black" : "white",
+          },
         }}
       >
         <Tabs.Screen

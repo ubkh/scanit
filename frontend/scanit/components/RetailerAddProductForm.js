@@ -3,7 +3,6 @@ import {
   Button,
   Text,
   TextArea,
-  KeyboardAvoidingView,
   Input,
   ScrollView,
   FormControl,
@@ -74,12 +73,21 @@ function RetailerAddProductForm() {
         touched,
         isSubmitting,
       }) => (
-        <ScrollView width="100%" flex={1} alignSelf="center" paddingLeft={10} paddingRight={10}>
+        <ScrollView
+          width="100%"
+          flex={1}
+          alignSelf="center"
+          paddingLeft={10}
+          paddingRight={10}
+        >
           <Text>&nbsp;</Text>
           <Text>Please fill in the details of the product.</Text>
           <Text>&nbsp;</Text>
           <VStack space={4}>
-            <FormControl isRequired isInvalid={"name" in errors && touched.name}>
+            <FormControl
+              isRequired
+              isInvalid={"name" in errors && touched.name}
+            >
               <FormControl.Label>Name</FormControl.Label>
               <Input
                 maxLength={100}
@@ -91,7 +99,9 @@ function RetailerAddProductForm() {
                 {touched.name && errors.name}
               </FormControl.ErrorMessage>
             </FormControl>
-            <FormControl isInvalid={"description" in errors && touched.description}>
+            <FormControl
+              isInvalid={"description" in errors && touched.description}
+            >
               <FormControl.Label>Description</FormControl.Label>
               <TextArea
                 maxLength={750}
@@ -103,7 +113,10 @@ function RetailerAddProductForm() {
                 {touched.description && errors.description}
               </FormControl.ErrorMessage>
             </FormControl>
-            <FormControl isRequired isInvalid={"price" in errors && touched.price}>
+            <FormControl
+              isRequired
+              isInvalid={"price" in errors && touched.price}
+            >
               <FormControl.Label>Price</FormControl.Label>
               <CurrencyInput
                 label="Price"
@@ -125,7 +138,10 @@ function RetailerAddProductForm() {
                 {touched.price && errors.price}
               </FormControl.ErrorMessage>
             </FormControl>
-            <FormControl isRequired isInvalid={"quantity" in errors && touched.quantity}>
+            <FormControl
+              isRequired
+              isInvalid={"quantity" in errors && touched.quantity}
+            >
               <FormControl.Label>Quantity</FormControl.Label>
               <Input
                 maxLength={5}
@@ -140,7 +156,10 @@ function RetailerAddProductForm() {
                 {touched.quantity && errors.quantity}
               </FormControl.ErrorMessage>
             </FormControl>
-            <FormControl isRequired isInvalid={"expiry" in errors && touched.expiry}>
+            <FormControl
+              isRequired
+              isInvalid={"expiry" in errors && touched.expiry}
+            >
               <FormControl.Label>Expiry</FormControl.Label>
               <Input
                 placeholder="YYYY-MM-DD"
@@ -156,7 +175,10 @@ function RetailerAddProductForm() {
                 {touched.expiry && errors.expiry}
               </FormControl.ErrorMessage>
             </FormControl>
-            <FormControl isRequired isInvalid={"barcode" in errors && touched.barcode}>
+            <FormControl
+              isRequired
+              isInvalid={"barcode" in errors && touched.barcode}
+            >
               <FormControl.Label>Barcode</FormControl.Label>
               <Input
                 placeholder="##############"

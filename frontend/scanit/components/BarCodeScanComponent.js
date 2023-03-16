@@ -1,8 +1,8 @@
 import { useState, useContext, useEffect } from "react";
-// import {useNavigation} from'@react-navigation/native';
 import { useRouter } from "expo-router";
 import { Context } from "../context/GlobalContext";
-import { Text, View, Button, Alert, TextInput } from "react-native";
+import { Alert } from "react-native";
+import { Text, View, Button } from "native-base";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import BarCodeScanStyle from "../styles/BarCodeScanStyle";
 

@@ -48,6 +48,12 @@ class UserRegistrationAPIView(APIView):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
             new_user = serializer.save()
+
+            # email = request.data.get('email', None)
+            # user_model = get_user_model()
+            # user = user_model.objects.get(email=email)
+            # user.store_address=request.data.get('store_address', None)
+            # user.save()
             if new_user:
                 access_token = generate_access_token(new_user)
                 data = { 'user_id': new_user.user_id }
@@ -57,6 +63,49 @@ class UserRegistrationAPIView(APIView):
                 return response
                 # return redirect(reverse('verify', args=[new_user.user_id]))
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class StaffRegistrationAPIView(APIView):
+    serializer_class = UserRegistrationSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (AllowAny,)
+
+    # def getretailid(self):
+    #     retailid = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+    #     if User.objects.filter(retailer_id = retailid).exists():
+    #         getretailid()
+    #     else:
+    #         return retailid
+        
+
+    def get(self, request):
+        content = { 'message': 'Hello!' }
+        return Response(content)
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            new_user = serializer.save()
+
+         
+            email = request.data.get('email', None)
+            user_model = get_user_model()
+            user = user_model.objects.get(email=email)
+            user.is_staff=True
+            user.is_verified=True
+            # user.retailer_id=request.data.get('retailer_id')
+            # user.retailer_id = current_user.retailer_id
+            user.save()
+
+            if new_user:
+                access_token = generate_access_token(new_user)
+                data = { 'user_id': new_user.user_id }
+                response = Response(data, status=status.HTTP_201_CREATED)
+                response.set_cookie(key='access_token', value=access_token, httponly=True)
+                return response
+                # return redirect(reverse('verify', args=[new_user.user_id]))
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 class UserLoginAPIView(APIView):
     serializer_class = UserLoginSerializer
@@ -93,7 +142,9 @@ class UserLoginAPIView(APIView):
                     'first_name': user_instance.first_name,
                     'last_name': user_instance.last_name,
                     'number': user_instance.number,
+                    'store_address': user_instance.store_address,
                     'is_staff': user_instance.is_staff,
+                    'is_retailer': user_instance.is_retailer,
                 }
             }
             return response
@@ -152,8 +203,19 @@ class UserVerificationAPIView(APIView):
             user_model = get_user_model()
             current_user = get_object_or_404(user_model, user_id=user_id)
 
+            if current_user.store_address and current_user.verification_code == input_verification_code:
+                # If the verification code matches, mark the user as verified
+                current_user.is_verified = True
+                current_user.is_staff = True
+                current_user.is_retailer = True
+                # current_user.retailer_id = self.getretailid()
+                current_user.save()
+                return Response({'message': 'Verification successful!'}, status=status.HTTP_200_OK)
+
             if current_user.verification_code == input_verification_code:
                 current_user.is_verified = True
+                # current_user.is_staff = True
+                # current_user.is_retailer = True
                 current_user.save()
                 return Response({'message': 'Verification successful!'}, status=status.HTTP_200_OK)
             else:
