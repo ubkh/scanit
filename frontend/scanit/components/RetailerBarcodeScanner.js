@@ -30,7 +30,9 @@ function RetailerBarcodeScanner() {
       // const res = await fetch(
       //   `http://${domain}/api/get-product/${retailerId}/${data}`
       // );
-      const res = await fetch(`http://${domain}/api/store-get-product/${data}`);
+      const res = await fetch(
+        `http://${domain}/api/retailer/get-product//${data}`
+      );
       if (res.ok) {
         const resData = await res.json();
         Alert.alert("Product found", "Please fill in the quantity and expiry.");

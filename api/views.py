@@ -310,7 +310,7 @@ def send_account_verification_code(request):
     return JsonResponse({'error': 'Invalid request'})
 
 @csrf_exempt
-def storeAddProduct(request):
+def retailerAddProduct(request):
     user_token = request.COOKIES.get('access_token')
     if not user_token:
         raise AuthenticationFailed('Unauthenticated user.')
@@ -336,7 +336,7 @@ def storeAddProduct(request):
         return HttpResponseServerError()
     
 @csrf_exempt
-def storeGetProduct(request, barcode):
+def retailerGetProduct(request, barcode):
     user_token = request.COOKIES.get('access_token')
     if not user_token:
         raise AuthenticationFailed('Unauthenticated user.')

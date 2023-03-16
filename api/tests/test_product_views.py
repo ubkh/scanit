@@ -24,7 +24,7 @@ class AddProductViewTestCase(TestCase):
         self.retailer = get_user_model().objects.get(user_id = 1)
 
     def send_req(self):
-        return self.client.post(reverse("store-add-product"), json.dumps(self.json), content_type="application/json; charset=utf-8")
+        return self.client.post(reverse("retailer-add-product"), json.dumps(self.json), content_type="application/json; charset=utf-8")
 
     def log_in(self):
         return self.client.post(reverse("user_login"), {"email": self.retailer.email, "password": UNHASHED_RETAILER_PASS})
@@ -95,7 +95,7 @@ class GetProductViewTestCase(TestCase):
         return self.client.post(reverse("user_login"), {"email": self.retailer.email, "password": UNHASHED_RETAILER_PASS})
 
     def send_req(self):
-        return self.client.get(reverse("store-get-product", args=[self.barcode]))
+        return self.client.get(reverse("retailer-get-product", args=[self.barcode]))
 
     
     def test_unauth_retailer_get_product(self):

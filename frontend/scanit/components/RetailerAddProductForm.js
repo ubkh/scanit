@@ -51,7 +51,7 @@ function RetailerAddProductForm() {
       price: Math.ceil(parseFloat(values.price) * 100), // some inputs like "300.09" becomes 30008.9999999 for some reason, hence Math.ceil
       quantity: parseInt(values.quantity),
     });
-    await fetch(`http://${domain}/api/store-add-product/`, {
+    await fetch(`http://${domain}/api/retailer/add-product/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: jsonObj,
