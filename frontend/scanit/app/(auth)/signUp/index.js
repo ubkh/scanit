@@ -1,4 +1,5 @@
 import React, { useState, useContext, useRef, useEffect } from 'react';
+import { Platform } from 'react-native';
 import { View, Text, StatusBar, Flex, Spacer, Button, Box, Heading, useColorMode, Center, KeyboardAvoidingView } from 'native-base';
 import CustomInput from '../../../components/CustomInput.js';
 import { useRouter, Link } from "expo-router";
@@ -15,7 +16,12 @@ const SignUpScreen = () =>  {
     const { colorMode } = useColorMode();
 
     const {control, handleSubmit, watch} = useForm();
+    const [selectedIndex, setSelectedIndex] = useState(0);
 
+
+    // const[storeAddress, setStoreAddress] = useState('');
+  
+    // const[error, setError] = useState('');
     const pwd = watch('password');
     const[error, setError] = useState('');
 
@@ -25,7 +31,9 @@ const SignUpScreen = () =>  {
             'first_name': data.first_name,
             'last_name': data.last_name,
             'number': data.number,
-            'password': data.password
+            'store_address': data.store_address,
+            'password': data.password,
+            'is_retailer': selectedIndex == 1 ? true : false
         })
 
         fetch(`http://${domain}/api/user/register/`,{
@@ -58,7 +66,7 @@ const SignUpScreen = () =>  {
         <KeyboardAvoidingView h={{
             base: "400px",
             lg: "auto"
-          }} behavior={Platform.OS === "ios" ? "padding" : "height"} style={{flex: 1}} _dark={{bg: "black"}} _light={{bg: "white"}}>
+            }} behavior={Platform.OS === "ios" ? "padding" : "height"} style={{flex: 1}} _dark={{bg: "black"}} _light={{bg: "white"}}>
         <StatusBar barStyle={colorMode === 'light' ? 'dark-content' : 'light-content'} animated={true}/>
         <Flex flex={1} alignItems="center" safeAreaTop>
             <Spacer />
@@ -67,6 +75,16 @@ const SignUpScreen = () =>  {
                 marginTop={1} _dark={{borderColor:"muted.700"}}>
                 <Center>
                     <Heading bold>Create an account</Heading>
+                    <Text>&nbsp;</Text>
+                    <Button.Group isAttached rounded={"md"} colorScheme="gray" mx={{
+                        base: "auto",
+                        md: 0
+                    }} size="sm"
+                    selectedIndex={selectedIndex}
+                    >
+                        <Button onPress={() => setSelectedIndex(0)} variant={selectedIndex==0 ?'solid' : 'outline'}>Customer</Button>
+                        <Button onPress={() => setSelectedIndex(1)} variant={selectedIndex==1 ? 'solid' : 'outline'}>Retailer</Button>
+                    </Button.Group>
                     <Text>&nbsp;</Text>
                     <CustomInput 
                         name='first_name'
@@ -108,6 +126,19 @@ const SignUpScreen = () =>  {
                             }
                         }} 
                     />
+
+                    {selectedIndex == 1 &&
+                        <CustomInput 
+                            name = 'store_address'
+                            placeholder = 'Store address' 
+                            control={control} 
+                            rules = {{
+                                required: 'address is required', 
+                            
+                            }} 
+                        />  
+                    }
+
                     <CustomInput 
                         name = 'password'
                         placeholder = 'Password' 
@@ -130,16 +161,17 @@ const SignUpScreen = () =>  {
                         }} 
                         secureTextEntry
                     />
-
+                
                     <Text>&nbsp;</Text>
                     <Button bg="brand.400" width="100%" maxWidth="300px" onPress={handleSubmit(onRegisterPressed)}>Sign Up</Button>
                     <Text>&nbsp;</Text>
                     <Text>Already have an account? <Link style={{fontWeight:"bold"}} href="/signIn">Sign in</Link></Text>
                 </Center>
             </Box>
+
             <Spacer />
         </Flex>
-        </KeyboardAvoidingView>  
+        </KeyboardAvoidingView>
     );
 }
 
