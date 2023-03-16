@@ -62,6 +62,7 @@ function Basket(props) {
                       <Text>Barcode Type: {item.type}</Text>
                       <Text>Quantity: {item.quantity}</Text>
 
+                    <View testID={`numeric-input-${index}`}>
                       <NumericInput
                         key={`${item.data}`}
                         value={item.quantity}
@@ -88,9 +89,12 @@ function Basket(props) {
                         totalHeight={40}
                         totalWidth={100}
                       />
+                    </View>
+
 
                       <View style={{flexDirection: "row", justifyContent: "flex-end"}} key={index}>
                         <TouchableOpacity
+                          testID={`remove-button-${index}`}
                           onPress={() => removeItem(index)}
                         >
                           <View

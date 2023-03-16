@@ -22,7 +22,11 @@ export default function RetailerLayout() {
 
   // TODO: Consider a context here to prevent access
   // prevent other users from accessing this group of pages
-  if (userType !== "retailer") {
+  if (userType === undefined) {
+    return (
+        <Redirect href={`/(auth)/signIn`} />
+    )
+  } else if (userType !== "retailer") {
     return (
         <Redirect href={`/(${userType})/${segments[2]}`} />
     )

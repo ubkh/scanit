@@ -1,6 +1,7 @@
 import React from "react";
-import { View, Text, Input, FormControl, WarningOutlineIcon } from "native-base";
 import { TextInput, StyleSheet } from 'react-native';
+import { Platform } from 'react-native';
+import { View, Text, Input, FormControl, WarningOutlineIcon } from "native-base";
 import { Controller } from "react-hook-form";
 
 const CustomInput = ({ control, name, rules = {}, placeholder, secureTextEntry}) => {
@@ -53,6 +54,21 @@ const styles = StyleSheet.create({
         width: '100%',
 
         borderWidth: 1,
+        borderRadius: 5,
+
+        paddingHorizontal: 10,
+        marginVertical: 10,
+    },
+    input: {
+        padding: 15,
+    },
+});
+
+const webstyles = StyleSheet.create({
+    container: {
+        backgroundColor:  '#e8e8e8',
+        width: '50%',
+
         borderRadius: 5,
 
         paddingHorizontal: 10,
