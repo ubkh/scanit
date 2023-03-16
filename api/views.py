@@ -29,7 +29,7 @@ from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest, Http
 from django.core.exceptions import ValidationError
 
 
-from .utils import generate_access_token
+from .utils import generate_access_token, get_logged_in_user
 import jwt
 import random
 import string
@@ -115,13 +115,11 @@ class UserLoginAPIView(APIView):
     def post(self, request):
         email = request.data.get('email', None)
         user_password = request.data.get('password', None)
-
         if not user_password:
             raise AuthenticationFailed('A user password is needed.')
 
         if not email:
             raise AuthenticationFailed('An user email is needed.')
-
         user_instance = authenticate(username=email, password=user_password)
 
         if not user_instance:
@@ -313,12 +311,24 @@ def send_account_verification_code(request):
 
 @csrf_exempt
 def storeAddProduct(request):
-    productData = json.loads(request.body)
+    user_token = request.COOKIES.get('access_token')
+    if not user_token:
+        raise AuthenticationFailed('Unauthenticated user.')
+    user = get_logged_in_user(user_token)
+
     try:
-        # Same product with same expiry date and retailer is in the db, i.e: same batch. Update quantity and do not create new entries.
-        # if (Product.objects.get(barcode = productData['barcode'], expiry = productData['expiry'], retailer = RETAILER_ID)):
-        #     pass
-        Product.objects.create(**productData)
+        product_data = json.loads(request.body)
+        # Same product with same expiry date and retailer, i.e: same batch
+        product_query = Product.objects.filter(barcode=product_data['barcode'], expiry=product_data['expiry'], retailer=user)
+        if (product_query.count()):
+            product_obj = product_query.first()
+            updated_quantity = product_obj.quantity + product_data['quantity']
+            product_data['quantity'] = updated_quantity
+            for (key, value) in product_data.items():
+                setattr(product_obj, key, value)
+            product_obj.save()
+        else:
+            Product.objects.create(**product_data, retailer = user)
         return HttpResponse(status=200)
     except ValidationError:
         return HttpResponseBadRequest()
@@ -326,10 +336,15 @@ def storeAddProduct(request):
         return HttpResponseServerError()
     
 @csrf_exempt
-def storeGetProduct(_, barcode):
-    queryset = Product.objects.filter(barcode=barcode)
+def storeGetProduct(request, barcode):
+    user_token = request.COOKIES.get('access_token')
+    if not user_token:
+        raise AuthenticationFailed('Unauthenticated user.')
+    user = get_logged_in_user(user_token)
+
+    queryset = Product.objects.filter(barcode=barcode, retailer=user)
     if (queryset.count()):
         item = queryset.first()
-        return JsonResponse({'name': item.name, 'description': item.description, 'price': item.price, 'barcode': item.barcode})
+        return JsonResponse({'name': item.name, 'description': item.description, 'price': item.price, 'barcode': item.barcode, 'expiry': item.expiry, 'quantity': item.quantity})
     else:
         return HttpResponseBadRequest()
