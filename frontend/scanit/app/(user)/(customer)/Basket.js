@@ -32,7 +32,6 @@ function Basket(props) {
               },
             ],)
     }
-    
 
     const handleQuantityChange = (index, newQuantity) => {
       const updatedBasketList = basketList.map((basketItem, i) => {
