@@ -11,42 +11,43 @@ export function useAuth() {
 
 // This hook will protect the route access based on user authentication.
 function useProtectedRoute(user) {
-  const rootSegment = useSegments()[0];
+  const segments = useSegments();
   const router = useRouter();
 
   React.useEffect(() => {
-    if (user === undefined) {
-      return;
-    }
+    const inAuthGroup = segments[0] === "(auth)";
 
     if (
       // If the user is not signed in and the initial segment is not anything in the auth group.
       !user &&
-      rootSegment !== "(auth)"
+      !inAuthGroup
     ) {
       // Redirect to the sign-in page.
       router.replace("/signIn");
-    } else if (user && rootSegment !== "(user)") {
+    } else if (user && inAuthGroup) {
       // Redirect away from the sign-in page.
       router.replace("/");
     }
-  }, [user, rootSegment]);
+  }, [user, segments]);
 }
 
 export function AuthProvider(props) {
   const { getItem, setItem, removeItem } = useAsyncStorage("USER");
   const [user, setAuth] = useState(undefined);
+  const [ userType, setUserType ] = useState(undefined);
 
-// Note: this hook causes act() issues in tests - look into this
   React.useEffect(() => {
     getItem().then((json) => {
       //console.log("json", json);
       if (json != null) {
-        //console.log("JSON", json)
+        const parsed = JSON.parse(json);
+
         //removeItem();
-        setAuth(JSON.parse(json));
+        setAuth(parsed);
+        setUserType(parsed.user.is_retailer ? 'retailer' : 'customer')
       } else {
         setAuth(null);
+        setUserType(undefined)
       }
     });
     // const json = getItem();
@@ -58,15 +59,18 @@ export function AuthProvider(props) {
   return (
     <AuthContext.Provider
       value={{
-        signIn: (user) => {
-          setAuth(user);
-          setItem(JSON.stringify({}));
+        signIn: (json) => {
+          setAuth(json);
+          setItem(JSON.stringify(json));
+          setUserType(json.user.is_retailer ? 'retailer' : 'customer')
         },
         signOut: () => {
           setAuth(null);
           removeItem();
+          setUserType(undefined)
         },
         user,
+        userType,
       }}
     >
       {props.children}
