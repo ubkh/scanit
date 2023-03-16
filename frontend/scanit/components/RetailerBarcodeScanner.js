@@ -26,12 +26,8 @@ function RetailerBarcodeScanner() {
   const handleBarCodeScanned = async ({ data }) => {
     setScanned(true);
     try {
-      // Retailer Auth not implemented yet. Retailer ID with barcode to find the product.
-      // const res = await fetch(
-      //   `http://${domain}/api/get-product/${retailerId}/${data}`
-      // );
       const res = await fetch(
-        `http://${domain}/api/retailer/get-product//${data}`
+        `http://${domain}/api/retailer/get-product/${data}`
       );
       if (res.ok) {
         const resData = await res.json();
@@ -90,9 +86,6 @@ function RetailerBarcodeScanner() {
         Point your camera at a barcode to ScanIt!
       </Text>
       <Text>&nbsp;</Text>
-      {/* {scanned && (
-        <Button title={"Tap to Scan Again"} onPress={() => setScanned(false)} />
-      )} */}
     </View>
   );
 }

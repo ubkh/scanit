@@ -9,6 +9,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 const links = [
   { label: "Home", url: "/(retailer)/home" },
+  { label: "Add a product", url: "/(retailer)/add-product" },
   { label: "Something Else", url: "/other" },
 ];
 
@@ -55,7 +56,7 @@ export default function RetailerLayout() {
           }}
         ></Tabs.Screen>
         <Tabs.Screen
-          name="AddProduct"
+          name="add-product"
           options={{
             title: "Add product",
             headerShown: false,

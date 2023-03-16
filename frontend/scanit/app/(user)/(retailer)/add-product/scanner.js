@@ -1,10 +1,10 @@
 import RetailerBarcodeScanner from "../../../../components/RetailerBarcodeScanner";
 import { View } from "native-base";
-import ContainerStyle from "../../../../styles/ContainerStyle";
+import BarCodeScanStyle from "../../../../styles/BarCodeScanStyle";
 
 export default function Scanner() {
   return (
-    <View style={ContainerStyle.container}>
+    <View style={BarCodeScanStyle.container}>
       <RetailerBarcodeScanner />
     </View>
   );

@@ -1,10 +1,10 @@
 import RetailerAddProductForm from "../../../../components/RetailerAddProductForm";
 import { View } from "native-base";
-import ContainerStyle from "../../../../styles/ContainerStyle";
+import BarCodeScanStyle from "../../../../styles/BarCodeScanStyle";
 
 export default function Form() {
   return (
-    <View style={ContainerStyle.container}>
+    <View style={BarCodeScanStyle.container}>
       <RetailerAddProductForm />
     </View>
   );
