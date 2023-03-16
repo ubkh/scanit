@@ -5,7 +5,7 @@ import { TabRouter } from "@react-navigation/native";
 import NavBarComponent from "../../../components/NavBarComponent";
 import { Context } from "../../../context/GlobalContext";
 import { Ionicons } from '@expo/vector-icons';
-import { Text, View } from "native-base";
+import { Text, View, useColorMode } from "native-base";
 
 const links = [
 ];
@@ -14,10 +14,12 @@ export default function CustomerLayout() {
   const globalContext = useContext(Context);
   const { userType } = globalContext;
   const segments = useSegments();
+  const { colorMode } = useColorMode();
   
   // TODO: Consider a context here to prevent access
   // prevent other users from accessing this group of pages
   if (userType !== "customer") {
+    console.log("USER " + userType);
     return (
         <Redirect href={`/(${userType})/${segments[2]}`} />
     )
@@ -32,11 +34,29 @@ export default function CustomerLayout() {
       setIsSmallScreen(width < 600);
   }, [width]);
 
+  function getNumberOfBasketItems() {
+    let total = 0;
+    for (let i = 0; i < basketList.length; i++) {
+        total += basketList[i].quantity;
+    }
+
+    let display = ''
+    
+    if (total > 99) {
+        display = "99+"
+    }
+    else{
+        display = total.toString()
+    }
+
+    return total > 0 ? display : null;
+  }
+
   if (Platform.OS !== "web") {
     return (
             <Tabs screenOptions={{
-                tabBarActiveTintColor: '#34d399'
-                
+                tabBarActiveTintColor: '#34d399',
+                tabBarStyle: { backgroundColor: colorMode == "dark" ? "black" : "white" },
             }}>
                 <Tabs.Screen 
                     name="home"
@@ -52,10 +72,11 @@ export default function CustomerLayout() {
                     name="basket"
                     options={{
                         title: "Basket",
+                        headerShown: false,
                         tabBarIcon: ({ color, size }) => (
                         <Ionicons name="cart-outline" color={color} size={size} />
                         ),
-                        tabBarBadge: basketList.length > 0 ? basketList.length : null,
+                        tabBarBadge: basketList.length > 0 ? getNumberOfBasketItems() : null,
                         tabBarBadgeStyle: {
                             backgroundColor: 'red',
                             color: 'white',
@@ -74,9 +95,21 @@ export default function CustomerLayout() {
                 <Tabs.Screen 
                     name="Another"
                     options={{
+                        headerShown: true,
+                        tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="newspaper-outline" color={color} size={size} />
+                        ),
+                        backgroundColor: '#0f0f0f',
+                    }}>
+                </Tabs.Screen>
+                <Tabs.Screen 
+                    name="Settings"
+                    options={{
+                        headerShown: false,
                         tabBarIcon: ({ color, size }) => (
                         <Ionicons name="settings-outline" color={color} size={size} />
                         ),
+                        backgroundColor: '#0f0f0f',
                     }}>
                 </Tabs.Screen>
                 {/* <Tabs.Screen 
@@ -92,7 +125,7 @@ export default function CustomerLayout() {
   return (
     <Navigator router={TabRouter}>
         <NavBarComponent links={ links } isSmallScreen={ isSmallScreen } />
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <View _dark={{bg: "black"}} style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
              <Text bold>The customer side is not supported on web.</Text>
              <Text>&nbsp;</Text>
          </View>

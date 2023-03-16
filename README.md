@@ -75,7 +75,12 @@ $ npm start
 
 Run all tests with:
 ```
-$ npm run test
+$ npm test
+```
+
+Run tests and watch changes:
+```
+$ npm test -- --watch
 ```
 
 ## Sources

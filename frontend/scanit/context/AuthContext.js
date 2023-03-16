@@ -1,5 +1,5 @@
 import { useRouter, useSegments } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 
 const AuthContext = React.createContext(null);
@@ -25,7 +25,7 @@ function useProtectedRoute(user) {
       rootSegment !== "(auth)"
     ) {
       // Redirect to the sign-in page.
-      router.replace("/login");
+      router.replace("/signIn");
     } else if (user && rootSegment !== "(user)") {
       // Redirect away from the sign-in page.
       router.replace("/");
@@ -35,17 +35,20 @@ function useProtectedRoute(user) {
 
 export function AuthProvider(props) {
   const { getItem, setItem, removeItem } = useAsyncStorage("USER");
-  const [user, setAuth] = React.useState(undefined);
+  const [user, setAuth] = useState(undefined);
 
+// Note: this hook causes act() issues in tests - look into this
   React.useEffect(() => {
     getItem().then((json) => {
-      console.log("json", json);
+      //console.log("json", json);
       if (json != null) {
         setAuth(JSON.parse(json));
       } else {
         setAuth(null);
       }
     });
+    // const json = getItem();
+    // setAuth(json);
   }, []);
 
   useProtectedRoute(user);
@@ -53,8 +56,8 @@ export function AuthProvider(props) {
   return (
     <AuthContext.Provider
       value={{
-        signIn: () => {
-          setAuth({});
+        signIn: (user) => {
+          setAuth(user);
           setItem(JSON.stringify({}));
         },
         signOut: () => {

@@ -1,14 +1,16 @@
-import { View, ScrollView, Platform, TouchableOpacity, StyleSheet, Alert, TouchableHighlight } from 'react-native';
+import { ScrollView, Platform, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Container, Text, Heading, Button, StatusBar, Center, Flex, Divider, Spacer, useColorMode } from 'native-base';
 import { useState, useContext, useEffect } from 'react';
 // import { useNavigation, useRoute } from '@react-navigation/native';
-import { Button, Text } from 'native-base';
 import { Context } from '../../../../context/GlobalContext';
-import ContainerStyle from '../../../../styles/ContainerStyle';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from "expo-router";
+import NumericInput from 'react-native-numeric-input'; // https://github.com/himelbrand/react-native-numeric-input for props and info
+
 
 
 function Basket(props) {
+    const { colorMode } = useColorMode();
     const { basketList, setBasketList } = useContext(Context);
     const [basketItems, setBasketItems] = useState(<Text> Your basket is empty </Text>);
     const router = useRouter();
@@ -31,30 +33,73 @@ function Basket(props) {
               },
               {
                 text: 'Cancel',
-                onPress: () => {
-                  console.log("Cancelled item remove")
-                },
                 style: 'cancel',
               },
             ],)
     }
     
-  
+
+    const handleQuantityChange = (index, newQuantity) => {
+      const updatedBasketList = basketList.map((basketItem, i) => {
+        if (i === index) {
+          return { ...basketItem, quantity: newQuantity };
+        } else {
+          return basketItem;
+        }
+      });
+      setBasketList(updatedBasketList);
+    };
+    
     useEffect(() => {
+        setBasketList(basketList);
+
         if (basketList.length === 0) {
           setBasketItems(<Text> Your basket is empty </Text>);
         } else {
           setBasketItems(
         <View style={styles.basketList}>
           <ScrollView>
-          <Text style={styles.basketHeader}>{basketList.length} items</Text>
+          <Text style={styles.basketHeader}>{basketList.length} products</Text>
             {basketList.map((item, index) => (
               <View style={styles.basketEntry} key={index}>
-                  <TouchableOpacity key={index}>
+                  <View key={index}>
                       <Text>Barcode ID: {item.data}</Text>
                       <Text>Barcode Type: {item.type}</Text>
+                      <Text>Quantity: {item.quantity}</Text>
+
+                    <View testID={`numeric-input-${index}`}>
+                      <NumericInput
+                        key={`${item.data}`}
+                        value={item.quantity}
+                        onChange={value => {
+                          if (value > 0) {
+                            handleQuantityChange(index, value);
+                          }
+                          else {
+                            Alert.alert(
+                              'Enter a valid quantity',
+                              'Quantity must be 1 or more!',
+                              [
+                                {
+                                  text: 'Ok',
+                                  style: 'default',
+                                },
+                              ],
+                            )
+                          }
+                        }} 
+                        minValue={1}
+                        rounded={true}
+                        textColor={colorMode === 'light' ? 'black' : 'white'}
+                        totalHeight={40}
+                        totalWidth={100}
+                      />
+                    </View>
+
+
                       <View style={{flexDirection: "row", justifyContent: "flex-end"}} key={index}>
                         <TouchableOpacity
+                          testID={`remove-button-${index}`}
                           onPress={() => removeItem(index)}
                         >
                           <View
@@ -72,7 +117,7 @@ function Basket(props) {
                           </View>
                         </TouchableOpacity>
                       </View>
-                  </TouchableOpacity>
+                  </View>
                   <Text>&nbsp;</Text>
               </View>
             ))}
@@ -85,14 +130,25 @@ function Basket(props) {
         </View>
         );
         }
-      }, [basketList]);
+      }, [basketList, colorMode]);
       
   
     return (
-      <View style={ContainerStyle.container}>
-        {basketItems}
-      </View>
-      
+      <View style={{flex: 1}} _dark={{bg: "black"}} _light={{bg: "white"}}>
+      <StatusBar barStyle={colorMode === 'light' ? 'dark-content' : 'light-content'} animated={true}/>
+      <Flex flex={1} alignItems="center" safeAreaTop>
+          <Heading size="lg" fontSize={30} bold justifyContent="flex-start" style={{ fontFamily: 'Rubik-Bold' }}>Basket</Heading>
+          <Divider my="2" _light={{
+              bg: "muted.200"
+          }} _dark={{
+              bg: "muted.500"
+          }} />
+
+          <Spacer />
+          {basketItems}
+          <Spacer />
+      </Flex>
+      </View>      
     );
   }
 
@@ -121,33 +177,5 @@ function Basket(props) {
         width: '100%'
     }
 });
-
-// VERSION OF BARCODE SCAN THAT DOESN'T ALLOW DUPLICATES IN BASKET
-
-// const handleBarCodeScanned = ({ type, data }) => {
-//   setScanned(true);
-//   setText(data)
-//   console.log('Type: ' + type + '\nData: ' + data)
-//   const check  = basketList.find(obj => obj.data === data)
-//   if (check) {
-//     Alert.alert(
-//     'Item Already in Basket',
-//     'This item is already in your basket!',
-//     [
-//       {
-//         text: 'Ok',
-//         onPress: () => {
-//           console.log("Ok on dialog was pressed")
-//           navigation.navigate('HomeScreen', { data, type });
-//         },
-//         style: 'default',
-//       },
-//     ],)
-//   }
-//   else {
-//     globalContext.setBasketList([...globalContext.basketList, { 'data': data, 'type': type }])
-//     navigation.navigate('HomeScreen', { data, type });
-//   }
-// };
 
 export default Basket;
