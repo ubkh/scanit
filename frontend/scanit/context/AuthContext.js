@@ -42,6 +42,8 @@ export function AuthProvider(props) {
     getItem().then((json) => {
       //console.log("json", json);
       if (json != null) {
+        //console.log("JSON", json)
+        //removeItem();
         setAuth(JSON.parse(json));
       } else {
         setAuth(null);

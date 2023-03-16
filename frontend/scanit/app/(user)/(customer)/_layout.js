@@ -18,8 +18,11 @@ export default function CustomerLayout() {
   
   // TODO: Consider a context here to prevent access
   // prevent other users from accessing this group of pages
-  if (userType !== "customer") {
-    console.log("USER " + userType);
+  if (userType === undefined) {
+    return (
+        <Redirect href={`/(auth)/signIn`} />
+    )
+  } else if (userType !== "customer") {
     return (
         <Redirect href={`/(${userType})/${segments[2]}`} />
     )
