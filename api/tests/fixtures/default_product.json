@@ -3,13 +3,13 @@
         "model": "api.product",
         "pk": "1",
         "fields": {
-            "retailerID": 9,
-            "barcodeID": "42069",
+            "retailer": 1,
             "name": "Copium",
             "description": "High quality copium.",
             "price": 800,
             "quantity": 300,
-            "expiry": "2025-09-01"
+            "expiry": "2025-09-01",
+            "barcode": "5050404"
         }
     }
 ]

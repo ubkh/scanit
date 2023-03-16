@@ -15,7 +15,7 @@ from .views import (
 urlpatterns = [
 	path('user/register/', UserRegistrationAPIView.as_view()),
 	path('staff/register/', StaffRegistrationAPIView.as_view()),
-	path('user/login/', UserLoginAPIView.as_view()),
+	path('user/login/', UserLoginAPIView.as_view(), name='user_login'),
 	path('user/', UserViewAPI.as_view()),
 	path('user/logout/', UserLogoutViewAPI.as_view()),
 	path('user/verify/<int:user_id>/', UserVerificationAPIView.as_view(), name='verify'),
