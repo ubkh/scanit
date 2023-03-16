@@ -71,7 +71,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 					print("RETAILER BARCODE GENERATED")
 					ean = barcode.get_barcode_class('ean13')
 					print(self.user_id)
-					value = '8' + '0' * (12 - len(str(self.user_id))) + str(self.user_id)
+					value = '8' + '0' * (11 - len(str(self.user_id))) + str(self.user_id)
 					barcode_value = ean(value, writer=ImageWriter())
 					self.retailer_barcode = barcode_value.get_fullcode()
 					print(value)

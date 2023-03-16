@@ -33,7 +33,8 @@ function Account() {
             {/* <ViewShot ref={ref => (this.viewShot = ref)}>
               <Barcode value="123456789011" format="EAN13" />
             </ViewShot> */}
-            <Barcode value="123456789011" format="EAN13" />
+
+            <Barcode value={user.user.retailer_barcode} format="EAN13" />
             <Text>{user.user.retailer_barcode}</Text>
             <Text>&nbsp;</Text>
             <Button shadow={2} bg={"blue.600"} leftIcon={<Icon as={Ionicons} name="download-outline" size="md"/>}
