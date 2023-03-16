@@ -116,7 +116,7 @@ function Basket(props) {
               </View>
             ))}
             <View style={{width: '90%', alignSelf: "center"}}>
-                <Button shadow={2} bg="brand.400" style={{ marginBottom: 10 }}onPress= {() => console.log("Checkout button")}>
+                <Button shadow={2} bg="brand.400" style={{ marginBottom: 100 }}onPress= {() => console.log("Checkout button")}>
                   <Text style={{fontWeight: "bold", color: "white", fontSize: 20}}>Checkout!</Text>
                 </Button>
               </View>
@@ -169,7 +169,15 @@ function Basket(props) {
         alignSelf: 'flex-start',
         justifyContent: 'flex-start',
         width: '100%'
-    }
+    },
+    checkoutButtonContainer: {
+      position: "absolute",
+      bottom: 10,
+      left: 0,
+      right: 0,
+      alignItems: "center",
+      justifyContent: "center",
+    },
 });
 
 export default Basket;
