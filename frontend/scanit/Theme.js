@@ -33,10 +33,22 @@ const ColorTheme = {
     },
 };
 
+const Components = {
+    ButtonGroup: {
+        variants: {
+            brand: ({ colorScheme }) => {
+              return {
+                bg: "#34d399" ,
+              };
+            },
+        },
+    }
+}
+
 const Config = {
     dependencies: {
         'linear-gradient': LinearGradient
     }
 }
 
-export { ColorTheme, Config };
+export { ColorTheme, Components, Config };
