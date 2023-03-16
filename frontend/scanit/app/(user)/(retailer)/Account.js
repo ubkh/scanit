@@ -1,35 +1,17 @@
 import React, { useRef } from 'react';
-import { View, Text, Button, Box, Heading, Icon, useToast } from 'native-base';
-import ContainerStyle from '../../../styles/ContainerStyle';
+import { View, Text, Heading, Flex, StatusBar, Spacer, useColorMode, Button, Box, Icon, useToast } from 'native-base';
 import Barcode from 'react-native-barcode-svg';
 import { Ionicons } from '@expo/vector-icons';
-import * as Print from 'expo-print';
-// import * as Permissions from 'expo-permissions';
+import { useAuth } from '../../../context/AuthContext';
 
-
-// import { shareAsync } from 'expo-sharing';
-
-// import { saveAsAsync } from 'expo-file-system';
-// import { Platform, Alert } from 'react-native';
-// import RNHTMLtoPDF from 'react-native-html-to-pdf';
-
-// import * as FileSystem from 'expo-file-system';
-
-import * as ImagePicker from 'expo-image-picker';
-import ViewShot from 'react-native-view-shot';
-//import { captureScreen } from 'react-native-screenshot';
- 
-const viewRef = useRef(null);
-
-const Account = () => {
+function Account() {
+  const colorMode = useColorMode();
   const toast = useToast();
   const barcodeRef = useRef(null);
+  const { user } = useAuth();
 
   const saveBarcodeImage = async () => {
-    const uri = await this.viewShot.capture();
-
-
-    console.log(uri);
+    
 
     // const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
     // if (permission.granted) {
@@ -40,18 +22,19 @@ const Account = () => {
   };
 
     return (
-        <View style={ContainerStyle.container}>
-            <Heading size="lg" fontSize={30} bold justifyContent="flex-start">Your Account</Heading>
-            <Text>&nbsp;</Text>
-
+      <View style={{flex: 1}} _dark={{bg: "black"}} _light={{bg: "white"}}>
+        <StatusBar barStyle={colorMode === 'light' ? 'dark-content' : 'light-content'} animated={true}/>
+        <Flex flex={1} alignItems="center">
+            <Spacer />
+            <Heading size="lg" fontSize={30} bold justifyContent="flex-start" style={{ fontFamily: 'Rubik-Bold' }}>Your Account</Heading>
             <Box rounded={10} shadow={3} alignSelf="center" alignItems="center" padding={10}>
             <Text style={{ fontFamily: 'Rubik-Bold' }}>Retailer barcode:</Text>
             <Text>&nbsp;</Text>
-            <ViewShot ref={ref => (this.viewShot = ref)}>
+            {/* <ViewShot ref={ref => (this.viewShot = ref)}>
               <Barcode value="123456789011" format="EAN13" />
-            </ViewShot>
-            {/* <Barcode value="123456789011" format="EAN13" /> */}
-            <Text>123456789011</Text>
+            </ViewShot> */}
+            <Barcode value="123456789011" format="EAN13" />
+            <Text>{user.user.retailer_barcode}</Text>
             <Text>&nbsp;</Text>
             <Button shadow={2} bg={"blue.600"} leftIcon={<Icon as={Ionicons} name="download-outline" size="md"/>}
                  onPress={async () => {
@@ -61,6 +44,9 @@ const Account = () => {
                 <Text bold color="white" style={{ fontFamily: 'Rubik-Bold' }}>Download as PDF</Text>
             </Button>
             </Box>
+
+            <Spacer />
+        </Flex>
         </View>
     );
 }

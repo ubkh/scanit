@@ -13,7 +13,7 @@ const LogOutButton = ({ style }) => {
         style = {[{}, style]}
         onPress={ (ev) => {
             signOut();
-            router.push("/login");
+            router.push("/signIn");
         }}>
             Log Out
         </Button>

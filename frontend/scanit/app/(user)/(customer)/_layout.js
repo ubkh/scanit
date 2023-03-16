@@ -6,23 +6,20 @@ import NavBarComponent from "../../../components/NavBarComponent";
 import { Context } from "../../../context/GlobalContext";
 import { Ionicons } from '@expo/vector-icons';
 import { Text, View, useColorMode } from "native-base";
+import { useAuth } from "../../../context/AuthContext";
 
 const links = [
 ];
   
 export default function CustomerLayout() {
+  const { userType, user } = useAuth();
   const globalContext = useContext(Context);
-  const { userType } = globalContext;
   const segments = useSegments();
   const { colorMode } = useColorMode();
   
   // TODO: Consider a context here to prevent access
   // prevent other users from accessing this group of pages
-  if (userType === undefined) {
-    return (
-        <Redirect href={`/(auth)/signIn`} />
-    )
-  } else if (userType !== "customer") {
+  if (userType !== "customer") {
     return (
         <Redirect href={`/(${userType})/${segments[2]}`} />
     )
