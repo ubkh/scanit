@@ -13,13 +13,16 @@ const validateForm = (values) => {
 
   if (!values.price) {
     errors.price = "Required";
-  } else if (!/^[0-9.]+/i.test(values.price) || values.price === "0") {
+  } else if (
+    !/^(([1-9]+0*)+|0{1})\.{1}[0-9]{2}$/.test(values.price) ||
+    values.price === "0"
+  ) {
     errors.price = "Invalid price";
   }
 
   if (!values.quantity) {
     errors.quantity = "Required";
-  } else if (/\b0+/i.test(values.quantity)) {
+  } else if (/\b0+/.test(values.quantity)) {
     errors.quantity = "Invalid quantity";
   }
 
