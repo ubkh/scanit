@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, IntegrityError
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.core.validators import RegexValidator
@@ -8,6 +8,8 @@ from django.contrib.auth.models import User
 from django.core.serializers.json import DjangoJSONEncoder
 import uuid
 import datetime
+import barcode
+from barcode.writer import ImageWriter
 
 
 class CustomUserManager(BaseUserManager):
@@ -46,6 +48,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 	first_name = models.CharField(max_length=32)
 	last_name = models.CharField(max_length=32)
 	number = models.CharField(validators=[phone_regex], max_length=11, blank=True)
+	retailer_barcode = models.CharField(max_length=100, unique=True, null=True, blank=True)
 	store_address = models.CharField(max_length=100, blank=True, null=True)
 	is_active = models.BooleanField(default=True)
 	is_staff = models.BooleanField(default=False)
@@ -59,12 +62,40 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 	def __str__(self):
 		return f'{self.first_name} {self.last_name}'
+	
+	def save(self, *args, **kwargs):
+		if not self.retailer_barcode and self.is_retailer:
+			try_count = 0
+			while try_count < 10:
+				try:
+					# Generate unique barcode
+					print("RETAILER BARCODE GENERATED")
+					ean = barcode.get_barcode_class('ean13')
+					print(self.user_id)
+					value = '8' + '0' * (11 - len(str(self.user_id))) + str(self.user_id)
+					barcode_value = ean(value, writer=ImageWriter())
+					self.retailer_barcode = barcode_value.get_fullcode()
+					print(value)
+					self.retailer_barcode = value
+					super().save(*args, **kwargs)
+					return
+				except IntegrityError:
+					try_count += 1
+					print("Barcode not unique, trying again...")
+				except Exception as e:
+					print(e)
+					raise
+
+			raise ValueError("Failed to generate unique barcode!")
+		else:
+			super().save(*args, **kwargs)
+
 
 class Test(models.Model):
     text = models.CharField(max_length=100)
 
 class Product(models.Model):
-    retailerID = models.PositiveIntegerField()
+    retailerID = models.PositiveIntegerField() # this should be a foreign key to the retailer account
     barcodeID = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=750, blank=True)
@@ -103,11 +134,21 @@ class Transaction(models.Model):
 #     dob = models.DateField()
 
 # class RetailerAccount(UserAccount):
-#     retailerID = models.PositiveIntegerField()
-#     retailBarcode = models.CharField()
+#     barcode = models.CharField(max_length=100, unique=True, null=True, blank=True)
 #     shop_address = models.CharField()
 #     payment_method = models.CharField()
 #     balance = models.DecimalField()
+
+#     # UNCOMMENT WHEN READY TO IMPLEMENT RETAILER ACCOUNTS
+#     def save(self, *args, **kwargs):
+#         if not self.barcode:
+#             # Generate unique barcode
+#             ean = barcode.get_barcode_class('ean13')
+#             value = "8" + "0" * (12 - len(str(self.id))) + str(self.id)
+#             self.barcode = ean(value, writer=ImageWriter()).get_fullcode()
+
+#         super().save(*args, **kwargs)
+
 
     
 # class CustomerAccount(UserAccount):

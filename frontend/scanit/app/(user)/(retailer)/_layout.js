@@ -4,28 +4,24 @@ import { useWindowDimensions, Platform } from "react-native";
 import { useColorMode } from "native-base";
 import { TabRouter } from "@react-navigation/native";
 import NavBarComponent from "../../../components/NavBarComponent";
-import { Context } from "../../../context/GlobalContext";
 import { Ionicons } from '@expo/vector-icons';
+import { useAuth } from "../../../context/AuthContext";
 
 const links = [
     { label: 'Home', url: '/(retailer)/home' },
     { label: 'Something Else', url: '/other' },
+    { label: 'Account', url: '/Account' },
 ];
 
 export default function RetailerLayout() {
-  const globalContext = useContext(Context);
-  const { userType } = globalContext;
+  const { userType } = useAuth();
   const segments = useSegments();
 
   const { colorMode } = useColorMode();
 
   // TODO: Consider a context here to prevent access
   // prevent other users from accessing this group of pages
-  if (userType === undefined) {
-    return (
-        <Redirect href={`/(auth)/signIn`} />
-    )
-  } else if (userType !== "retailer") {
+  if (userType !== "retailer") {
     return (
         <Redirect href={`/(${userType})/${segments[2]}`} />
     )

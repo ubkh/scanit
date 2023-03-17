@@ -13,7 +13,7 @@ function SignInScreen(props) {
     const { colorMode } = useColorMode();
     const globalContext = useContext(Context)
     const { signIn } = useAuth();
-    const { setIsLoggedIn, domain, setToken, setUserType } = globalContext;
+    const { domain } = globalContext;
  
     const[ error, setError ] = useState('');
 
@@ -43,10 +43,12 @@ function SignInScreen(props) {
             }
         })
         .then(json => {
-            setToken(json.access_token)
-            setIsLoggedIn(true)
-            setUserType(json.user.is_retailer ? 'retailer' : 'customer')
-            signIn(json.user)
+            // setToken(json.access_token)
+            // setIsLoggedIn(true)
+            // setUserType(json.user.is_retailer ? 'retailer' : 'customer')
+            // console.log(json.user.is_retailer)
+            // console.log(userType)
+            signIn(json)
         })
         .catch(error => {
             console.log(error)
