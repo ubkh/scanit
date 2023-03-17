@@ -1,7 +1,8 @@
 import { useState, useContext, useEffect } from "react";
 import { useRouter } from "expo-router";
 import { Context } from "../context/GlobalContext";
-import { Alert } from "react-native";
+import { Alert, TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { Text, View, Button } from "native-base";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import BarCodeScanStyle from "../styles/BarCodeScanStyle";
@@ -50,30 +51,70 @@ function BarCodeScanComponent(props) {
           index = i;
           break;
         }
+
+        //navigation.navigate('HomeScreen', { data, type });
+        router.push({ pathname: "/home", params: { data, type } });
       }
 
-      if (foundObject) {
-        Alert.alert(
-          "Item already in basket",
-          "Adjust the quantity in the basket!",
-          [
-            {
-              text: "Ok",
-              onPress: () => {
-                console.log("User acknowledged warning");
-              },
-              style: "default",
-            },
-          ]
+      if (hasPermission === null) {
+        return (
+          <View style={BarCodeScanStyle.container}>
+            <Text style={{ margin: 10, fontWeight: "bold", fontSize: 20 }}>
+              Requesting for camera permission
+            </Text>
+          </View>
         );
-      } else {
-        globalContext.setBasketList([
-          ...globalContext.basketList,
-          { data: data, type: type, quantity: 1 },
-        ]);
-        // Wanted to have an alert display if 'doneFirstScan' if false to let the user know
-        // that they need to go to the basket to edit quantities, but the alert was causing
-        // the app to crash, works above though...
+      }
+
+      if (hasPermission === false) {
+        return (
+          <View style={BarCodeScanStyle.container}>
+            <Text style={{ margin: 10, fontWeight: "bold", fontSize: 20 }}>
+              No access to camera!
+            </Text>
+            <Text
+              style={{
+                margin: 15,
+                fontWeight: "bold",
+                fontSize: 20,
+                textAlign: "center",
+              }}
+            >
+              Camera permission is needed to scan barcodes!
+            </Text>
+            {/* <Button shadow={5} title='Allow Camera' onPress={() => askForCameraPermission()} bg="brand.400">
+              <Text style={{fontWeight: "bold", color: "white", fontSize: 20}}>
+                Allow Camera Access
+              </Text>
+            </Button> */}
+            <View style={{ alignItems: "center" }}>
+              <TouchableOpacity onPress={() => askForCameraPermission()}>
+                <View
+                  style={{
+                    backgroundColor: "#34d399",
+                    borderRadius: 20,
+                    padding: 10,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexDirection: "row",
+                  }}
+                >
+                  <Ionicons
+                    name="camera"
+                    size={25}
+                    color="white"
+                    marginRight={5}
+                  />
+                  <Text
+                    style={{ fontWeight: "bold", color: "white", fontSize: 15 }}
+                  >
+                    Allow Camera Access
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        );
       }
     }
 

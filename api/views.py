@@ -141,6 +141,7 @@ class UserLoginAPIView(APIView):
                     'last_name': user_instance.last_name,
                     'number': user_instance.number,
                     'store_address': user_instance.store_address,
+                    'retailer_barcode': user_instance.retailer_barcode,
                     'is_staff': user_instance.is_staff,
                     'is_retailer': user_instance.is_retailer,
                 }

@@ -4,9 +4,9 @@ import * as SecureStore from "expo-secure-store";
 
 export const Context = createContext();
 
-const setToken = async (token) => {
-  await SecureStore.setItemAsync("token", token);
-};
+// const setToken = async(token) => {
+//     await SecureStore.setItemAsync('token', token);
+// }
 
 export default function ContextProvider(props) {
   const [domain, setDomain] = useState(DJANGO);
@@ -17,17 +17,12 @@ export default function ContextProvider(props) {
   const [isRetailerScanned, setRetailerScanned] = useState(false);
 
   //const [ userType, setUserType ] = useState('retailer'); //'customer' or 'retailer'
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userID, setUserID] = useState(undefined);
-  const [token, setToken] = useState(undefined);
-  const [userType, setUserType] = useState(undefined);
+  const [userID, setUserID] = useState(undefined); // ?
 
   useEffect(() => {}, []);
 
   const globalContext = {
     domain,
-    isLoggedIn,
-    setIsLoggedIn,
     basketList,
     setBasketList,
     isRetailerScanned,
@@ -36,12 +31,8 @@ export default function ContextProvider(props) {
     setRetailerBarcodeData,
     retailerBarcodeType,
     setRetailerBarcodeType,
-    userType,
-    token,
-    setToken,
     userID,
     setUserID,
-    setUserType,
   };
 
   return (
