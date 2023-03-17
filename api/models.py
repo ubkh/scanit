@@ -72,6 +72,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 					ean = barcode.get_barcode_class('ean13')
 					print(self.user_id)
 					value = '8' + '0' * (11 - len(str(self.user_id))) + str(self.user_id)
+					checksum = sum(int(digit) * (3 if i % 2 == 0 else 1) for i, digit in enumerate(reversed(value)))
+					value += str((10 - (checksum % 10)) % 10)
 					barcode_value = ean(value, writer=ImageWriter())
 					self.retailer_barcode = barcode_value.get_fullcode()
 					print(value)
