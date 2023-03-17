@@ -31,9 +31,9 @@ class AddProductViewTestCase(TestCase):
 
     def test_unauth_retailer_add_product(self):
         before = Product.objects.filter(retailer = self.retailer).count()
-        with self.assertRaises(AuthenticationFailed):
-            res = self.send_req()
-            self.assertEqual(res.status_code, 401)
+        # with self.assertRaises(AuthenticationFailed):
+        res = self.send_req()
+        self.assertEqual(res.status_code, 401)
         after = Product.objects.filter(retailer = self.retailer).count()
         self.assertEqual(before, after)
 
@@ -99,9 +99,9 @@ class GetProductViewTestCase(TestCase):
 
     
     def test_unauth_retailer_get_product(self):
-        with self.assertRaises(AuthenticationFailed):
-            res = self.send_req()
-            self.assertEqual(res.status_code, 401)
+        # with self.assertRaises(AuthenticationFailed):
+        res = self.send_req()
+        self.assertEqual(res.status_code, 401)
 
     def test_valid_get_product(self):
         self.log_in()
