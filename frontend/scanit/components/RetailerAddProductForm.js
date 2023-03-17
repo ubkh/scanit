@@ -53,8 +53,12 @@ function RetailerAddProductForm() {
     });
     await fetch(`http://${domain}/api/retailer/add-product/`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      // mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: jsonObj,
+      credentials: "include",
     });
   }
 

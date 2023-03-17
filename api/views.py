@@ -313,10 +313,10 @@ def send_account_verification_code(request):
 @csrf_exempt
 def retailerAddProduct(request):
     user_token = request.COOKIES.get('access_token')
-    if not user_token:
+    user = get_logged_in_user(user_token)
+    if not user_token or not user:
         return HttpResponse('Unauthorized', status=401)
         # raise AuthenticationFailed('Unauthenticated user.')
-    user = get_logged_in_user(user_token)
 
     try:
         product_data = json.loads(request.body)
@@ -341,10 +341,10 @@ def retailerAddProduct(request):
 @csrf_exempt
 def retailerGetProduct(request, barcode):
     user_token = request.COOKIES.get('access_token')
-    if not user_token:
+    user = get_logged_in_user(user_token)
+    if not user_token or not user:
         # raise AuthenticationFailed('Unauthenticated user.')
         return HttpResponse('Unauthorized', status=401)
-    user = get_logged_in_user(user_token)
 
     queryset = Product.objects.filter(barcode=barcode, retailer=user)
     if (queryset.count()):
