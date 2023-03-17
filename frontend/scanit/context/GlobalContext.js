@@ -10,14 +10,17 @@ const setToken = async(token) => {
 
 export default function ContextProvider(props) {
     const [ domain, setDomain ] = useState(DJANGO);
-    const [ isLoggedIn, setIsLoggedIn ] = useState(false);
+
     const [retailerBarcodeData, setRetailerBarcodeData] = useState("");
     const[retailerBarcodeType, setRetailerBarcodeType] = useState("");
     const[basketList, setBasketList] = useState([]);
     const[isRetailerScanned, setRetailerScanned] = useState(false);
-    const [ userType, setUserType ] = useState('retailer'); //'customer' or 'retailer'
-    const [ userID, setUserID ] = useState()
-    const [ token, setToken ] = useState()
+
+    //const [ userType, setUserType ] = useState('retailer'); //'customer' or 'retailer'
+    const [ isLoggedIn, setIsLoggedIn ] = useState(false);
+    const [ userID, setUserID ] = useState(undefined);
+    const [ token, setToken ] = useState(undefined);
+    const [ userType, setUserType ] = useState(undefined);
 
     useEffect(() => {
     }, []);
@@ -39,6 +42,7 @@ export default function ContextProvider(props) {
         setToken,
         userID,
         setUserID,
+        setUserType
     }
 
     return (

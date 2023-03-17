@@ -139,6 +139,7 @@ class UserLoginAPIView(APIView):
                     'number': user_instance.number,
                     'store_address': user_instance.store_address,
                     'is_staff': user_instance.is_staff,
+                    'is_retailer': user_instance.is_retailer,
                 }
             }
             return response
