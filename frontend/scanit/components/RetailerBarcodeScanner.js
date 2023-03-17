@@ -27,7 +27,8 @@ function RetailerBarcodeScanner() {
     setScanned(true);
     try {
       const res = await fetch(
-        `http://${domain}/api/retailer/get-product/${data}`
+        `http://${domain}/api/retailer/get-product/${data}`,
+        { credentials: "include" }
       );
       if (res.ok) {
         const resData = await res.json();
