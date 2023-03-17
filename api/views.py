@@ -313,7 +313,8 @@ def send_account_verification_code(request):
 def retailerAddProduct(request):
     user_token = request.COOKIES.get('access_token')
     if not user_token:
-        raise AuthenticationFailed('Unauthenticated user.')
+        return HttpResponse('Unauthorized', status=401)
+        # raise AuthenticationFailed('Unauthenticated user.')
     user = get_logged_in_user(user_token)
 
     try:
@@ -333,13 +334,15 @@ def retailerAddProduct(request):
     except ValidationError:
         return HttpResponseBadRequest()
     except:
+        print("\n reached here")
         return HttpResponseServerError()
     
 @csrf_exempt
 def retailerGetProduct(request, barcode):
     user_token = request.COOKIES.get('access_token')
     if not user_token:
-        raise AuthenticationFailed('Unauthenticated user.')
+        # raise AuthenticationFailed('Unauthenticated user.')
+        return HttpResponse('Unauthorized', status=401)
     user = get_logged_in_user(user_token)
 
     queryset = Product.objects.filter(barcode=barcode, retailer=user)
