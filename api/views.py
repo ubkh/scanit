@@ -327,8 +327,14 @@ class RetailerUploadItemAPIView(APIView):
 
 
     def post(self, request):
-        
-        data = request.data 
+        # serializer = self.serializer_class(data=request.data)
+        # if serializer.is_valid():
+            
+        #     pass    
+    
+        data = request.data
+        print(data)
+
         return Response(data, status=status.HTTP_201_CREATED)
 
     # def post(self, request):

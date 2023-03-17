@@ -49,6 +49,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 	is_active = models.BooleanField(default=True)
 	is_staff = models.BooleanField(default=False)
 	is_retailer = models.BooleanField(default=False)
+
 	# retailer_id= models.CharField(max_length=8, blank=True)
 	verification_code = models.CharField(max_length=6)
 	is_verified = models.BooleanField(default=False)
@@ -82,6 +83,35 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         self.full_clean()
         super().save(*args, **kwargs)
+
+
+
+# class Store:
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # class UserAccount(User):
     

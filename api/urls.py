@@ -23,7 +23,7 @@ urlpatterns = [
 	
 	# ADMIN (RETAILER) URL PATHS
 	# path('retailer/dashboard'),
-	path('retailer/uploadItems', RetailerUploadItemAPIView.as_view()),
+	path('retailer/uploadItem/', RetailerUploadItemAPIView.as_view()),
 	
 	# ADMIN (DIRECTOR) URL PATHS
 	path('staff/register/', StaffRegistrationAPIView.as_view()),
