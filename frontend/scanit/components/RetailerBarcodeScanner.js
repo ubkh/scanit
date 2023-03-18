@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
-import { Text, View, Button, Alert } from "native-base";
+import { Alert } from "react-native";
+import { Text, View, Button } from "native-base";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import BarCodeScanStyle from "../styles/BarCodeScanStyle";
 import { Context } from "../context/GlobalContext";

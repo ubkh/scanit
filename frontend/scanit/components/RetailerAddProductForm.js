@@ -8,11 +8,12 @@ import {
   FormControl,
   VStack,
 } from "native-base";
+import { Alert } from "react-native";
 import CurrencyInput from "react-native-currency-input";
 import { Formik } from "formik";
 import { Context } from "../context/GlobalContext";
 import validateForm from "./forms-validations/RetailerAddProduct";
-import { useSearchParams } from "expo-router";
+import { useSearchParams, useRouter } from "expo-router";
 
 function RetailerAddProductForm() {
   const params = useSearchParams();
@@ -20,6 +21,7 @@ function RetailerAddProductForm() {
   const globalContext = useContext(Context);
   const { domain } = globalContext;
   // const errorStyle = { color: "#c20808" };
+  const router = useRouter();
 
   // if product was not found in the db then productData has only the barcode. This prevents price from becoming a NaN
   function getProductPrice() {
@@ -51,7 +53,7 @@ function RetailerAddProductForm() {
       price: Math.ceil(parseFloat(values.price) * 100), // some inputs like "300.09" becomes 30008.9999999 for some reason, hence Math.ceil
       quantity: parseInt(values.quantity),
     });
-    await fetch(`http://${domain}/api/retailer/add-product/`, {
+    const res = await fetch(`http://${domain}/api/retailer/add-product/`, {
       method: "POST",
       // mode: "cors",
       headers: {
@@ -60,6 +62,21 @@ function RetailerAddProductForm() {
       body: jsonObj,
       credentials: "include",
     });
+    if (res.ok) {
+      Alert.alert("Success", "Product was successfully added to the system.", [
+        {
+          text: "OK",
+          onPress: () => {
+            router.push("/home");
+          },
+        },
+      ]);
+    } else {
+      Alert.alert(
+        "Failed",
+        "Could not add the product to the system. Please try again."
+      );
+    }
   }
 
   return (
