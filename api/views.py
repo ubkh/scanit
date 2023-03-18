@@ -314,7 +314,7 @@ def send_account_verification_code(request):
 def retailerAddProduct(request):
     user_token = request.COOKIES.get('access_token')
     user = get_logged_in_user(user_token)
-    if not user_token or not user:
+    if not user_token or not user or not user.is_retailer:
         return HttpResponse('Unauthorized', status=401)
         # raise AuthenticationFailed('Unauthenticated user.')
 
@@ -342,7 +342,7 @@ def retailerAddProduct(request):
 def retailerGetProduct(request, barcode):
     user_token = request.COOKIES.get('access_token')
     user = get_logged_in_user(user_token)
-    if not user_token or not user:
+    if not user_token or not user or not user.is_retailer:
         # raise AuthenticationFailed('Unauthenticated user.')
         return HttpResponse('Unauthorized', status=401)
 
