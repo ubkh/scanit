@@ -93,13 +93,13 @@ export default function CustomerLayout() {
                     }}>
                 </Tabs.Screen>
                 <Tabs.Screen 
-                    name="Another"
+                    name="Purchases"
                     options={{
-                        headerShown: true,
+                        headerShown: false,
                         tabBarIcon: ({ color, size }) => (
                         <Ionicons name="newspaper-outline" color={color} size={size} />
                         ),
-                        backgroundColor: '#0f0f0f',
+                        //backgroundColor: '#0f0f0f',
                     }}>
                 </Tabs.Screen>
                 <Tabs.Screen 

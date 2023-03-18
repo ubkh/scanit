@@ -26,8 +26,9 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
   const getFullDate = () => {
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
     var yyyy = today.getFullYear();
+
     return dd + '/' + mm + '/' + yyyy;
 
   };
@@ -97,8 +98,8 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
       //console.warn(basketList);
       setPreviousPurchases([
 
-        ...previousPurchases,
-        {date: getFullDate(), time: getFullTime(), location: retailerBarcodeData , items: basketList }
+        {date: getFullDate(), time: getFullTime(), location: retailerBarcodeData , items: basketList },
+        ...previousPurchases
       ])
       console.warn(previousPurchases)
       resetFields();
