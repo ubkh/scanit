@@ -349,6 +349,6 @@ def retailerGetProduct(request, barcode):
     queryset = Product.objects.filter(barcode=barcode, retailer=user)
     if (queryset.count()):
         item = queryset.first()
-        return JsonResponse({'name': item.name, 'description': item.description, 'price': item.price, 'barcode': item.barcode, 'expiry': item.expiry, 'quantity': item.quantity})
+        return JsonResponse({'name': item.name, 'description': item.description, 'price': item.price, 'barcode': item.barcode})
     else:
         return HttpResponseBadRequest()
