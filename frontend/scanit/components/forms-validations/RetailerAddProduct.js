@@ -15,7 +15,7 @@ const validateForm = (values) => {
     errors.price = "Required";
   } else if (
     !/^(([1-9]+0*)+|0{1})\.{1}[0-9]{2}$/.test(values.price) ||
-    values.price === "0"
+    values.price === "0.00"
   ) {
     errors.price = "Invalid price";
   }

@@ -125,7 +125,7 @@ function RetailerAddProductForm() {
               <CurrencyInput
                 label="Price"
                 onChangeValue={(val) => {
-                  handleChange("price")((val || 0).toString());
+                  handleChange("price")((val || 0).toFixed(2));
                 }}
                 onBlur={handleBlur("price")}
                 value={values.price}
