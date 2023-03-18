@@ -10,6 +10,7 @@ from .views import (
 	UserPasswordResetConfirmView,
     retailerAddProduct,
     retailerGetProduct,
+    retailerSetProductSuspended
 )
 
 urlpatterns = [
@@ -22,5 +23,6 @@ urlpatterns = [
     path('user/password-reset/', UserPasswordResetView.as_view(), name='password_reset'),
     path('user/password-reset/<uidb64>/<token>/', UserPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
 	path('retailer/add-product/', retailerAddProduct, name='retailer-add-product'),
-    path('retailer/get-product/<str:barcode>', retailerGetProduct, name='retailer-get-product')
+    path('retailer/get-product/<str:barcode>', retailerGetProduct, name='retailer-get-product'),
+    path('retailer/set-product-suspended/<str:barcode>/<str:should_suspend>', retailerSetProductSuspended, name='set-suspended')
 ]
