@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { Container, Heading, Button, StatusBar, Center, Flex, Divider, Spacer, useColorMode } from 'native-base';
+import { ScrollView, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text,Container, Heading, Button, StatusBar, Center, Flex, Divider, Spacer, useColorMode } from 'native-base';
 import { Context } from '../../../context/GlobalContext';
 import { Ionicons } from '@expo/vector-icons';
 

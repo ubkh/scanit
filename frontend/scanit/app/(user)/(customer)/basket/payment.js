@@ -1,5 +1,11 @@
 import React, { useState, useContext } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+//import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import {TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+
+//import {StatusBar, useColorMode} from 'native-base';
+import { View, Container, Text, useColorMode, StatusBar,Input } from 'native-base';
+
+
 import { useRouter } from "expo-router";
 import { Context } from '../../../../context/GlobalContext';
 import PaymentStyle from '../../../../styles/PaymentPageStyle';
@@ -7,6 +13,9 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
 
 
   function CardDetails(props) {
+
+    const { colorMode } = useColorMode();
+
 
   const [name, setName] = useState('');
   const [cardNumber, setCardNumber] = useState('');
@@ -94,7 +103,8 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
     } 
     else {
       //console.warn('Card details submitted');
-      router.push("/Basket");
+      router.push("/basket/Basket");
+      router.push("/home")
       //console.warn(basketList);
       setPreviousPurchases([
 
@@ -108,9 +118,13 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
   };
 
   return (
+
+    <View style={{flex: 1}} _dark={{bg: "black"}} _light={{bg: "white"}}>
+      <StatusBar barStyle={colorMode === 'light' ? 'dark-content' : 'light-content'} animated={true}/>
+
     <View style={PaymentStyle.container}>
       <Text style={PaymentStyle.label}>Name on Card</Text>
-      <TextInput
+      <Input
         style={PaymentStyle.input}
         placeholder="Enter Name on Card"
         value={name}
@@ -118,7 +132,7 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
         maxLength={30}
       />
       <Text style={PaymentStyle.label}>Card Number</Text>
-      <TextInput
+      <Input
         style={PaymentStyle.input}
         placeholder="Enter card number"
         keyboardType="numeric"
@@ -129,7 +143,7 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
       <Text style={PaymentStyle.label}>Expiry Date</Text>
         <View style = {{flexDirection: "row"}}>
           <View style={{flex:1}}>
-            <TextInput
+            <Input
               style={PaymentStyle.inputMonth}
               placeholder="MM"
               keyboardType="numeric"
@@ -139,7 +153,7 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
             />
           </View>
           <View style={{flex:1}}>
-            <TextInput
+            <Input
               style={PaymentStyle.inputYear}
               placeholder="YYYY"
               keyboardType="numeric"
@@ -151,7 +165,7 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
         </View>
 
       <Text style={PaymentStyle.label}>CVV</Text>
-      <TextInput
+      <Input
         style={PaymentStyle.input}
         placeholder="Enter CVV"
         keyboardType="numeric"
@@ -163,6 +177,7 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
       <TouchableOpacity style={PaymentStyle.button} onPress={handleSubmit}>
         <Text style={PaymentStyle.buttonText}>Pay Now</Text>
       </TouchableOpacity>
+    </View>
     </View>
   );
 }

@@ -1,11 +1,11 @@
 import { Slot, SplashScreen } from "expo-router";
 import { AuthProvider } from "../context/AuthContext";
 import { extendTheme, NativeBaseProvider } from "native-base";
-import { ColorTheme, Config } from "../Theme.js";
+import { ColorTheme, Components, Config } from "../Theme.js";
 import { useFonts } from "expo-font";
 import ContextProvider from "../context/GlobalContext";
 
-const theme = extendTheme({ colors: ColorTheme });
+const theme = extendTheme({ colors: ColorTheme, components: Components });
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({

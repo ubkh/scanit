@@ -1,7 +1,6 @@
 import { StyleSheet } from 'react-native';
 
 
-
 const PaymentStyle = StyleSheet.create({
     container: {
       flex: 1,
@@ -13,28 +12,29 @@ const PaymentStyle = StyleSheet.create({
     },
     input: {
       height: 40,
-      borderColor: '#ccc',
-      borderWidth: 1,
-      borderRadius: 5,
-      paddingHorizontal: 10,
-      marginBottom: 10,
+      //borderColor: '#ccc',
+      // borderWidth: 1,
+      // borderRadius: 5,
+      // paddingHorizontal: 10,
+      // marginBottom: 10,
+
     },
     inputMonth: {
       height: 40,
-      borderColor: '#ccc',
-      borderWidth: 1,
-      borderRadius: 5,
+      //borderColor: '#ccc',
+      // borderWidth: 1,
+      // borderRadius: 5,
       paddingHorizontal: 10,
-      marginBottom: 10,
+      // marginBottom: 10,
       justifyContent: 'flex-start',
     },
     inputYear: {
       height: 40,
-      borderColor: '#ccc',
-      borderWidth: 1,
-      borderRadius: 5,
-      paddingHorizontal: 10,
-      marginBottom: 10,
+      //borderColor: '#ccc',
+      // borderWidth: 1,
+      // borderRadius: 5,
+       paddingHorizontal: 10,
+      // marginBottom: 10,
       justifyContent: 'flex-end',
     },
     button: {
