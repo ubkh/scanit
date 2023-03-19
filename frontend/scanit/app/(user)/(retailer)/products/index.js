@@ -7,11 +7,11 @@ import {
   Spinner,
   Divider,
 } from "native-base";
-import BarCodeScanStyle from "../../../styles/BarCodeScanStyle";
+import BarCodeScanStyle from "../../../../styles/BarCodeScanStyle";
 import { useRouter } from "expo-router";
 import { useEffect, useState, useContext } from "react";
-import { Context } from "../../../context/GlobalContext";
-import ProductListItem from "../../../components/ProductsListItem";
+import { Context } from "../../../../context/GlobalContext";
+import ProductListItem from "../../../../components/ProductsListItem";
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -37,7 +37,11 @@ function Products() {
   // const isOnWeb = Platform.OS === "web";
 
   return (
-    <View style={BarCodeScanStyle.container}>
+    <View
+      style={BarCodeScanStyle.container}
+      _dark={{ bg: "black" }}
+      _light={{ bg: "white" }}
+    >
       <ScrollView
         width="100%"
         flex={1}
