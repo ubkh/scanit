@@ -343,7 +343,6 @@ def retailerGetProduct(request, barcode):
     user_token = request.COOKIES.get('access_token')
     user = get_logged_in_user(user_token)
     if not user_token or not user or not user.is_retailer:
-        # raise AuthenticationFailed('Unauthenticated user.')
         return HttpResponse('Unauthorized', status=401)
 
     queryset = Product.objects.filter(barcode=barcode, retailer=user)
@@ -352,7 +351,21 @@ def retailerGetProduct(request, barcode):
         return JsonResponse({'name': product_obj.name, 'description': product_obj.description, 'price': product_obj.price, 'barcode': product_obj.barcode})
     else:
         return HttpResponseBadRequest()
+
+@csrf_exempt
+def retailerGetAllProducts(request):
+    user_token = request.COOKIES.get('access_token')
+    user = get_logged_in_user(user_token)
+    if not user_token or not user or not user.is_retailer:
+        return HttpResponse('Unauthorized', status=401)
     
+    queryset = Product.objects.filter(retailer=user)
+    if (queryset.count()):
+        data = list(queryset.values())
+        return JsonResponse(data, safe=False)
+    else:
+        return HttpResponseBadRequest()
+
 @csrf_exempt
 def retailerSetProductSuspended(request, barcode, should_suspend):
     user_token = request.COOKIES.get('access_token')

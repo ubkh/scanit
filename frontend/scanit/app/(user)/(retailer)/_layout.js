@@ -10,6 +10,7 @@ import { useAuth } from "../../../context/AuthContext";
 const links = [
   { label: "Home", url: "/(retailer)/home" },
   { label: "Add a product", url: "/(retailer)/add-product" },
+  { label: "Products", url: "/products" },
   { label: "Something Else", url: "/other" },
   { label: "Account", url: "/Account" },
 ];
@@ -60,6 +61,16 @@ export default function RetailerLayout() {
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="add-outline" color={color} size={size} />
+            ),
+          }}
+        ></Tabs.Screen>
+        <Tabs.Screen
+          name="products"
+          options={{
+            title: "Products",
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="list" color={color} size={size} />
             ),
           }}
         ></Tabs.Screen>
