@@ -178,7 +178,8 @@
 import { useState, useContext, useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import { Context } from '../context/GlobalContext';
-import { Alert } from 'react-native';
+import { Alert, TouchableOpacity } from 'react-native';
+import { Ionicons } from "@expo/vector-icons";
 import { Text, View, Button } from 'native-base';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import BarCodeScanStyle from '../styles/BarCodeScanStyle';
@@ -268,10 +269,53 @@ function BarCodeScanComponent(props){
 
       if (hasPermission === false) {
         return (
+          
           <View style={BarCodeScanStyle.container}>
-            <Text style={{ margin: 10 }}>No access to camera</Text>
-            <Button title={'Allow Camera'} onPress={() => askForCameraPermission()} />
-          </View>)
+            <Text style={{ margin: 10, fontWeight: "bold", fontSize: 20 }}>
+              No access to camera!
+            </Text>
+            <Text
+              style={{
+                margin: 15,
+                fontWeight: "bold",
+                fontSize: 20,
+                textAlign: "center",
+              }}
+            >
+              Camera permission is needed to scan barcodes!
+            </Text>
+            {/* <Button shadow={5} title='Allow Camera' onPress={() => askForCameraPermission()} bg="brand.400">
+              <Text style={{fontWeight: "bold", color: "white", fontSize: 20}}>
+                Allow Camera Access
+              </Text>
+            </Button> */}
+            <View style={{ alignItems: "center" }}>
+              <TouchableOpacity onPress={() => askForCameraPermission()}>
+                <View
+                  style={{
+                    backgroundColor: "#34d399",
+                    borderRadius: 20,
+                    padding: 10,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexDirection: "row",
+                  }}
+                >
+                  <Ionicons
+                    name="camera"
+                    size={25}
+                    color="white"
+                    marginRight={5}
+                  />
+                  <Text style={{ fontWeight: "bold", color: "white", fontSize: 15 }}>
+                    Allow Camera Access
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+          
+          )
       }
 
       return (
@@ -283,10 +327,38 @@ function BarCodeScanComponent(props){
           <Text>&nbsp;</Text>
           <Text style={BarCodeScanStyle.subtitle}> Point your camera at a barcode to ScanIt! </Text>
           <Text>&nbsp;</Text>
-          {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+          {scanned && 
+          <View style={{ alignItems: "center" }}>
+              <TouchableOpacity onPress={() => askForCameraPermission()}>
+                <View
+                  style={{
+                    backgroundColor: "#34d399",
+                    borderRadius: 20,
+                    padding: 10,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexDirection: "row",
+                  }}
+                >
+                  <Ionicons
+                    name="camera"
+                    size={25}
+                    color="white"
+                    marginRight={5}
+                  />
+                  <Text
+                    style={{ fontWeight: "bold", color: "white", fontSize: 15 }}
+                  >
+                    Tap to Scan Again!
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>}
         </View>
       );
     
 }
 
 export default BarCodeScanComponent;
+
+
