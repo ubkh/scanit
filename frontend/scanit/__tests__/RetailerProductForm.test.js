@@ -1,5 +1,5 @@
 import { expect, jest, test, describe } from "@jest/globals";
-import validateForm from "../components/forms-validations/RetailerAddProduct";
+import validateForm from "../components/forms-validations/RetailerProduct";
 
 describe("Form validation using regex", () => {
   let valuesInput;

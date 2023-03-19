@@ -2,6 +2,8 @@ import { Box, Text, AlertDialog, Button, HStack } from "native-base";
 import { useState, useRef, useContext } from "react";
 import { Alert } from "react-native";
 import { Context } from "../context/GlobalContext";
+import { useRouter } from "expo-router";
+
 // import { Platform } from "react-native";
 
 function ProductsListItem({ item }) {
@@ -9,6 +11,7 @@ function ProductsListItem({ item }) {
   const suspendAlertCancelRef = useRef(null);
   const globalContext = useContext(Context);
   const { domain } = globalContext;
+  const router = useRouter();
 
   async function handleSuspend(barcode) {
     const res = await fetch(
@@ -46,7 +49,19 @@ function ProductsListItem({ item }) {
         <Text flex={1}>Price: £{item.price}</Text>
         <Text flex={1}>Quantity: {item.quantity}</Text>
         <Text flex={1}>Expiry: {item.expiry}</Text>
-        <Button variant="outline" colorScheme="emerald" mr="5">
+        <Button
+          variant="outline"
+          colorScheme="emerald"
+          mr="5"
+          onPress={() =>
+            router.push({
+              pathname: "/products/edit",
+              params: {
+                isUpdate: true,
+              },
+            })
+          }
+        >
           <Text color="brand.400">Edit</Text>
         </Button>
         {item.is_suspended ? (

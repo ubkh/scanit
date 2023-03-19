@@ -12,11 +12,12 @@ import { Alert } from "react-native";
 import CurrencyInput from "react-native-currency-input";
 import { Formik } from "formik";
 import { Context } from "../context/GlobalContext";
-import validateForm from "./forms-validations/RetailerAddProduct";
+import validateForm from "./forms-validations/RetailerProduct";
 import { useSearchParams, useRouter } from "expo-router";
 
-function RetailerAddProductForm() {
+function RetailerProductForm() {
   const params = useSearchParams();
+  const isUpdate = true;
   const { productData } = params || {};
   const globalContext = useContext(Context);
   const { domain } = globalContext;
@@ -29,6 +30,8 @@ function RetailerAddProductForm() {
   }
 
   function getInitialValues() {
+    // console.log(productData);
+
     const vals = {
       name: "",
       description: "",
@@ -47,12 +50,16 @@ function RetailerAddProductForm() {
     return vals;
   }
 
-  async function submitHandler(values) {
-    const jsonObj = JSON.stringify({
+  function dataToJSON(values) {
+    return JSON.stringify({
       ...values,
       price: Math.ceil(parseFloat(values.price) * 100), // some inputs like "300.09" becomes 30008.9999999 for some reason, hence Math.ceil
       quantity: parseInt(values.quantity),
     });
+  }
+
+  async function addSubmitHandler(values) {
+    const jsonObj = dataToJSON(values);
     const res = await fetch(`http://${domain}/api/retailer/add-product/`, {
       method: "POST",
       // mode: "cors",
@@ -79,10 +86,42 @@ function RetailerAddProductForm() {
     }
   }
 
+  async function updateSubmitHandler(values) {
+    const jsonObj = dataToJSON(values);
+    const res = await fetch(
+      `http://${domain}/api/retailer/update-product/${values.barcode}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: jsonObj,
+        credentials: "include",
+      }
+    );
+    if (res.ok) {
+      Alert.alert("Success", "Product was updated successfully.", [
+        {
+          text: "OK",
+          onPress: () => {
+            router.back();
+          },
+        },
+      ]);
+    } else {
+      Alert.alert(
+        "Failed",
+        "Could not update the product's data. Please try again."
+      );
+    }
+  }
+
   return (
     <Formik
       initialValues={getInitialValues()}
-      onSubmit={(vals) => submitHandler(vals)}
+      onSubmit={(vals) => {
+        isUpdate ? addSubmitHandler(vals) : updateSubmitHandler(vals);
+      }}
       validate={validateForm}
     >
       {({
@@ -102,7 +141,7 @@ function RetailerAddProductForm() {
           paddingRight={10}
         >
           <Text>&nbsp;</Text>
-          <Text>Please fill in the details of the product.</Text>
+          {!isUpdate && <Text>Please fill in the details of the product.</Text>}
           <Text>&nbsp;</Text>
           <VStack space={4}>
             <FormControl
@@ -309,7 +348,7 @@ function RetailerAddProductForm() {
               onPress={handleSubmit}
               disabled={isSubmitting}
             >
-              Add product
+              {isUpdate ? "Confirm edit" : "Add product"}
             </Button>
             <Text>&nbsp;</Text>
           </VStack>
@@ -319,4 +358,4 @@ function RetailerAddProductForm() {
   );
 }
 
-export default RetailerAddProductForm;
+export default RetailerProductForm;

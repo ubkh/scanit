@@ -8,7 +8,11 @@ function AddProduct() {
   const isOnWeb = Platform.OS === "web";
 
   return (
-    <View style={BarCodeScanStyle.container}>
+    <View
+      style={BarCodeScanStyle.container}
+      _dark={{ bg: "black" }}
+      _light={{ bg: "white" }}
+    >
       {isOnWeb ? (
         <Text>
           Scanning is not available on the web app. Please enter the product's
