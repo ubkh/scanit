@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, waitFor } from "test-utils";
 import { Context } from '../context/GlobalContext';
-import Basket from '../app/(user)/(customer)/Basket';
+import Basket from '../app/(user)/(customer)/basket/Basket';
 import { fireEvent } from "@testing-library/react-native";
 
 import { Alert } from 'react-native';
