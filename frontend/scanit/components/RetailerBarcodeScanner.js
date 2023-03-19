@@ -35,7 +35,10 @@ function RetailerBarcodeScanner() {
         const resData = await res.json();
         Alert.alert("Product found", "Please fill in the quantity and expiry.");
         router.back();
-        router.push({ pathname: "/Form", params: { productData: resData } });
+        router.push({
+          pathname: "/add-product/form",
+          params: { productData: resData },
+        });
       } else if (res.status === 400) {
         Alert.alert(
           "Not found",
@@ -43,7 +46,7 @@ function RetailerBarcodeScanner() {
         );
         router.back();
         router.push({
-          pathname: "/Form",
+          pathname: "/add-product/form",
           params: { productData: { barcode: data } },
         });
       }
