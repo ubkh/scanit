@@ -15,9 +15,8 @@ import { Context } from "../context/GlobalContext";
 import validateForm from "./forms-validations/RetailerProduct";
 import { useSearchParams, useRouter } from "expo-router";
 
-function RetailerProductForm() {
+function RetailerProductForm({ isUpdate = false }) {
   const params = useSearchParams();
-  const isUpdate = true;
   const { productData } = params || {};
   const globalContext = useContext(Context);
   const { domain } = globalContext;

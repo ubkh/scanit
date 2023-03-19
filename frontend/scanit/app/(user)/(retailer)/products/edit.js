@@ -9,7 +9,7 @@ export default function Edit() {
       _dark={{ bg: "black" }}
       _light={{ bg: "white" }}
     >
-      <RetailerProductForm />
+      <RetailerProductForm isUpdate={true} />
     </View>
   );
 }

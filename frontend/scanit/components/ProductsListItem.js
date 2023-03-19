@@ -56,9 +56,6 @@ function ProductsListItem({ item }) {
           onPress={() =>
             router.push({
               pathname: "/products/edit",
-              params: {
-                isUpdate: true,
-              },
             })
           }
         >
