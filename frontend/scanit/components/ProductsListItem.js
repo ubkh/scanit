@@ -1,4 +1,4 @@
-import { Box, Text, AlertDialog, Button, HStack } from "native-base";
+import { Box, Text, AlertDialog, Button, HStack, Link } from "native-base";
 import { useState, useRef, useContext } from "react";
 import { Alert } from "react-native";
 import { Context } from "../context/GlobalContext";
@@ -43,76 +43,87 @@ function ProductsListItem({ item }) {
   }
 
   return (
-    <Box borderBottomWidth="1" py="2" borderColor="gray.400">
-      <HStack alignItems="center">
-        <Text flex={2} maxW="35%" pr="5">
-          {item.name}
-        </Text>
-        <Text flex={1}>Price: £{(item.price / 100).toFixed(2)}</Text>
-        <Text flex={1}>Quantity: {item.quantity}</Text>
-        <Text flex={1}>Expiry: {item.expiry}</Text>
-        <Button
-          variant="outline"
-          colorScheme="emerald"
-          mr="5"
-          onPress={() => {
-            setProductData(item);
-            router.push("/products/edit");
-          }}
-        >
-          <Text color="brand.400">Edit</Text>
-        </Button>
-        {item.is_suspended ? (
+    <Box borderBottomWidth="1" borderColor="gray.400">
+      <Link
+        _hover={{
+          bg: "#d3f5e8",
+        }}
+        onPress={() => {
+          setProductData(item);
+          router.push("/products/view");
+        }}
+      >
+        <HStack alignItems="center" w="100%" py="2" px="1">
+          <Text flex={2} maxW="35%" pr="5">
+            {item.name}
+          </Text>
+          <Text flex={1}>Price: £{(item.price / 100).toFixed(2)}</Text>
+          <Text flex={1}>Quantity: {item.quantity}</Text>
+          <Text flex={1}>Expiry: {item.expiry}</Text>
           <Button
-            bg="blueGray.600"
-            onPress={() => handleUnsuspend(item.barcode)}
+            variant="outline"
+            bg="white"
+            colorScheme="emerald"
+            mr="5"
+            onPress={() => {
+              setProductData(item);
+              router.push("/products/edit");
+            }}
           >
-            Unsuspend
+            <Text color="brand.400">Edit</Text>
           </Button>
-        ) : (
-          <Button
-            colorScheme="danger"
-            onPress={() => setAlertOpen(!isAlertOpen)}
+          {item.is_suspended ? (
+            <Button
+              bg="blueGray.600"
+              onPress={() => handleUnsuspend(item.barcode)}
+            >
+              Unsuspend
+            </Button>
+          ) : (
+            <Button
+              colorScheme="danger"
+              onPress={() => setAlertOpen(!isAlertOpen)}
+            >
+              Suspend
+            </Button>
+          )}
+          <AlertDialog
+            leastDestructiveRef={suspendAlertCancelRef}
+            isOpen={isAlertOpen}
+            onClose={() => setAlertOpen(false)}
           >
-            Suspend
-          </Button>
-        )}
-        <AlertDialog
-          leastDestructiveRef={suspendAlertCancelRef}
-          isOpen={isAlertOpen}
-          onClose={() => setAlertOpen(false)}
-        >
-          <AlertDialog.Content>
-            <AlertDialog.CloseButton />
-            <AlertDialog.Header>Suspend product</AlertDialog.Header>
-            <AlertDialog.Body>
-              This will suspend the product, preventing customers from scanning
-              it. Are you sure?
-            </AlertDialog.Body>
-            <AlertDialog.Footer>
-              <Button.Group space={2}>
-                <Button
-                  variant="unstyled"
-                  colorScheme="coolGray"
-                  onPress={() => setAlertOpen(false)}
-                  ref={suspendAlertCancelRef}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  colorScheme="danger"
-                  onPress={() => {
-                    handleSuspend(item.barcode);
-                    setAlertOpen(false);
-                  }}
-                >
-                  Confirm
-                </Button>
-              </Button.Group>
-            </AlertDialog.Footer>
-          </AlertDialog.Content>
-        </AlertDialog>
-      </HStack>
+            <AlertDialog.Content>
+              <AlertDialog.CloseButton />
+              <AlertDialog.Header>Suspend product</AlertDialog.Header>
+              <AlertDialog.Body>
+                This will suspend the product, preventing customers from
+                scanning it. Are you sure?
+              </AlertDialog.Body>
+              <AlertDialog.Footer>
+                <Button.Group space={2}>
+                  <Button
+                    variant="unstyled"
+                    colorScheme="coolGray"
+                    onPress={() => setAlertOpen(false)}
+                    ref={suspendAlertCancelRef}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    colorScheme="danger"
+                    onPress={() => {
+                      handleSuspend(item.barcode);
+                      setAlertOpen(false);
+                    }}
+                  >
+                    Confirm
+                  </Button>
+                </Button.Group>
+              </AlertDialog.Footer>
+            </AlertDialog.Content>
+          </AlertDialog>
+        </HStack>
+      </Link>
     </Box>
   );
 }

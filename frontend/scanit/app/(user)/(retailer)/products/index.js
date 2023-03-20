@@ -6,6 +6,7 @@ import {
   View,
   Spinner,
   Divider,
+  Box,
 } from "native-base";
 import BarCodeScanStyle from "../../../../styles/BarCodeScanStyle";
 import { useRouter } from "expo-router";
@@ -70,7 +71,11 @@ function Products() {
         {isLoading ? (
           <Spinner size="lg" color="blue.400" />
         ) : (
-          products.map((item) => <ProductListItem item={item} key={item.id} />)
+          <Box>
+            {products.map((item) => (
+              <ProductListItem item={item} key={item.id} />
+            ))}
+          </Box>
         )}
       </ScrollView>
     </View>
