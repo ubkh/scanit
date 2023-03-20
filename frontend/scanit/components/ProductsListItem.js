@@ -25,6 +25,7 @@ function ProductsListItem({ item }) {
     } else {
       Alert.alert("Failed", "Could not suspend the product. Please try again.");
     }
+    router.replace("/products");
   }
 
   async function handleUnsuspend(barcode) {
@@ -40,6 +41,7 @@ function ProductsListItem({ item }) {
         "Could not unsuspend the product. Please try again."
       );
     }
+    router.replace("/products");
   }
 
   return (

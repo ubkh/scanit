@@ -94,6 +94,7 @@ function RetailerProductForm({ isUpdate = false }) {
     if (res.ok) {
       Alert.alert("Success", "Product was updated successfully.");
       router.back();
+      router.replace("/products");
       setProductData({});
     } else {
       Alert.alert(
