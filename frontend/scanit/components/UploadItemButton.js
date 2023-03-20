@@ -29,7 +29,7 @@ const UploadItemButton = ({validProducts}) => {
         console.log(bodyData);
 
 
-        fetch(`http://${domain}/api/retailer/uploadItem/`,{
+        fetch(`http://${domain}/api/retailer/add-item/`,{
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json'

@@ -31,9 +31,10 @@ const SignUpScreen = () =>  {
             'first_name': data.first_name,
             'last_name': data.last_name,
             'number': data.number,
-            'store_address': data.store_address,
+            // 'store_address': data.store_address,
             'password': data.password,
-            'is_retailer': selectedIndex == 1 ? true : false
+            // 'is_retailer': selectedIndex == 1 ? true : false
+            'account_type': selectedIndex == 1 ? 3 : 1 // 1 == CUSTOMER, 3 == RETAIL_OWNER
         })
 
         fetch(`http://${domain}/api/user/register/`,{

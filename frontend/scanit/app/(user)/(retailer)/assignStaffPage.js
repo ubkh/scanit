@@ -30,8 +30,10 @@ function assignStaffPage(props) {
             'first_name': data.first_name,
             'last_name': data.last_name,
             'number': number,
-            'store_address': store_address,
-            'password': data.password
+            // 'store_address': store_address,
+            // 'employed_at': // TODO
+            'password': data.password,
+            'account_type': 2,
         })
 
         fetch(`http://${domain}/api/staff/register/`,{

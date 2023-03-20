@@ -83,16 +83,20 @@ class StaffRegistrationAPIView(APIView):
         return Response(content)
 
     def post(self, request):
+        
+        print("printing the emp")
+        print(request.data.get('employed_at'))
+
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
             new_user = serializer.save()
-
-         
             email = request.data.get('email', None)
             user_model = get_user_model()
             user = user_model.objects.get(email=email)
-            user.is_staff=True
+            # user.is_staff=True
+            user.account_type=2 # RETAIL STAFF
             user.is_verified=True
+            # user.employed_at=
             # user.retailer_id=request.data.get('retailer_id')
             # user.retailer_id = current_user.retailer_id
             user.save()
@@ -116,6 +120,7 @@ class UserLoginAPIView(APIView):
     def post(self, request):
         email = request.data.get('email', None)
         user_password = request.data.get('password', None)
+
         if not user_password:
             raise AuthenticationFailed('A user password is needed.')
 
@@ -125,10 +130,10 @@ class UserLoginAPIView(APIView):
 
         if not user_instance:
             raise AuthenticationFailed('User not found.')
-        
+
         if not user_instance.is_verified:
             raise AuthenticationFailed('User not verified.')
-
+        
         if user_instance.is_active and user_instance.is_verified:
             user_access_token = generate_access_token(user_instance)
             response = Response()
@@ -141,13 +146,17 @@ class UserLoginAPIView(APIView):
                     'first_name': user_instance.first_name,
                     'last_name': user_instance.last_name,
                     'number': user_instance.number,
-                    'store_address': user_instance.store_address,
-                    'retailer_barcode': user_instance.retailer_barcode,
-                    'is_staff': user_instance.is_staff,
-                    'is_retailer': user_instance.is_retailer,
+                    'account_type': user_instance.account_type,
+                    'employed_at': user_instance.employed_at,
+
+                    # 'store_address': user_instance.store_address,
+                    # 'retailer_barcode': user_instance.retailer_barcode,
+                    # 'is_staff': user_instance.is_staff,
+                    # 'is_retailer': user_instance.is_retailer,
                 }
             }
             return response
+        
 
         return Response({
             'message': 'Something went wrong.'
@@ -203,14 +212,24 @@ class UserVerificationAPIView(APIView):
             user_model = get_user_model()
             current_user = get_object_or_404(user_model, user_id=user_id)
 
-            if current_user.store_address and current_user.verification_code == input_verification_code:
-                # If the verification code matches, mark the user as verified
-                current_user.is_verified = True
-                current_user.is_staff = True
-                current_user.is_retailer = True
-                # current_user.retailer_id = self.getretailid()
-                current_user.save()
-                return Response({'message': 'Verification successful!'}, status=status.HTTP_200_OK)
+            # if current_user.store_address and current_user.verification_code == input_verification_code:
+            #     # If the verification code matches, mark the user as verified
+            #     current_user.is_verified = True
+            #     current_user.is_staff = True
+            #     current_user.is_retailer = True
+            #     # current_user.retailer_id = self.getretailid()
+            #     current_user.save()
+            #     return Response({'message': 'Verification successful!'}, status=status.HTTP_200_OK)
+            
+            # TODO: SMTHN WITH current_user.employed_at.address ...
+            # BELOW ALMOST COMPLETE
+            # if ... and current_user.verification_code == input_verification_code:
+            #     current_user.is_verified = True
+            #     current_user.save()
+            #     return Response({'message': 'Verification successful!'}, status=status.HTTP_200_OK)
+
+            # THERE IS A CHANCE THAT THE FUNCTION BELOW DOES THE SAME THING AS THE ONE ABOVE, SINCE THE ACCOUNT TYPE IS SET, WE DONT NEED TOO MUCH MORE SETTINGS
+            # SO IT MIGHT BASICALLY BE DONE, DOUBLE CHECK PLS
 
             if current_user.verification_code == input_verification_code:
                 current_user.is_verified = True
@@ -313,7 +332,6 @@ def send_account_verification_code(request):
 
 
 class RetailerUploadItemAPIView(APIView):
-    # serializer_class = UserRegistrationSerializer
     serializer_class = RetailerUploadItemSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (AllowAny,)
@@ -331,16 +349,17 @@ class RetailerUploadItemAPIView(APIView):
         return Response(content)
 
 
-    def post(self, request):
-        # serializer = self.serializer_class(data=request.data)
-        # if serializer.is_valid():
-            
-        #     pass    
-    
-        data = request.data
-        print(data)
+    # def post(self, request):
+    #     user_token = request.COOKIES.get('access_token')
+    #     user = get_logged_in_user(user_token)
+    #     if not user_token or not user:
+    #         return HttpResponse('Unauthorized', status=401)
+    #     # raise AuthenticationFailed('Unauthenticated user.')
+    #     serializer = self.serializer_class(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
 
-        return Response(data, status=status.HTTP_201_CREATED)
+    #         return Response(data, status=status.HTTP_201_CREATED)
 
     # def post(self, request):
     #     serializer = self.serializer_class(data=request.data)
