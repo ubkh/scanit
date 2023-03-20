@@ -104,8 +104,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         default = Account.CUSTOMER
     )
 	#store the store which the staff works at
-	employed_at = models.ForeignKey(Store, blank=True, null=True, on_delete=models.CASCADE)    
-    
+	employed_at = models.ForeignKey(Store, blank=True, null=True, on_delete=models.CASCADE)
 
 	# retailer_id= models.CharField(max_length=8, blank=True)
 	verification_code = models.CharField(max_length=6)
@@ -127,7 +126,7 @@ class Product(models.Model):
     quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     expiry = models.DateField()
     barcode = models.CharField(max_length=20)
-    retailer = models.ForeignKey(User, on_delete= models.CASCADE)
+    store = models.ForeignKey(Store, on_delete=models.CASCADE)
 
     def is_expiry_date_past(self):
         if self.expiry < datetime.date.today():
