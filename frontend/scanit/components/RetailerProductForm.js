@@ -83,17 +83,14 @@ function RetailerProductForm({ isUpdate = false }) {
 
   async function updateSubmitHandler(values) {
     const jsonObj = dataToJSON(values);
-    const res = await fetch(
-      `http://${domain}/api/retailer/update-product/${values.barcode}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: jsonObj,
-        credentials: "include",
-      }
-    );
+    const res = await fetch(`http://${domain}/api/retailer/update-product/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: jsonObj,
+      credentials: "include",
+    });
     if (res.ok) {
       Alert.alert("Success", "Product was updated successfully.");
       router.back();

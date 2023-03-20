@@ -11,7 +11,8 @@ from .views import (
     retailerAddProduct,
     retailerGetProduct,
     retailerSetProductSuspended,
-    retailerGetAllProducts
+    retailerGetAllProducts,
+    retailerUpdateProduct
 )
 
 urlpatterns = [
@@ -26,5 +27,6 @@ urlpatterns = [
 	path('retailer/add-product/', retailerAddProduct, name='retailer-add-product'),
     path('retailer/get-product/<str:barcode>', retailerGetProduct, name='retailer-get-product'),
     path('retailer/get-products/', retailerGetAllProducts, name='retailer-get-all-products'),
-    path('retailer/set-product-suspended/<str:barcode>/<str:should_suspend>', retailerSetProductSuspended, name='set-suspended')
+    path('retailer/set-product-suspended/<str:barcode>/<str:should_suspend>', retailerSetProductSuspended, name='set-suspended'),
+    path('retailer/update-product/', retailerUpdateProduct, name='update-product')
 ]
