@@ -1,19 +1,19 @@
-import { Box, Text, AlertDialog, Button, HStack, Link } from "native-base";
-import { useState, useRef, useContext } from "react";
+import { Box, Text, Button, HStack, VStack } from "native-base";
+import { useState, useContext } from "react";
 import { Alert } from "react-native";
 import { Context } from "../context/GlobalContext";
 import { useRouter } from "expo-router";
 import { ProductDataContext } from "../context/RetailerProductContext";
-
-// import { Platform } from "react-native";
+import { Platform } from "react-native";
+import AlertDialogComponent from "./AlertDialog";
 
 function ProductsListItem({ item }) {
   const [isAlertOpen, setAlertOpen] = useState(false);
-  const suspendAlertCancelRef = useRef(null);
   const globalContext = useContext(Context);
   const { domain } = globalContext;
   const { setProductData } = useContext(ProductDataContext);
   const router = useRouter();
+  const isOnWeb = Platform.OS === "web";
 
   async function handleSuspend(barcode) {
     const res = await fetch(
@@ -44,88 +44,94 @@ function ProductsListItem({ item }) {
     router.replace("/products");
   }
 
+  function getItemTextElements() {
+    return (
+      <>
+        <Text flex={2} _web={{ maxW: "35%" }} pr="5">
+          {item.name}
+        </Text>
+        <Text flex={1}>Price: £{(item.price / 100).toFixed(2)}</Text>
+        <Text flex={1}>Quantity: {item.quantity}</Text>
+        <Text flex={1}>Expiry: {item.expiry}</Text>
+      </>
+    );
+  }
+
+  function getItemButtons() {
+    return (
+      <>
+        <Button
+          bg="brand.400"
+          onPress={() => {
+            setProductData(item);
+            router.push("/products/view");
+          }}
+          mr="2"
+        >
+          View
+        </Button>
+        <Button
+          variant="outline"
+          bg="white"
+          colorScheme="emerald"
+          mr="2"
+          onPress={() => {
+            setProductData(item);
+            router.push("/products/edit");
+          }}
+        >
+          <Text color="brand.400">Edit</Text>
+        </Button>
+        {item.is_suspended ? (
+          <Button
+            bg="blueGray.600"
+            onPress={() => handleUnsuspend(item.barcode)}
+          >
+            Unsuspend
+          </Button>
+        ) : (
+          <Button
+            colorScheme="danger"
+            onPress={() => setAlertOpen(!isAlertOpen)}
+          >
+            Suspend
+          </Button>
+        )}
+      </>
+    );
+  }
+
+  function getWebStyle() {
+    return (
+      <>
+        {getItemTextElements()}
+        {getItemButtons()}
+      </>
+    );
+  }
+
+  function getPhoneStyle() {
+    return (
+      <VStack>
+        {getItemTextElements()}
+        <HStack mt="2">{getItemButtons()}</HStack>
+      </VStack>
+    );
+  }
+
   return (
     <Box borderBottomWidth="1" borderColor="gray.400">
-      <Link
-        _hover={{
-          bg: "#d3f5e8",
+      <HStack alignItems="center" w="100%" py="2" px="1">
+        {isOnWeb ? getWebStyle() : getPhoneStyle()}
+      </HStack>
+      <AlertDialogComponent
+        isOpen={isAlertOpen}
+        onClose={() => setAlertOpen(false)}
+        onSubmit={() => {
+          handleSuspend(item.barcode);
+          setAlertOpen(false);
         }}
-        onPress={() => {
-          setProductData(item);
-          router.push("/products/view");
-        }}
-      >
-        <HStack alignItems="center" w="100%" py="2" px="1">
-          <Text flex={2} maxW="35%" pr="5">
-            {item.name}
-          </Text>
-          <Text flex={1}>Price: £{(item.price / 100).toFixed(2)}</Text>
-          <Text flex={1}>Quantity: {item.quantity}</Text>
-          <Text flex={1}>Expiry: {item.expiry}</Text>
-          <Button
-            variant="outline"
-            bg="white"
-            colorScheme="emerald"
-            mr="5"
-            onPress={() => {
-              setProductData(item);
-              router.push("/products/edit");
-            }}
-          >
-            <Text color="brand.400">Edit</Text>
-          </Button>
-          {item.is_suspended ? (
-            <Button
-              bg="blueGray.600"
-              onPress={() => handleUnsuspend(item.barcode)}
-            >
-              Unsuspend
-            </Button>
-          ) : (
-            <Button
-              colorScheme="danger"
-              onPress={() => setAlertOpen(!isAlertOpen)}
-            >
-              Suspend
-            </Button>
-          )}
-          <AlertDialog
-            leastDestructiveRef={suspendAlertCancelRef}
-            isOpen={isAlertOpen}
-            onClose={() => setAlertOpen(false)}
-          >
-            <AlertDialog.Content>
-              <AlertDialog.CloseButton />
-              <AlertDialog.Header>Suspend product</AlertDialog.Header>
-              <AlertDialog.Body>
-                This will suspend the product, preventing customers from
-                scanning it. Are you sure?
-              </AlertDialog.Body>
-              <AlertDialog.Footer>
-                <Button.Group space={2}>
-                  <Button
-                    variant="unstyled"
-                    colorScheme="coolGray"
-                    onPress={() => setAlertOpen(false)}
-                    ref={suspendAlertCancelRef}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    colorScheme="danger"
-                    onPress={() => {
-                      handleSuspend(item.barcode);
-                      setAlertOpen(false);
-                    }}
-                  >
-                    Confirm
-                  </Button>
-                </Button.Group>
-              </AlertDialog.Footer>
-            </AlertDialog.Content>
-          </AlertDialog>
-        </HStack>
-      </Link>
+      />
     </Box>
   );
 }
