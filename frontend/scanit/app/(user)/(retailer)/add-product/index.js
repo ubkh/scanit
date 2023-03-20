@@ -2,11 +2,13 @@ import { View, Button, Text, StatusBar } from "native-base";
 import BarCodeScanStyle from "../../../../styles/BarCodeScanStyle";
 import { useRouter } from "expo-router";
 import { Platform } from "react-native";
+import { ProductDataContext } from "../../../../context/RetailerProductContext";
+import { useContext } from "react";
 
 function AddProduct() {
   const router = useRouter();
   const isOnWeb = Platform.OS === "web";
-
+  const { setProductData } = useContext(ProductDataContext);
   return (
     <View
       style={BarCodeScanStyle.container}
@@ -38,7 +40,10 @@ function AddProduct() {
       <Button
         variant="outline"
         colorScheme="emerald"
-        onPress={() => router.push("add-product/form")}
+        onPress={() => {
+          setProductData({});
+          router.push("add-product/form");
+        }}
       >
         <Text color="brand.400">Enter details manually</Text>
       </Button>

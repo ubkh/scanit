@@ -3,6 +3,7 @@ import { useState, useRef, useContext } from "react";
 import { Alert } from "react-native";
 import { Context } from "../context/GlobalContext";
 import { useRouter } from "expo-router";
+import { ProductDataContext } from "../context/RetailerProductContext";
 
 // import { Platform } from "react-native";
 
@@ -11,6 +12,7 @@ function ProductsListItem({ item }) {
   const suspendAlertCancelRef = useRef(null);
   const globalContext = useContext(Context);
   const { domain } = globalContext;
+  const { setProductData } = useContext(ProductDataContext);
   const router = useRouter();
 
   async function handleSuspend(barcode) {
@@ -46,18 +48,17 @@ function ProductsListItem({ item }) {
         <Text flex={2} maxW="35%" pr="5">
           {item.name}
         </Text>
-        <Text flex={1}>Price: £{item.price}</Text>
+        <Text flex={1}>Price: £{(item.price / 100).toFixed(2)}</Text>
         <Text flex={1}>Quantity: {item.quantity}</Text>
         <Text flex={1}>Expiry: {item.expiry}</Text>
         <Button
           variant="outline"
           colorScheme="emerald"
           mr="5"
-          onPress={() =>
-            router.push({
-              pathname: "/products/edit",
-            })
-          }
+          onPress={() => {
+            setProductData(item);
+            router.push("/products/edit");
+          }}
         >
           <Text color="brand.400">Edit</Text>
         </Button>

@@ -12,40 +12,41 @@ import { Alert } from "react-native";
 import CurrencyInput from "react-native-currency-input";
 import { Formik } from "formik";
 import { Context } from "../context/GlobalContext";
+import { ProductDataContext } from "../context/RetailerProductContext";
 import validateForm from "./forms-validations/RetailerProduct";
-import { useSearchParams, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 
 function RetailerProductForm({ isUpdate = false }) {
-  const params = useSearchParams();
-  const { productData } = params || {};
+  const { productData, setProductData } = useContext(ProductDataContext);
   const globalContext = useContext(Context);
   const { domain } = globalContext;
   // const errorStyle = { color: "#c20808" };
   const router = useRouter();
 
   // if product was not found in the db then productData has only the barcode. This prevents price from becoming a NaN
-  function getProductPrice() {
-    return productData.price ? (productData.price / 100).toString() : "0";
-  }
+  // function getProductPrice() {
+  //   return productData.price ? (productData.price / 100).toString() : "0";
+  // }
 
   function getInitialValues() {
-    // console.log(productData);
-
     const vals = {
-      name: "",
-      description: "",
-      price: "0",
-      quantity: "",
-      expiry: "",
-      barcode: "",
+      name: productData.name ? productData.name : "",
+      description: productData.description ? productData.description : "",
+      price: productData.price ? (productData.price / 100).toFixed(2) : "0",
+      quantity: productData.quantity ? productData.quantity : "",
+      expiry: productData.expiry ? productData.expiry : "",
+      barcode: productData.barcode ? productData.barcode : "",
     };
-    if (productData) {
-      return {
-        ...vals,
-        ...productData,
-        price: getProductPrice(),
-      };
-    }
+    // if (productData) {
+    //   return {
+    //     ...vals,
+    //     name: productData.name,
+    //     description: productData.description,
+    //     priceproductData.price,
+    //     productData.quantity,
+    //     price: getProductPrice(),
+    //   };
+    // }
     return vals;
   }
 
@@ -69,14 +70,9 @@ function RetailerProductForm({ isUpdate = false }) {
       credentials: "include",
     });
     if (res.ok) {
-      Alert.alert("Success", "Product was successfully added to the system.", [
-        {
-          text: "OK",
-          onPress: () => {
-            router.push("/home");
-          },
-        },
-      ]);
+      Alert.alert("Success", "Product was successfully added to the system.");
+      router.back();
+      setProductData({});
     } else {
       Alert.alert(
         "Failed",
@@ -99,14 +95,9 @@ function RetailerProductForm({ isUpdate = false }) {
       }
     );
     if (res.ok) {
-      Alert.alert("Success", "Product was updated successfully.", [
-        {
-          text: "OK",
-          onPress: () => {
-            router.back();
-          },
-        },
-      ]);
+      Alert.alert("Success", "Product was updated successfully.");
+      router.back();
+      setProductData({});
     } else {
       Alert.alert(
         "Failed",
@@ -119,7 +110,7 @@ function RetailerProductForm({ isUpdate = false }) {
     <Formik
       initialValues={getInitialValues()}
       onSubmit={(vals) => {
-        isUpdate ? addSubmitHandler(vals) : updateSubmitHandler(vals);
+        isUpdate ? updateSubmitHandler(vals) : addSubmitHandler(vals);
       }}
       validate={validateForm}
     >

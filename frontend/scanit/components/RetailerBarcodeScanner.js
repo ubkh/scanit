@@ -5,6 +5,7 @@ import { BarCodeScanner } from "expo-barcode-scanner";
 import BarCodeScanStyle from "../styles/BarCodeScanStyle";
 import { Context } from "../context/GlobalContext";
 import { useRouter } from "expo-router";
+import { ProductDataContext } from "../context/RetailerProductContext";
 
 function RetailerBarcodeScanner() {
   const [hasPermission, setHasPermission] = useState(null);
@@ -12,6 +13,7 @@ function RetailerBarcodeScanner() {
   const router = useRouter();
   const globalContext = useContext(Context);
   const { domain } = globalContext;
+  const { setProductData } = useContext(ProductDataContext);
 
   const askForCameraPermission = () => {
     (async () => {
@@ -34,21 +36,17 @@ function RetailerBarcodeScanner() {
       if (res.ok) {
         const resData = await res.json();
         Alert.alert("Product found", "Please fill in the quantity and expiry.");
+        setProductData(resData);
         router.back();
-        router.push({
-          pathname: "/add-product/form",
-          params: { productData: resData },
-        });
+        router.push("/add-product/form");
       } else if (res.status === 400) {
         Alert.alert(
           "Not found",
           "The scanned product was not found in the system. Please fill in the product's data manually."
         );
+        setProductData(data);
         router.back();
-        router.push({
-          pathname: "/add-product/form",
-          params: { productData: { barcode: data } },
-        });
+        router.push("/add-product/form");
       }
       setScanned(false);
     } catch (error) {
