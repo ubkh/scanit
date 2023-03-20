@@ -8,21 +8,25 @@ import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../../../context/AuthContext";
 
 const links = [
-  { label: "Home", url: "/(retailer)/home" },
-  { label: "Add a product", url: "/(retailer)/add-product" },
-  { label: "Something Else", url: "/other" },
-  { label: "Account", url: "/Account" },
+    { label: 'Home', url: '/(retailer)/home' },
+    { label: 'Something Else', url: '/other' },
+    { label: 'Add Item', url: '/addItem' },
+    { label: 'Assign Staff', url: '/assignStaffPage' },
+    { label: "Add a product", url: "/(retailer)/add-product" },
+    { label: "Account", url: "/Account" },
 ];
 
 export default function RetailerLayout() {
   const { userType } = useAuth();
   const segments = useSegments();
-
   const { colorMode } = useColorMode();
 
   // TODO: Consider a context here to prevent access
-  // prevent other users from accessing this group of pages
-  if (userType !== "retailer") {
+  // prevent other users from accessing this group of page/s
+  // if (userType !== "retailer") {
+  //   return <Redirect href={`/(${userType})/${segments[2]}`} />;
+  // }
+  if (userType === 1) {
     return <Redirect href={`/(${userType})/${segments[2]}`} />;
   }
 

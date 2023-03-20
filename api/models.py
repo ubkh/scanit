@@ -35,50 +35,35 @@ class CustomUserManager(BaseUserManager):
 
         user = self.create_user(email, password)
         user.is_superuser = True
-        user.is_staff = True
         user.save()
         return user
 
-
-class User(AbstractBaseUser, PermissionsMixin):
-	phone_regex = RegexValidator(regex=r'^\0?1?\d{11}$', message="Phone number must have 11 digits.")
-
-	user_id = models.AutoField(primary_key=True)
-	email = models.EmailField(max_length=100, unique=True)
-	first_name = models.CharField(max_length=32)
-	last_name = models.CharField(max_length=32)
-	number = models.CharField(validators=[phone_regex], max_length=11, blank=True)
-	retailer_barcode = models.CharField(max_length=100, unique=True, null=True, blank=True)
-	store_address = models.CharField(max_length=100, blank=True, null=True)
-	is_active = models.BooleanField(default=True)
-	is_staff = models.BooleanField(default=False)
-	is_retailer = models.BooleanField(default=False)
-	# retailer_id= models.CharField(max_length=8, blank=True)
-	verification_code = models.CharField(max_length=6)
-	is_verified = models.BooleanField(default=False)
-	date_joined = models.DateField(auto_now_add=True)
-	USERNAME_FIELD = 'email'
-	objects = CustomUserManager()
-
-	def __str__(self):
-		return f'{self.first_name} {self.last_name}'
-	
+class Store(models.Model):
+	id = models.AutoField(primary_key=True)
+	name = models.CharField(max_length=100, blank=False)
+	description = models.CharField(max_length=750, blank=True)
+	barcode = models.CharField(max_length=25, blank=False)
+	address = models.CharField(max_length=100, blank=True, null=True)
+        
 	def save(self, *args, **kwargs):
-		if not self.retailer_barcode and self.is_retailer:
+                
+		super().save(*args, **kwargs)
+
+		if not self.barcode:
 			try_count = 0
 			while try_count < 10:
 				try:
 					# Generate unique barcode
 					print("RETAILER BARCODE GENERATED")
 					ean = barcode.get_barcode_class('ean13')
-					print(self.user_id)
-					value = '8' + '0' * (11 - len(str(self.user_id))) + str(self.user_id)
+					print("WHAT IS MY STORE ID")
+					print(self.id)
+					value = '8' + '0' * (11 - len(str(self.id))) + str(self.id)
 					checksum = sum(int(digit) * (3 if i % 2 == 0 else 1) for i, digit in enumerate(reversed(value)))
 					value += str((10 - (checksum % 10)) % 10)
 					barcode_value = ean(value, writer=ImageWriter())
-					self.retailer_barcode = barcode_value.get_fullcode()
-					print(value)
-					self.retailer_barcode = value
+					self.barcode = barcode_value.get_fullcode()
+					self.barcode = value
 					super().save(*args, **kwargs)
 					return
 				except IntegrityError:
@@ -92,6 +77,45 @@ class User(AbstractBaseUser, PermissionsMixin):
 		else:
 			super().save(*args, **kwargs)
 
+class User(AbstractBaseUser, PermissionsMixin):
+	
+	class Account(models.IntegerChoices):
+		CUSTOMER = 1
+		RETAIL_STAFF = 2
+		RETAIL_OWNER = 3
+		DIRECTOR = 4
+
+	
+
+	phone_regex = RegexValidator(regex=r'^\0?1?\d{11}$', message="Phone number must have 11 digits.")
+
+	user_id = models.AutoField(primary_key=True)
+	email = models.EmailField(max_length=100, unique=True)
+	first_name = models.CharField(max_length=32)
+	last_name = models.CharField(max_length=32)
+	number = models.CharField(validators=[phone_regex], max_length=11, blank=True)
+	#retailer_barcode = models.CharField(max_length=100, unique=True, null=True, blank=True)
+	#store_address = models.CharField(max_length=100, blank=True, null=True)
+	is_active = models.BooleanField(default=True)
+	# is_staff = models.BooleanField(default=False)
+	#is_retailer = models.BooleanField(default=False)
+
+	account_type = models.SmallIntegerField(
+        choices = Account.choices,
+        default = Account.CUSTOMER
+    )
+	#store the store which the staff works at
+	employed_at = models.ForeignKey(Store, blank=True, null=True, on_delete=models.CASCADE)
+
+	# retailer_id= models.CharField(max_length=8, blank=True)
+	verification_code = models.CharField(max_length=6)
+	is_verified = models.BooleanField(default=False)
+	date_joined = models.DateField(auto_now_add=True)
+	USERNAME_FIELD = 'email'
+	objects = CustomUserManager()
+
+	def __str__(self):
+		return f'{self.first_name} {self.last_name}'
 
 class Test(models.Model):
     text = models.CharField(max_length=100)
@@ -103,7 +127,7 @@ class Product(models.Model):
     quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     expiry = models.DateField()
     barcode = models.CharField(max_length=20)
-    retailer = models.ForeignKey(User, on_delete= models.CASCADE)
+    store = models.ForeignKey(Store, on_delete=models.CASCADE)
 
     def is_expiry_date_past(self):
         if self.expiry < datetime.date.today():
@@ -127,6 +151,7 @@ class Product(models.Model):
         self.full_clean()
         super().save(*args, **kwargs)
 
+<<<<<<< HEAD
 class Transaction(models.Model):
 	transaction_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 	retailer = models.ForeignKey(User, related_name='transactions_as_retailer', on_delete=models.CASCADE)
@@ -172,3 +197,8 @@ class Transaction(models.Model):
 #     adminID = models.PositiveIntegerField()
     
     
+=======
+
+
+  
+>>>>>>> item-loader
