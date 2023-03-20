@@ -35,16 +35,18 @@ export function AuthProvider(props) {
   const { getItem, setItem, removeItem } = useAsyncStorage("USER");
   const [user, setAuth] = useState(undefined);
   const [ userType, setUserType ] = useState(undefined);
-
+  
   React.useEffect(() => {
     getItem().then((json) => {
       //console.log("json", json);
       if (json != null) {
         const parsed = JSON.parse(json);
-
+        
         //removeItem();
+        console.log("parsed is ")
+        console.log(parsed)
         setAuth(parsed);
-        console.log(parsed.user)
+
         // setUserType(parsed.user.is_retailer ? 'retailer' : 'customer')
 
         if (parsed.user.account_type === 1) { // CUSTOMER 
@@ -76,7 +78,7 @@ export function AuthProvider(props) {
           setItem(JSON.stringify(json));
           // setUserType(json.user.is_retailer ? 'retailer' : 'customer')
 
-          console.log(json.user);
+          // console.log("reece st john commey : " + json.user.employed_at_id)
 
           if (json.user.account_type === 1) {
             setUserType('customer');

@@ -4,6 +4,7 @@ import CustomInput from '../../../components/CustomInput.js';
 import { useRouter, useSearchParams } from "expo-router";
 import { Context } from '../../../context/GlobalContext.js';
 import { useForm } from 'react-hook-form';
+import { useAuth } from '../../../context/AuthContext';
 
 
 function assignStaffPage(props) {
@@ -14,7 +15,7 @@ function assignStaffPage(props) {
     const[number, setNumber] = useState('');
     const[store_address, setStoreAddress] = useState('');
     const router = useRouter();
- 
+
     // const[firstName, setFirstName] = useState('');
     // const[lastName, setLastName] = useState('');
     // const[email, setEmail] = useState('');
@@ -23,6 +24,9 @@ function assignStaffPage(props) {
     // const[password, setPassword] = useState('');
     // const[confirmPassword, setConfirmPassword] = useState('');
     const[error, setError] = useState('');
+    const { user } = useAuth();
+
+    console.log(user)
 
     const onRegisterPressed = async data =>  {
         let body = JSON.stringify({
@@ -30,8 +34,7 @@ function assignStaffPage(props) {
             'first_name': data.first_name,
             'last_name': data.last_name,
             'number': number,
-            // 'store_address': store_address,
-            // 'employed_at': // TODO
+            'employed_at_id': 4,
             'password': data.password,
             'account_type': 2,
         })

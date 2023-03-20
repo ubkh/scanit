@@ -46,6 +46,8 @@ class Store(models.Model):
         
 	def save(self, *args, **kwargs):
                 
+		super().save(*args, **kwargs)
+
 		if not self.barcode:
 			try_count = 0
 			while try_count < 10:
@@ -53,8 +55,9 @@ class Store(models.Model):
 					# Generate unique barcode
 					print("RETAILER BARCODE GENERATED")
 					ean = barcode.get_barcode_class('ean13')
-					print(self.user_id)
-					value = '8' + '0' * (11 - len(str(self.user_id))) + str(self.user_id)
+					print("WHAT IS MY STORE ID")
+					print(self.id)
+					value = '8' + '0' * (11 - len(str(self.id))) + str(self.id)
 					checksum = sum(int(digit) * (3 if i % 2 == 0 else 1) for i, digit in enumerate(reversed(value)))
 					value += str((10 - (checksum % 10)) % 10)
 					barcode_value = ean(value, writer=ImageWriter())

@@ -8,6 +8,7 @@ from .serializers import (
     UserPasswordResetSerializer,
     UserConfirmPasswordResetSerializer,
     RetailerUploadItemSerializer,
+    StoreRegistrationSerializer,
     ) 
 
 from rest_framework.views import APIView
@@ -29,6 +30,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest, HttpResponseServerError
 from django.core.exceptions import ValidationError
 
+from .models import Store, User
 
 from .utils import generate_access_token, get_logged_in_user
 import jwt
@@ -36,6 +38,40 @@ import random
 import string
 
 
+# class UserRegistrationAPIView(APIView):
+#     serializer_class = UserRegistrationSerializer
+#     authentication_classes = (TokenAuthentication,)
+#     permission_classes = (AllowAny,)
+
+#     def get(self, request):
+#         content = { 'message': 'Hello!' }
+#         return Response(content)
+
+#     def post(self, request):
+#         serializer = self.serializer_class(data=request.data)
+#         if serializer.is_valid(raise_exception=True):
+#             new_user = serializer.save()
+
+#             store_serializer_class = StoreRegistrationSerializer
+#             store_serializer = self.store_serializer_class(data=request.data)
+#             if store_serializer.is_valid(raise_exception=True):
+#                 new_store = store_serializer.save()
+ 
+#             # email = request.data.get('email', None)
+#             # user_model = get_user_model()
+#             # user = user_model.objects.get(email=email)
+#             # user.store_address=request.data.get('store_address', None)
+#             # user.save()
+#             if new_user:
+#                 access_token = generate_access_token(new_user)
+#                 data = { 'user_id': new_user.user_id }
+#                 response = Response(data, status=status.HTTP_201_CREATED)
+#                 response.set_cookie(key='access_token', value=access_token, httponly=True)
+#                 send_account_verification_code(request)
+#                 return response
+#                 # return redirect(reverse('verify', args=[new_user.user_id]))
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 class UserRegistrationAPIView(APIView):
     serializer_class = UserRegistrationSerializer
     authentication_classes = (TokenAuthentication,)
@@ -50,11 +86,30 @@ class UserRegistrationAPIView(APIView):
         if serializer.is_valid(raise_exception=True):
             new_user = serializer.save()
 
-            # email = request.data.get('email', None)
-            # user_model = get_user_model()
-            # user = user_model.objects.get(email=email)
-            # user.store_address=request.data.get('store_address', None)
-            # user.save()
+            print("user is saved 1")
+            print(request.data)
+            # print(self)
+
+            if new_user.account_type == User.Account.RETAIL_OWNER:
+                store_data = {'address': request.data['store_address'], 'name': request.data['store_name'], 'description': request.data['store_description']}
+                store_serializer = StoreRegistrationSerializer(data=store_data)
+                if store_serializer.is_valid(raise_exception=True):
+                    # print("im inside here now")
+                    new_store = store_serializer.save()
+                    new_user.employed_at = new_store
+                    new_user.save()
+
+            # If account type is RETAIL_OWNER, create a new store instance
+            # if new_user.account_type == User.Account.RETAIL_OWNER:
+            #     store_serializer = StoreRegistrationSerializer(data=request.data)
+            #     print("now here")
+            #     if store_serializer.is_valid(raise_exception=True):
+            #         print("inside here")
+            #         new_store = store_serializer.save()
+            #         # Set employed_at field of new user instance to the new store
+            #         new_user.employed_at = new_store
+            #         new_user.save()
+
             if new_user:
                 access_token = generate_access_token(new_user)
                 data = { 'user_id': new_user.user_id }
@@ -62,7 +117,7 @@ class UserRegistrationAPIView(APIView):
                 response.set_cookie(key='access_token', value=access_token, httponly=True)
                 send_account_verification_code(request)
                 return response
-                # return redirect(reverse('verify', args=[new_user.user_id]))
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class StaffRegistrationAPIView(APIView):
@@ -85,7 +140,7 @@ class StaffRegistrationAPIView(APIView):
     def post(self, request):
         
         print("printing the emp")
-        print(request.data.get('employed_at'))
+        print(request.data)
 
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -96,7 +151,7 @@ class StaffRegistrationAPIView(APIView):
             # user.is_staff=True
             user.account_type=2 # RETAIL STAFF
             user.is_verified=True
-            # user.employed_at=
+            user.employed_at=request.data.get('employed_at')
             # user.retailer_id=request.data.get('retailer_id')
             # user.retailer_id = current_user.retailer_id
             user.save()
@@ -138,6 +193,16 @@ class UserLoginAPIView(APIView):
             user_access_token = generate_access_token(user_instance)
             response = Response()
             response.set_cookie(key='access_token', value=user_access_token, httponly=True)
+            
+            print(user_instance.user_id)
+            print(user_instance.last_name)
+            print(user_instance.employed_at)
+
+            if user_instance.employed_at:
+                employed_at_id = user_instance.employed_at.id
+            else:
+                employed_at_id = None
+
             response.data = {
                 'access_token': user_access_token,
                 'user': {
@@ -147,7 +212,7 @@ class UserLoginAPIView(APIView):
                     'last_name': user_instance.last_name,
                     'number': user_instance.number,
                     'account_type': user_instance.account_type,
-                    'employed_at': user_instance.employed_at,
+                    'employed_at_id': employed_at_id,
 
                     # 'store_address': user_instance.store_address,
                     # 'retailer_barcode': user_instance.retailer_barcode,
