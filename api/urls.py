@@ -9,6 +9,9 @@ from .views import (
     UserPasswordResetView,
 	UserPasswordResetConfirmView,
     RetailerUploadItemAPIView,
+    TransactionByBarcodeList,
+    TransactionByIDList,
+    StoreByBarcodeList,
     retailerAddProduct,
     retailerGetProduct,
 )
@@ -31,4 +34,9 @@ urlpatterns = [
 	
 	# ADMIN (DIRECTOR) URL PATHS
 	path('staff/register/', StaffRegistrationAPIView.as_view()),
+    
+	# CUSTOMER AND RETAILER URL PATHS FOR TRANSACTIONS
+	path('transactions-by-barcode/', TransactionByBarcodeList.as_view(), name='get-transactions-by-barcode'),
+    path('transactions-by-id', TransactionByIDList.as_view(), name='get-transactions-by-id'),
+    path('stores-by-barcode/', StoreByBarcodeList.as_view(), name='get-stores-by-barcode')
 ]

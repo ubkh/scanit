@@ -1,4 +1,4 @@
-from .models import Product
+from .models import Product, Transaction
 from rest_framework import generics
 import json
 from .serializers import (
@@ -9,6 +9,8 @@ from .serializers import (
     UserConfirmPasswordResetSerializer,
     RetailerUploadItemSerializer,
     StoreRegistrationSerializer,
+    TransactionSerializer,
+    StoreSerializer
     ) 
 
 from rest_framework.views import APIView
@@ -394,6 +396,39 @@ def send_account_verification_code(request):
 
             return JsonResponse({'message': 'Verification code sent'})
     return JsonResponse({'error': 'Invalid request'})
+
+
+class TransactionByBarcodeList(generics.ListAPIView):
+    serializer_class = TransactionSerializer
+
+    def get_queryset(self):
+        barcode = self.request.query_params.get('barcode', None)
+        if barcode is not None:
+            return Transaction.objects.filter(store__barcode=barcode)
+        else:
+            return Transaction.objects.all()
+        
+class TransactionByIDList(generics.ListAPIView):
+    serializer_class = TransactionSerializer
+
+    def get_queryset(self):
+        transaction_id = self.request.query_params.get('transaction_id', None)
+        if transaction_id is not None:
+            return Transaction.objects.filter(transaction_id=transaction_id)
+        else:
+            return Transaction.objects.all()
+
+class StoreByBarcodeList(generics.ListAPIView):
+    serializer_class = StoreSerializer
+
+    def get_queryset(self):
+        barcode = self.request.query_params.get('barcode', None)
+        if barcode is not None:
+            return Store.objects.filter(barcode=barcode)
+        else:
+            return Store.objects.all()
+
+
 
 
 class RetailerUploadItemAPIView(APIView):

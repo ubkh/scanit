@@ -42,7 +42,7 @@ class Store(models.Model):
 	id = models.AutoField(primary_key=True)
 	name = models.CharField(max_length=100, blank=False)
 	description = models.CharField(max_length=750, blank=True)
-	barcode = models.CharField(max_length=25, blank=False)
+	barcode = models.CharField(max_length=25, blank=False, unique=True)
 	address = models.CharField(max_length=100, blank=True, null=True)
         
 	def save(self, *args, **kwargs):
@@ -153,7 +153,7 @@ class Product(models.Model):
 
 class Transaction(models.Model):
 	transaction_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-	retailer = models.ForeignKey(User, related_name='transactions_as_retailer', on_delete=models.CASCADE)
+	store = models.ForeignKey(Store, related_name='transactions_as_store', to_field= 'barcode', on_delete=models.CASCADE)
 	# use retailer barcode here when available, to_field='...'
 	customer = models.ForeignKey(User, related_name='transactions_as_customer', on_delete=models.CASCADE)
 	products = models.JSONField(encoder=DjangoJSONEncoder)
