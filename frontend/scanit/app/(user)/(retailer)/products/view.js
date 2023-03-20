@@ -13,11 +13,19 @@ export default function ViewProductData() {
   const [isAlertOpen, setAlertOpen] = useState(false);
   const router = useRouter();
 
-  async function handleSuspend(barcode) {
-    const res = await fetch(
-      `http://${domain}/api/retailer/set-product-suspended/${barcode}/true`,
-      { method: "POST", credentials: "include" }
-    );
+  async function handleSuspend() {
+    const res = await fetch(`http://${domain}/api/retailer/update-product/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        barcode: productData.barcode,
+        expiry: productData.expiry,
+        is_suspended: true,
+      }),
+      credentials: "include",
+    });
     if (res.ok) {
       Alert.alert("Success", "Product was suspended successfully.");
     } else {
@@ -26,18 +34,23 @@ export default function ViewProductData() {
     router.replace("/products");
   }
 
-  async function handleUnsuspend(barcode) {
-    const res = await fetch(
-      `http://${domain}/api/retailer/set-product-suspended/${barcode}/false`,
-      { method: "POST", credentials: "include" }
-    );
+  async function handleUnsuspend() {
+    const res = await fetch(`http://${domain}/api/retailer/update-product/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        barcode: productData.barcode,
+        expiry: productData.expiry,
+        is_suspended: false,
+      }),
+      credentials: "include",
+    });
     if (res.ok) {
-      Alert.alert("Success", "Product was unsuspended successfully.");
+      Alert.alert("Success", "Product was suspended successfully.");
     } else {
-      Alert.alert(
-        "Failed",
-        "Could not unsuspend the product. Please try again."
-      );
+      Alert.alert("Failed", "Could not suspend the product. Please try again.");
     }
     router.replace("/products");
   }
@@ -69,10 +82,7 @@ export default function ViewProductData() {
             <Text color="brand.400">Edit</Text>
           </Button>
           {productData.is_suspended ? (
-            <Button
-              bg="blueGray.600"
-              onPress={() => handleUnsuspend(productData.barcode)}
-            >
+            <Button bg="blueGray.600" onPress={() => handleUnsuspend()}>
               Unsuspend
             </Button>
           ) : (
@@ -89,7 +99,7 @@ export default function ViewProductData() {
         isOpen={isAlertOpen}
         onClose={() => setAlertOpen(false)}
         onSubmit={() => {
-          handleSuspend(productData.barcode);
+          handleSuspend();
           setAlertOpen(false);
         }}
       />

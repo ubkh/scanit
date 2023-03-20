@@ -366,29 +366,6 @@ def retailerGetAllProducts(request):
         return HttpResponseBadRequest()
 
 @csrf_exempt
-def retailerSetProductSuspended(request, barcode, should_suspend):
-    user_token = request.COOKIES.get('access_token')
-    user = get_logged_in_user(user_token)
-    if not user_token or not user or not user.is_retailer:
-        return HttpResponse('Unauthorized', status=401)
-    
-    # check if the url argument is invalid
-    if should_suspend.lower() not in ("true", "false"):
-        return HttpResponseBadRequest()
-
-    queryset = Product.objects.filter(barcode=barcode, retailer=user)
-    if (queryset.count()):
-        product_obj = queryset.first()
-        if (should_suspend == "true"):
-            product_obj.is_suspended = True
-        else:
-            product_obj.is_suspended = False
-        product_obj.save()
-        return HttpResponse(status=200)
-    else:
-        return HttpResponseBadRequest()
-
-@csrf_exempt
 def retailerUpdateProduct(request):
     user_token = request.COOKIES.get('access_token')
     user = get_logged_in_user(user_token)
