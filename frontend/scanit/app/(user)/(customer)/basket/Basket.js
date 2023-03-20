@@ -2,14 +2,19 @@ import { ScrollView, Platform, TouchableOpacity, StyleSheet, Alert } from 'react
 import { View, Container, Text, Heading, Button, StatusBar, Center, Flex, Divider, Spacer, useColorMode } from 'native-base';
 import { useState, useContext, useEffect } from 'react';
 // import { useNavigation, useRoute } from '@react-navigation/native';
-import { Context } from '../../../context/GlobalContext';
+import { Context } from '../../../../context/GlobalContext';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from "expo-router";
 import NumericInput from 'react-native-numeric-input'; // https://github.com/himelbrand/react-native-numeric-input for props and info
+
+
 
 function Basket(props) {
     const { colorMode } = useColorMode();
     const { basketList, setBasketList } = useContext(Context);
     const [basketItems, setBasketItems] = useState(<Text> Your basket is empty </Text>);
+    const router = useRouter();
+
 
     const removeItem = (index) => {
       Alert.alert(
@@ -119,7 +124,7 @@ function Basket(props) {
               </View>
             ))}
             <View style={{width: '90%', alignSelf: "center"}}>
-                <Button shadow={2} bg="brand.400" style={{ marginBottom: 100 }}onPress= {() => console.log("Checkout button")}>
+                <Button shadow={2} bg="brand.400" style={{ marginBottom: 100 }}onPress= {() => router.push("basket/payment")}>
                   <Text style={{fontWeight: "bold", color: "white", fontSize: 20}}>Checkout!</Text>
                 </Button>
               </View>

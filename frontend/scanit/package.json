@@ -30,6 +30,7 @@
     "expo-secure-store": "~12.1.1",
     "expo-splash-screen": "^0.18.1",
     "expo-status-bar": "~1.4.4",
+    "formik": "^2.2.9",
     "lottie-react-native": "5.1.4",
     "native-base": "^3.4.25",
     "react": "18.2.0",
@@ -37,6 +38,7 @@
     "react-hook-form": "^7.43.2",
     "react-native": "0.71.3",
     "react-native-barcode-svg": "^0.0.15",
+    "react-native-currency-input": "^1.1.0",
     "react-native-dotenv": "^3.4.7",
     "react-native-numeric-input": "^1.9.1",
     "react-native-pager-view": "6.1.2",
@@ -44,6 +46,7 @@
     "react-native-screens": "~3.20.0",
     "react-native-svg": "13.4.0",
     "react-native-web": "~0.18.9",
+    "react-redux": "^8.0.5",
     "react-scripts": "4.0.3",
     "react-test-renderer": "^18.2.0"
   },

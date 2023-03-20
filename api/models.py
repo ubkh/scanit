@@ -13,31 +13,31 @@ from barcode.writer import ImageWriter
 
 
 class CustomUserManager(BaseUserManager):
-	def create_user(self, email, password):
-		if not email:
-			raise ValueError('A user email is needed.')
+    def create_user(self, email, password):
+        if not email:
+            raise ValueError('A user email is needed.')
 
-		if not password:
-			raise ValueError('A user password is needed.')
+        if not password:
+            raise ValueError('A user password is needed.')
 
-		email = self.normalize_email(email)
-		user = self.model(email=email)
-		user.set_password(password)
-		user.save()
-		return user
+        email = self.normalize_email(email)
+        user = self.model(email=email)
+        user.set_password(password)
+        user.save()
+        return user
 
-	def create_superuser(self, email, password, username=None):
-		if not email:
-			raise ValueError('A user email is needed.')
+    def create_superuser(self, email, password, username=None):
+        if not email:
+            raise ValueError('A user email is needed.')
 
-		if not password:
-			raise ValueError('A user password is needed.')
+        if not password:
+            raise ValueError('A user password is needed.')
 
-		user = self.create_user(email, password)
-		user.is_superuser = True
-		user.is_staff = True
-		user.save()
-		return user
+        user = self.create_user(email, password)
+        user.is_superuser = True
+        user.is_staff = True
+        user.save()
+        return user
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -73,6 +73,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 					ean = barcode.get_barcode_class('ean13')
 					print(self.user_id)
 					value = '8' + '0' * (11 - len(str(self.user_id))) + str(self.user_id)
+					checksum = sum(int(digit) * (3 if i % 2 == 0 else 1) for i, digit in enumerate(reversed(value)))
+					value += str((10 - (checksum % 10)) % 10)
 					barcode_value = ean(value, writer=ImageWriter())
 					self.retailer_barcode = barcode_value.get_fullcode()
 					print(value)
@@ -95,23 +97,33 @@ class Test(models.Model):
     text = models.CharField(max_length=100)
 
 class Product(models.Model):
-    retailerID = models.PositiveIntegerField() # this should be a foreign key to the retailer account
-    barcodeID = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=750, blank=True)
-    price = models.PositiveIntegerField(validators=[MinValueValidator(0)]) # accepts ints too. max price is 999.99
+    price = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     expiry = models.DateField()
+    barcode = models.CharField(max_length=20)
+    retailer = models.ForeignKey(User, on_delete= models.CASCADE)
 
     def is_expiry_date_past(self):
-        if self.expiry < datetime.date.today(): return True
-        else: return False
+        if self.expiry < datetime.date.today():
+            return True
+        return False
+
+    def is_invalid_barcode(self):
+        if (all(char.isdigit() for char in self.barcode)):
+            return False
+        return True
 
     def clean(self):
         if (self.is_expiry_date_past()):
             raise ValidationError("Expiry date cannot be in the past.")
+        if (self.is_invalid_barcode()):
+            raise ValidationError("Invalid barcode")
 
     def save(self, *args, **kwargs):
+        # even though full_clean() should call clean_fields() before clean(), it does not, and expiry date is not checked if valid
+        self.clean_fields()
         self.full_clean()
         super().save(*args, **kwargs)
 
