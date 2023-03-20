@@ -33,7 +33,7 @@ function RetailerProductForm({ isUpdate = false }) {
       name: productData.name ? productData.name : "",
       description: productData.description ? productData.description : "",
       price: productData.price ? (productData.price / 100).toFixed(2) : "0",
-      quantity: productData.quantity ? productData.quantity : "",
+      quantity: productData.quantity ? productData.quantity.toString() : "",
       expiry: productData.expiry ? productData.expiry : "",
       barcode: productData.barcode ? productData.barcode : "",
     };
@@ -142,6 +142,8 @@ function RetailerProductForm({ isUpdate = false }) {
                 onChangeText={handleChange("name")}
                 onBlur={handleBlur("name")}
                 value={values.name}
+                isReadOnly={!isUpdate && productData.name ? true : false}
+                isDisabled={!isUpdate && productData.name ? true : false}
               />
               <FormControl.ErrorMessage>
                 {touched.name && errors.name}
@@ -156,6 +158,8 @@ function RetailerProductForm({ isUpdate = false }) {
                 onChangeText={handleChange("description")}
                 onBlur={handleBlur("description")}
                 value={values.description}
+                isReadOnly={!isUpdate && productData.description ? true : false}
+                isDisabled={!isUpdate && productData.description ? true : false}
               />
               <FormControl.ErrorMessage>
                 {touched.description && errors.description}
@@ -179,7 +183,11 @@ function RetailerProductForm({ isUpdate = false }) {
                 minValue={0}
                 precision={2}
                 renderTextInput={(textInputProps) => (
-                  <Input {...textInputProps} />
+                  <Input
+                    {...textInputProps}
+                    isReadOnly={!isUpdate && productData.price ? true : false}
+                    isDisabled={!isUpdate && productData.price ? true : false}
+                  />
                 )}
               />
               <FormControl.ErrorMessage>
@@ -237,6 +245,8 @@ function RetailerProductForm({ isUpdate = false }) {
                 onBlur={handleBlur("barcode")}
                 value={values.barcode}
                 maxLength={13}
+                isReadOnly={productData.barcode ? true : false}
+                isDisabled={productData.barcode ? true : false}
               />
               <FormControl.ErrorMessage>
                 {touched.barcode && errors.barcode}

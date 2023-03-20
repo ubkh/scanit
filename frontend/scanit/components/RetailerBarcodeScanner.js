@@ -44,7 +44,7 @@ function RetailerBarcodeScanner() {
           "Not found",
           "The scanned product was not found in the system. Please fill in the product's data manually."
         );
-        setProductData(data);
+        setProductData({ barcode: data });
         router.back();
         router.push("/add-product/form");
       }
