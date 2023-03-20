@@ -7,6 +7,7 @@ import {
   Spinner,
   Divider,
   Box,
+  Text,
 } from "native-base";
 import BarCodeScanStyle from "../../../../styles/BarCodeScanStyle";
 import { useRouter } from "expo-router";
@@ -16,7 +17,9 @@ import ProductListItem from "../../../../components/ProductsListItem";
 
 function Products() {
   const [products, setProducts] = useState([]);
+  const [suspendedProducts, setSuspendedProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showSuspended, setShowSuspended] = useState(false);
 
   const globalContext = useContext(Context);
   const { domain } = globalContext;
@@ -33,6 +36,24 @@ function Products() {
       setIsLoading(false);
     })();
   }, []);
+
+  function handleShowSuspended() {
+    setIsLoading(true);
+    const susProducts = products.filter((item) => item.is_suspended === true);
+    setSuspendedProducts(susProducts);
+    setIsLoading(false);
+    setShowSuspended(true);
+  }
+
+  function getSuspendedProducts() {
+    if (suspendedProducts.length) {
+      return suspendedProducts.map((item) => (
+        <ProductListItem item={item} key={item.id} />
+      ));
+    } else {
+      return <Text>There are no suspended products</Text>;
+    }
+  }
 
   const router = useRouter();
   // const isOnWeb = Platform.OS === "web";
@@ -54,7 +75,12 @@ function Products() {
           Products
         </Heading>
         <HStack alignItems="center">
-          <Button variant="link" px="0" size="lg">
+          <Button
+            variant="link"
+            px="0"
+            size="lg"
+            onPress={() => setShowSuspended(false)}
+          >
             All products
           </Button>
           <Divider
@@ -64,7 +90,12 @@ function Products() {
             mx="2"
             orientation="vertical"
           />
-          <Button variant="link" px="0" size="lg">
+          <Button
+            variant="link"
+            px="0"
+            size="lg"
+            onPress={() => handleShowSuspended()}
+          >
             Suspended products
           </Button>
         </HStack>
@@ -72,9 +103,11 @@ function Products() {
           <Spinner size="lg" color="blue.400" />
         ) : (
           <Box>
-            {products.map((item) => (
-              <ProductListItem item={item} key={item.id} />
-            ))}
+            {showSuspended
+              ? getSuspendedProducts()
+              : products.map((item) => (
+                  <ProductListItem item={item} key={item.id} />
+                ))}
           </Box>
         )}
       </ScrollView>
