@@ -151,7 +151,6 @@ class Product(models.Model):
         self.full_clean()
         super().save(*args, **kwargs)
 
-<<<<<<< HEAD
 class Transaction(models.Model):
 	transaction_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 	retailer = models.ForeignKey(User, related_name='transactions_as_retailer', on_delete=models.CASCADE)
@@ -159,46 +158,8 @@ class Transaction(models.Model):
 	customer = models.ForeignKey(User, related_name='transactions_as_customer', on_delete=models.CASCADE)
 	products = models.JSONField(encoder=DjangoJSONEncoder)
 	date = models.DateField(auto_now_add=True)
-
-# class UserAccount(User):
-    
-#     def __init__(self):
-#         super(self)
-    
-#     name = models.CharField()
-#     # email = models.EmailField()
-#     # password = models.CharField()
-#     dob = models.DateField()
-
-# class RetailerAccount(UserAccount):
-#     barcode = models.CharField(max_length=100, unique=True, null=True, blank=True)
-#     shop_address = models.CharField()
-#     payment_method = models.CharField()
-#     balance = models.DecimalField()
-
-#     # UNCOMMENT WHEN READY TO IMPLEMENT RETAILER ACCOUNTS
-#     def save(self, *args, **kwargs):
-#         if not self.barcode:
-#             # Generate unique barcode
-#             ean = barcode.get_barcode_class('ean13')
-#             value = "8" + "0" * (12 - len(str(self.id))) + str(self.id)
-#             self.barcode = ean(value, writer=ImageWriter()).get_fullcode()
-
-#         super().save(*args, **kwargs)
-
-
-    
-# class CustomerAccount(UserAccount):
-#     customerID = models.PositiveIntegerField()
-#     personal_address = models.CharField()
-#     payment_method = models.CharField()
-
-# class AdminAccount(UserAccount):
-#     adminID = models.PositiveIntegerField()
     
     
-=======
 
 
   
->>>>>>> item-loader

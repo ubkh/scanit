@@ -1,10 +1,8 @@
 # Translates models into JSON objects
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-<<<<<<< HEAD
-from .models import Transaction
-=======
 from .models import Product, Store, User
+from .models import Transaction
 
 class StoreRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -44,7 +42,6 @@ class StoreRegistrationSerializer(serializers.ModelSerializer):
                                 )
         store.save()
         return store
->>>>>>> item-loader
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(max_length=100, min_length=8, style={'input_type': 'password'})
@@ -109,7 +106,6 @@ class UserConfirmPasswordResetSerializer(serializers.Serializer):
             print("banana bread")
             raise serializers.ValidationError("Passwords do not match.")
         return data
-<<<<<<< HEAD
 
 class UserSerializer(serializers.Serializer):
     class Meta:
@@ -125,7 +121,6 @@ class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         fields = ['id', 'retailer', 'customer', 'products', 'date']
-=======
     
 class RetailerUploadItemSerializer(serializers.ModelSerializer):
 
@@ -154,4 +149,3 @@ class RetailerUploadItemSerializer(serializers.ModelSerializer):
     #     product_instance = self.Meta.model(retailerID=validated_data.get('email'), first_name=validated_data.get('first_name'), last_name=validated_data.get('last_name'), number=validated_data.get('number'), store_address=validated_data.get('store_address'))
     #     product_instance.save()
     #     return product_instance
->>>>>>> item-loader
