@@ -26,6 +26,17 @@ function RetailerProductForm({ isUpdate = false }) {
     formState: { errors, isSubmitting },
   } = useForm({ defaultValues: getInitialValues(), mode: "onBlur" });
 
+  function getProductData() {
+    return {
+      name: productData.name,
+      description: productData.description,
+      price: productData.price,
+      quantity: productData.quantity,
+      expiry: productData.expiry,
+      barcode: productData.barcode,
+    };
+  }
+
   function getInitialValues() {
     const vals = {
       name: productData.name ? productData.name : "",
@@ -72,6 +83,11 @@ function RetailerProductForm({ isUpdate = false }) {
 
   async function updateSubmitHandler(values) {
     const jsonObj = dataToJSON(values);
+    // check if values have not changed
+    // properties order is important in JSON comparison
+    if (JSON.stringify(getProductData()) === jsonObj) {
+      return;
+    }
     const res = await fetch(`http://${domain}/api/retailer/update-product/`, {
       method: "POST",
       headers: {
