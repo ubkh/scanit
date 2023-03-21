@@ -545,8 +545,6 @@ def retailerGetAllProducts(request):
         return JsonResponse(data, safe=False)
     else:
         return HttpResponseBadRequest()
-<<<<<<< HEAD
-=======
 
 @csrf_exempt
 def retailerUpdateProduct(request):
@@ -570,4 +568,3 @@ def retailerUpdateProduct(request):
         return HttpResponseBadRequest()
     except:
         return HttpResponseServerError()
->>>>>>> main

@@ -9,20 +9,11 @@ import { useAuth } from "../../../context/AuthContext";
 import ProductDataProvider from "../../../context/RetailerProductContext";
 
 const links = [
-<<<<<<< HEAD
-    { label: 'Home', url: '/(retailer)/home' },
-    { label: 'Something Else', url: '/other' },
-    { label: 'Add Item', url: '/addItem' },
-    { label: 'Assign Staff', url: '/assignStaffPage' },
-    { label: "Add a product", url: "/(retailer)/add-product" },
-    { label: "Account", url: "/Account" },
-=======
   { label: "Home", url: "/(retailer)/home" },
   { label: "Add a product", url: "/(retailer)/add-product" },
   { label: "Products", url: "/products" },
   { label: "Something Else", url: "/other" },
   { label: "Account", url: "/Account" },
->>>>>>> main
 ];
 
 export default function RetailerLayout() {
