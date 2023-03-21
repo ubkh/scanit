@@ -102,10 +102,11 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
       Alert.alert('Invalid CVV', 'Please enter a valid 3-digit CVV');
     } 
     else {
+      console.log('Payment successful');
       //console.warn('Card details submitted');
       router.push("/basket/Basket");
       router.push("/home")
-      //console.warn(basketList);
+      console.warn(basketList);
       setPreviousPurchases([
 
         {date: getFullDate(), time: getFullTime(), location: retailerBarcodeData , items: basketList },
@@ -179,6 +180,7 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
       </TouchableOpacity>
     </View>
     </View>
+
   );
 }
 
@@ -228,6 +230,8 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
 //     fontSize: 16,
 //   },
 // });
+
+CardDetails.displayName = 'CardDetails';
 
 export default CardDetails;
 
