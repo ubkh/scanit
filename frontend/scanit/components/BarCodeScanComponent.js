@@ -214,10 +214,38 @@ function BarCodeScanComponent(props){
         setText(data)
         console.log('Type: ' + type + '\nData: ' + data)
         if (!isRetailerScanned) {
-          globalContext.setRetailerScanned(true)
-          console.log("Retailer Barcode Scanned!")
-          globalContext.setRetailerBarcodeData(data)
-          globalContext.setRetailerBarcodeType(type)
+          const resultList =  fetch(`http://${globalContext.domain}/api/stores-by-barcode/?barcode=${data}`, {
+              method: "GET",
+            })
+              .then((response) => response.json())
+              .then((json) => {
+                console.log(json);
+                return json;
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+          if (resultList.length === 0) { // no matching barcode
+            Alert.alert(
+              'Barcode not recognised',
+              'Please try again',
+              [
+                {
+                  text: 'Ok',
+                  onPress: () => {
+                    console.log("User acknowledged warning")
+                  },
+                  style: 'default',
+                },
+              ],
+            )
+          }
+          else { // store barcode found
+            globalContext.setRetailerScanned(true)
+            console.log("Retailer Barcode Scanned!")
+            globalContext.setRetailerBarcodeData(resultList)
+            globalContext.setRetailerBarcodeType(type)
+          }
         }
         else {
           let foundObject = null

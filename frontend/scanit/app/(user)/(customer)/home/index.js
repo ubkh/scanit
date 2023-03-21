@@ -116,7 +116,7 @@ function Home() {
               <Text color="white" style={{ fontFamily: "Rubik-Bold" }}>
                 Shopping with
               </Text>
-              <Text color="white">Retailer: {retailerBarcodeData}</Text>
+              <Text color="white">Retailer: {retailerBarcodeData[0].name}</Text>
               <Text>&nbsp;</Text>
               <Button
                 bg="brand.400"

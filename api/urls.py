@@ -12,6 +12,8 @@ from .views import (
     TransactionByBarcodeList,
     TransactionByIDList,
     StoreByBarcodeList,
+    RetailerList,
+    ProductByBarcodeAndStoreList,
     retailerAddProduct,
     retailerGetProduct,
     retailerGetAllProducts,
@@ -41,6 +43,10 @@ urlpatterns = [
 	path('transactions-by-barcode/', TransactionByBarcodeList.as_view(), name='get-transactions-by-barcode'),
     path('transactions-by-id/', TransactionByIDList.as_view(), name='get-transactions-by-id'),
     path('stores-by-barcode/', StoreByBarcodeList.as_view(), name='get-stores-by-barcode'),
+    
+	path('check-product/', ProductByBarcodeAndStoreList.as_view(), name='check-product'),
+    
+	path('retailer/all/', RetailerList.as_view(), name='get-all-retailers'),
     path('retailer/get-products/', retailerGetAllProducts, name='retailer-get-all-products'),
     path('retailer/update-product/', retailerUpdateProduct, name='update-product')
 ]

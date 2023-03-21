@@ -107,7 +107,7 @@ class UserConfirmPasswordResetSerializer(serializers.Serializer):
             raise serializers.ValidationError("Passwords do not match.")
         return data
 
-class CustomerSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ['user_id', 'email', 'first_name', 'last_name', 'number', 'is_active',
@@ -119,19 +119,27 @@ class StoreSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ProductSerializer(serializers.ModelSerializer):
-    store = StoreSerializer()
+    retailer = UserSerializer()
 
     class Meta:
         model = Product
         fields = '__all__'
 
+class RetailerSerializer(serializers.ModelSerializer):
+    employed_at = StoreSerializer()
+
+    class Meta:
+        model = get_user_model()
+        fields = ['user_id', 'email', 'first_name', 'last_name', 'number', 'is_active',
+                  'account_type', 'employed_at', 'verification_code', 'is_verified', 'date_joined']
+
 class TransactionSerializer(serializers.ModelSerializer):
-    store = StoreSerializer()
-    customer = CustomerSerializer()
+    retailer = RetailerSerializer()
+    customer = UserSerializer()
 
     class Meta:
         model = Transaction
-        fields = ['transaction_id', 'store', 'customer', 'products', 'date']
+        fields = ['transaction_id', 'retailer', 'customer', 'products', 'date']
     
 class RetailerUploadItemSerializer(serializers.ModelSerializer):
 

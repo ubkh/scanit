@@ -156,8 +156,7 @@ class Product(models.Model):
 
 class Transaction(models.Model):
 	transaction_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-	store = models.ForeignKey(Store, related_name='transactions_as_store', to_field= 'barcode', on_delete=models.CASCADE)
-	# use retailer barcode here when available, to_field='...'
+	retailer = models.ForeignKey(User, related_name='transactions_as_store', on_delete=models.CASCADE)
 	customer = models.ForeignKey(User, related_name='transactions_as_customer', on_delete=models.CASCADE)
 	products = models.JSONField(encoder=DjangoJSONEncoder)
 	date = models.DateField(auto_now_add=True)

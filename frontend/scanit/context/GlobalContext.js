@@ -11,7 +11,7 @@ export const Context = createContext();
 export default function ContextProvider(props) {
   const [domain, setDomain] = useState(DJANGO);
 
-  const [retailerBarcodeData, setRetailerBarcodeData] = useState("");
+  const [retailerBarcodeData, setRetailerBarcodeData] = useState([]);
   const [retailerBarcodeType, setRetailerBarcodeType] = useState("");
   const [basketList, setBasketList] = useState([]);
   const [isRetailerScanned, setRetailerScanned] = useState(false);

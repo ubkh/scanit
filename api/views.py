@@ -7,9 +7,11 @@ from .serializers import (
     UserVerificationSerializer,
     UserPasswordResetSerializer,
     UserConfirmPasswordResetSerializer,
+    UserSerializer,
     RetailerUploadItemSerializer,
     StoreRegistrationSerializer,
     TransactionSerializer,
+    ProductSerializer,
     StoreSerializer
     ) 
 
@@ -398,6 +400,7 @@ def send_account_verification_code(request):
     return JsonResponse({'error': 'Invalid request'})
 
 
+# FILTER TRANSACTIONS BY BARCODE OF THE STORE
 class TransactionByBarcodeList(generics.ListAPIView):
     serializer_class = TransactionSerializer
     permission_classes = [AllowAny]
@@ -405,10 +408,12 @@ class TransactionByBarcodeList(generics.ListAPIView):
     def get_queryset(self):
         barcode = self.request.query_params.get('barcode', None)
         if barcode is not None:
-            return Transaction.objects.filter(store__barcode=barcode)
+            return Transaction.objects.filter(retailer__employed_at__barcode=barcode)
         else:
             return Transaction.objects.all()
         
+
+# FIND A TRANSACTION WITH A SPECIFIC ID  
 class TransactionByIDList(generics.ListAPIView):
     serializer_class = TransactionSerializer
     permission_classes = [AllowAny]
@@ -420,6 +425,7 @@ class TransactionByIDList(generics.ListAPIView):
         else:
             return Transaction.objects.all()
 
+# USE THIS TO CHECK IF THE STORE BARCODE WE SCAN IS VALID
 class StoreByBarcodeList(generics.ListAPIView):
     serializer_class = StoreSerializer
     permission_classes = [AllowAny]
@@ -430,6 +436,28 @@ class StoreByBarcodeList(generics.ListAPIView):
             return Store.objects.filter(barcode=barcode)
         else:
             return Store.objects.all()
+
+class RetailerList(generics.ListAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        retailer_types = [User.Account.RETAIL_STAFF, User.Account.RETAIL_OWNER]
+        return User.objects.filter(account_type__in=retailer_types)
+
+# USE THIS FOR WHEN WE SCAN A PRODUCT BARCODE TO CHECK IF THE PRODUCT IS IN THAT RETAILER
+class ProductByBarcodeAndStoreList(generics.ListAPIView):
+    serializer_class = ProductSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        barcode = self.request.query_params.get('barcode', None)
+        store_barcode = self.request.query_params.get('store_barcode', None)
+
+        if barcode is not None and store_barcode is not None:
+            return Product.objects.filter(barcode=barcode, retailer__employed_at__barcode=store_barcode)
+        else:
+            return Product.objects.none()
 
 
 
