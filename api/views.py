@@ -492,7 +492,7 @@ class RetailerUploadItemAPIView(APIView):
 def retailerAddProduct(request):
     user_token = request.COOKIES.get('access_token')
     user = get_logged_in_user(user_token)
-    if not user_token or not user:
+    if not user_token or not user or not user.is_retailer:
         return HttpResponse('Unauthorized', status=401)
         # raise AuthenticationFailed('Unauthenticated user.')
 
@@ -503,9 +503,12 @@ def retailerAddProduct(request):
         if (product_query.count()):
             product_obj = product_query.first()
             updated_quantity = product_obj.quantity + product_data['quantity']
-            product_data['quantity'] = updated_quantity
-            for (key, value) in product_data.items():
-                setattr(product_obj, key, value)
+            product_obj.quantity = updated_quantity
+            
+            # in case the retailer changed the details of the product while updating the quantity
+            # product_data['quantity'] = updated_quantity
+            # for (key, value) in product_data.items():
+            #     setattr(product_obj, key, value)
             product_obj.save()
         else:
             Product.objects.create(**product_data, retailer = user)
@@ -513,20 +516,58 @@ def retailerAddProduct(request):
     except ValidationError:
         return HttpResponseBadRequest()
     except:
-        print("\n reached here")
         return HttpResponseServerError()
     
 @csrf_exempt
 def retailerGetProduct(request, barcode):
     user_token = request.COOKIES.get('access_token')
     user = get_logged_in_user(user_token)
-    if not user_token or not user:
-        # raise AuthenticationFailed('Unauthenticated user.')
+    if not user_token or not user or not user.is_retailer:
         return HttpResponse('Unauthorized', status=401)
 
     queryset = Product.objects.filter(barcode=barcode, retailer=user)
     if (queryset.count()):
-        item = queryset.first()
-        return JsonResponse({'name': item.name, 'description': item.description, 'price': item.price, 'barcode': item.barcode, 'expiry': item.expiry, 'quantity': item.quantity})
+        product_obj = queryset.first()
+        return JsonResponse({'name': product_obj.name, 'description': product_obj.description, 'price': product_obj.price, 'barcode': product_obj.barcode})
     else:
         return HttpResponseBadRequest()
+
+@csrf_exempt
+def retailerGetAllProducts(request):
+    user_token = request.COOKIES.get('access_token')
+    user = get_logged_in_user(user_token)
+    if not user_token or not user or not user.is_retailer:
+        return HttpResponse('Unauthorized', status=401)
+    
+    queryset = Product.objects.filter(retailer=user)
+    if (queryset.count()):
+        data = list(queryset.values())
+        return JsonResponse(data, safe=False)
+    else:
+        return HttpResponseBadRequest()
+<<<<<<< HEAD
+=======
+
+@csrf_exempt
+def retailerUpdateProduct(request):
+    user_token = request.COOKIES.get('access_token')
+    user = get_logged_in_user(user_token)
+    if not user_token or not user or not user.is_retailer:
+        return HttpResponse('Unauthorized', status=401)
+    
+    try:
+        product_data = json.loads(request.body)
+        product_query = Product.objects.filter(barcode=product_data['barcode'], expiry=product_data['expiry'], retailer=user)
+        if (product_query.count()):
+            product_obj = product_query.first()
+            for (key, value) in product_data.items():
+                setattr(product_obj, key, value)
+            product_obj.save()
+            return HttpResponse(status=200)
+        else:
+            return HttpResponseBadRequest()
+    except ValidationError:
+        return HttpResponseBadRequest()
+    except:
+        return HttpResponseServerError()
+>>>>>>> main

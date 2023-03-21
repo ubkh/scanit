@@ -127,7 +127,14 @@ class Product(models.Model):
     quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     expiry = models.DateField()
     barcode = models.CharField(max_length=20)
+<<<<<<< HEAD
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
+=======
+    retailer = models.ForeignKey(User, on_delete= models.CASCADE)
+    is_suspended = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+>>>>>>> main
 
     def is_expiry_date_past(self):
         if self.expiry < datetime.date.today():

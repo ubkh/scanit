@@ -14,6 +14,8 @@ from .views import (
     StoreByBarcodeList,
     retailerAddProduct,
     retailerGetProduct,
+    retailerGetAllProducts,
+    retailerUpdateProduct
 )
 
 urlpatterns = [
@@ -31,6 +33,7 @@ urlpatterns = [
 	# path('retailer/dashboard'),
 	path('retailer/add-product/', retailerAddProduct, name='retailer-add-product'),
     path('retailer/get-product/<str:barcode>', retailerGetProduct, name='retailer-get-product'),
+<<<<<<< HEAD
 	
 	# ADMIN (DIRECTOR) URL PATHS
 	path('staff/register/', StaffRegistrationAPIView.as_view()),
@@ -39,4 +42,8 @@ urlpatterns = [
 	path('transactions-by-barcode/', TransactionByBarcodeList.as_view(), name='get-transactions-by-barcode'),
     path('transactions-by-id/', TransactionByIDList.as_view(), name='get-transactions-by-id'),
     path('stores-by-barcode/', StoreByBarcodeList.as_view(), name='get-stores-by-barcode')
+=======
+    path('retailer/get-products/', retailerGetAllProducts, name='retailer-get-all-products'),
+    path('retailer/update-product/', retailerUpdateProduct, name='update-product')
+>>>>>>> main
 ]

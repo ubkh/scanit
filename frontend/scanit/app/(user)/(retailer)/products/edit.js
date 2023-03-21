@@ -1,15 +1,15 @@
-import RetailerBarcodeScanner from "../../../../components/RetailerBarcodeScanner";
+import RetailerProductForm from "../../../../components/RetailerProductForm";
 import { View } from "native-base";
 import BarCodeScanStyle from "../../../../styles/BarCodeScanStyle";
 
-export default function Scanner() {
+export default function Edit() {
   return (
     <View
       style={BarCodeScanStyle.container}
       _dark={{ bg: "black" }}
       _light={{ bg: "white" }}
     >
-      <RetailerBarcodeScanner />
+      <RetailerProductForm isUpdate={true} />
     </View>
   );
 }
