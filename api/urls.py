@@ -26,7 +26,8 @@ urlpatterns = [
 	
 	# ADMIN (RETAILER) URL PATHS
 	# path('retailer/dashboard'),
-	path('retailer/add-product/', retailerAddProduct, name='retailer-add-product'),
+	# path('retailer/add-product/', retailerAddProduct, name='retailer-add-product'),
+	path('retailer/add-product/', RetailerUploadItemAPIView.as_view(),name='retailer-add-product'),
     path('retailer/get-product/<str:barcode>', retailerGetProduct, name='retailer-get-product'),
 	
 	# ADMIN (DIRECTOR) URL PATHS

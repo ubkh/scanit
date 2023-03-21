@@ -3,6 +3,10 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from .models import Product, Store, User
 
+import datetime
+
+
+
 class StoreRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Store
@@ -17,9 +21,9 @@ class StoreRegistrationSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         # store = Store.objects.create(**validated_data)
-        print("print a string as well")
-        print(self)
-        print(validated_data)
+        # print("print a string as well")
+        # print(self)
+        # print(validated_data)
         store_address = validated_data['address']
         store_name = validated_data['name']
         store_description = validated_data['description']
@@ -47,16 +51,17 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = get_user_model()
-        fields = ['email', 'first_name', 'last_name', 'number', 'password', 'account_type', 'employed_at_id']
+        # fields = ['email', 'first_name', 'last_name', 'number', 'password', 'account_type', 'employed_at_id']
+        fields = ['email', 'first_name', 'last_name', 'number', 'password', 'account_type']
 
     def create(self, validated_data):
         user_password = validated_data.get('password', None)
         account_type = validated_data.get('account_type')
-        employed_at_id = validated_data.get('employed_at_id', None)
-        employed_at = None
+        # employed_at_id = validated_data.get('employed_at_id', None)
+        # employed_at = None
 
-        if account_type == User.Account.RETAIL_STAFF:
-            employed_at = Store.objects.get(id=employed_at_id)
+        # if account_type == User.Account.RETAIL_STAFF:
+        #     employed_at = Store.objects.get(id=employed_at_id)
 
         # if account_type == User.Account.RETAIL_OWNER:
         #     print("im here abc")
@@ -73,7 +78,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
                                     last_name=validated_data.get('last_name'), 
                                     number=validated_data.get('number'), 
                                     account_type=account_type,
-                                    employed_at=employed_at
+                                    # employed_at=employed_at
                                     )
         db_instance.set_password(user_password)
         db_instance.save()
@@ -110,23 +115,97 @@ class RetailerUploadItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['retailerID', 'barcodeID', 'name', 'description', 'price', 'quantity', 'expiry']
+        fields = ['barcode', 'name', 'description', 'price', 'quantity', 'expiry', 'store']
 
-    # def validate_retailerID(self, value):
-    #     if value 
     
-    # def validate_barcodeID(self,value):
+    def validate_barcode(self,value):
 
-    # def validate_name(self,value):   
-
-    # def validate_description(self,value):   
-
-    # def validate_price(self,value):    
-
-    # def validate_quantity(self,value):    
-
-    # def validate_expiry(self,value):    
+        if value == "":
+            raise serializers.ValidationError("Product barcode is invalid.")
+        return value
+    
+    
+    def validate_name(self,value):   
         
+        if value == "":
+            raise serializers.ValidationError("Name cannot be empty.")
+        return value
+        
+    def validate_description(self,value):
+        if value == "":
+            raise serializers.ValidationError("Description cannot be empty.")
+        return value
+
+    def validate_price(self,value):
+
+        try:
+            price = float(value)
+
+            if (price < 0):
+                raise serializers.ValidationError("Price cannot be negative.")
+            
+            return value
+        
+        except ValueError as e:
+            raise serializers.ValidationError("Invalid price entered.")    
+        
+        # if not (isinstance(value, float) or isinstance(value,int)):
+        #     raise serializers.ValidationError("Invalid price entered.")
+
+        # if value < 0:
+        #     raise serializers.ValidationError("Price cannot be negative.")
+        # return value
+
+    def validate_quantity(self,value):
+
+        if not (isinstance(value, int)):
+            raise serializers.ValidationError("Quantity must be an integer.")
+        
+        if value < 0:
+            raise serializers.ValidationError("Quantity cannot be less than zero.")
+        return value
+
+    def validate_expiry(self,value):    
+
+        if not isinstance(value, datetime.date):
+            raise serializers.ValidationError("Invalid date entered.")
+        
+        return value
+    
+    def validate_store(self, value):
+
+        print("id is ", value)
+        # print("store is ", Store.objects.filter(id=value))
+        # stores = Store.objects.get(id = value)
+
+        # if stores.count() == 0:
+        #     raise serializers.ValidationError("Store does not exist.")
+        
+        # if isinstance(value, Store):
+        #     raise serializers.ValidationError("Store does not exist.")
+        
+        return value
+
+
+    def create(self,validated_data):
+
+        print("store id ting is ", validated_data)
+
+        # store = Store.objects.get(id=validated_data.get('store_id'))
+        product = self.Meta.model(
+                                barcode=validated_data.get('barcode'),
+                                name=validated_data.get('name'),
+                                description=validated_data.get('description'),
+                                price=validated_data.get('price'),
+                                quantity=validated_data.get('quantity'),
+                                expiry=validated_data.get('expiry'),
+                                store=validated_data.get('store'),
+                                )
+
+        product.save()
+        return product
+
+
 
     # def create(self, validated_data):
     #     user_password = validated_data.get('password', None)

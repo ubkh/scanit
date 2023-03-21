@@ -43,8 +43,8 @@ export function AuthProvider(props) {
         const parsed = JSON.parse(json);
         
         //removeItem();
-        console.log("parsed is ")
-        console.log(parsed)
+        // console.log("parsed is ")
+        // console.log(parsed)
         setAuth(parsed);
 
         // setUserType(parsed.user.is_retailer ? 'retailer' : 'customer')

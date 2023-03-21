@@ -151,7 +151,11 @@ class StaffRegistrationAPIView(APIView):
             # user.is_staff=True
             user.account_type=2 # RETAIL STAFF
             user.is_verified=True
-            user.employed_at=request.data.get('employed_at')
+            print("here")
+            print(request.data.get('employed_at_id'))
+            print(Store.objects.get(id=request.data.get('employed_at_id')))
+            user.employed_at=Store.objects.get(id=request.data.get('employed_at_id'))
+            print("now here")
             # user.retailer_id=request.data.get('retailer_id')
             # user.retailer_id = current_user.retailer_id
             user.save()
@@ -194,10 +198,6 @@ class UserLoginAPIView(APIView):
             response = Response()
             response.set_cookie(key='access_token', value=user_access_token, httponly=True)
             
-            print(user_instance.user_id)
-            print(user_instance.last_name)
-            print(user_instance.employed_at)
-
             if user_instance.employed_at:
                 employed_at_id = user_instance.employed_at.id
             else:
@@ -401,18 +401,43 @@ class RetailerUploadItemAPIView(APIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (AllowAny,)
 
-    # def getretailid(self):
-    #     retailid = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
-    #     if User.objects.filter(retailer_id = retailid).exists():
-    #         getretailid()
-    #     else:
-    #         return retailid
         
 
     def get(self, request):
         content = { 'message': 'Hello!' }
         return Response(content)
+    
 
+    def post(self, request):
+        # user_token = request.COOKIES.get('access_token')
+        # user = get_logged_in_user(user_token)
+
+        # if not user_token or not user:
+            # return HttpResponse('hjkdashjkdashdhasjk', status=401)
+
+        # if user.account_type != 3 or user.account_type != 4:
+        #     return HttpResponse('aaaaaaaaaaa', status=401)
+
+
+
+        serializer = self.serializer_class(data=request.data)
+        
+        if serializer.is_valid():
+            product_data = request.data
+            product_query = Product.objects.filter(barcode=product_data['barcode'], store=Store.objects.get(id=product_data['store']),)
+
+            if (product_query.count()):
+                product_obj = product_query.first()
+                updated_quantity = product_obj.quantity + product_data['quantity']
+                product_data['quantity'] = updated_quantity
+
+                product_obj.save()
+            else:
+                serializer.save()
+            return HttpResponse(status=200)
+        
+        print(serializer.errors)
+        return HttpResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     # def post(self, request):
     #     user_token = request.COOKIES.get('access_token')

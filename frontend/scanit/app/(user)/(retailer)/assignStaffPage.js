@@ -34,7 +34,7 @@ function assignStaffPage(props) {
             'first_name': data.first_name,
             'last_name': data.last_name,
             'number': number,
-            'employed_at_id': 4,
+            'employed_at_id': user.user.employed_at_id,
             'password': data.password,
             'account_type': 2,
         })
@@ -93,6 +93,12 @@ function assignStaffPage(props) {
                     required: 'Email is required',
                 }} 
             />
+
+
+
+
+
+            
       
             <CustomInput 
                 name = 'password'

@@ -122,7 +122,7 @@ class Test(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=750, blank=True)
-    price = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    price = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(0)])
     quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     expiry = models.DateField()
     barcode = models.CharField(max_length=20)
