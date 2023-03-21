@@ -115,36 +115,41 @@ class GetProductViewTestCase(TestCase):
         self.assertEqual(res.status_code, 400)
 
 class UpdateProductViewTestCase(TestCase):
-    pass
-    # fixtures = [
-    #     "api/tests/fixtures/default_retailer.json", 
-    #     "api/tests/fixtures/default_product.json",
-    # ]
+    fixtures = [
+        "api/tests/fixtures/default_retailer.json", 
+        "api/tests/fixtures/default_product.json",
+    ]
 
-    # def setUp(self):
-    #     self.barcode = "5050404"    # default_product fixture barcode
-    #     self.retailer = get_user_model().objects.get(user_id = 1)
-    #     self.should_suspend = "true"
+    def setUp(self):
+        self.retailer = get_user_model().objects.get(user_id = 1)
+        self.productQuery = Product.objects.filter()
+        self.productVals = self.productQuery.values('name', 'description', 'price', 'quantity', 'expiry', 'barcode', 'is_suspended')[0]
 
-    # def send_req(self):
-    #     return self.client.post(reverse('set-suspended',  args=[self.barcode, self.should_suspend]))
+    def send_req(self):
+        self.productVals["expiry"] = "2023-10-12"   # just a random date bc Date object from field does not get serialized
+        return self.client.post(reverse('update-product'), json.dumps(self.productVals), content_type="application/json; charset=utf-8")
 
-    # def log_in(self):
-    #     return self.client.post(reverse("user_login"), {"email": self.retailer.email, "password": UNHASHED_RETAILER_PASS})
+    def log_in(self):
+        return self.client.post(reverse("user_login"), {"email": self.retailer.email, "password": UNHASHED_RETAILER_PASS})
 
-    # def test_set_suspended_true(self):
-    #     self.log_in()
-    #     res = self.send_req()
-    #     self.assertEqual(res.status_code, 200)
+    def test_set_suspended_true(self):
+        self.log_in()
+        self.productVals["is_suspended"] = True
+        res = self.send_req()
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(self.productQuery.first().is_suspended, True)
 
-    # def test_set_suspended_false(self):
-    #     self.log_in()
-    #     self.should_suspend = "false"
-    #     res = self.send_req()
-    #     self.assertEqual(res.status_code, 200)
+    def test_update_quantity(self):
+        self.log_in()
+        self.productVals["quantity"] = 2
+        res = self.send_req()
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(self.productQuery.first().quantity, 2)
 
-    # def test_invalid_arg_set_suspended(self):
-    #     self.log_in()
-    #     self.should_suspend = "invalid"
-    #     res = self.send_req()
-    #     self.assertEqual(res.status_code, 400)
+    def test_not_allowed_update_barcode(self):
+        self.log_in()
+        self.productVals["barcode"] = "00000001"
+        res = self.send_req()
+        self.assertEqual(res.status_code, 400)
+
+        
