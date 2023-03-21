@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { HStack, Text, VStack, View, Button, Box } from "native-base";
+import { Text, VStack, View, Button, Box } from "native-base";
 import { useContext, useState } from "react";
 import { ProductDataContext } from "../../../../context/RetailerProductContext";
 import { Context } from "../../../../context/GlobalContext";
@@ -13,7 +13,7 @@ export default function ViewProductData() {
   const [isAlertOpen, setAlertOpen] = useState(false);
   const router = useRouter();
 
-  async function handleSuspend() {
+  async function handleSuspend(shouldSuspend) {
     const res = await fetch(`http://${domain}/api/retailer/update-product/`, {
       method: "POST",
       headers: {
@@ -22,35 +22,28 @@ export default function ViewProductData() {
       body: JSON.stringify({
         barcode: productData.barcode,
         expiry: productData.expiry,
-        is_suspended: true,
+        is_suspended: shouldSuspend,
       }),
       credentials: "include",
     });
-    if (res.ok) {
-      Alert.alert("Success", "Product was suspended successfully.");
+    if (shouldSuspend) {
+      if (res.ok) {
+        Alert.alert("Success", "Product was suspended successfully.");
+      } else {
+        Alert.alert(
+          "Failed",
+          "Could not suspend the product. Please try again."
+        );
+      }
     } else {
-      Alert.alert("Failed", "Could not suspend the product. Please try again.");
-    }
-    router.replace("/products");
-  }
-
-  async function handleUnsuspend() {
-    const res = await fetch(`http://${domain}/api/retailer/update-product/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        barcode: productData.barcode,
-        expiry: productData.expiry,
-        is_suspended: false,
-      }),
-      credentials: "include",
-    });
-    if (res.ok) {
-      Alert.alert("Success", "Product was suspended successfully.");
-    } else {
-      Alert.alert("Failed", "Could not suspend the product. Please try again.");
+      if (res.ok) {
+        Alert.alert("Success", "Product was unsuspended successfully.");
+      } else {
+        Alert.alert(
+          "Failed",
+          "Could not unsuspend the product. Please try again."
+        );
+      }
     }
     router.replace("/products");
   }
@@ -66,9 +59,13 @@ export default function ViewProductData() {
         <Text>Description: {productData.description}</Text>
         <Text>Price: £{(productData.price / 100).toFixed(2)}</Text>
         <Text>Quantity: {productData.quantity}</Text>
-        <Text>Expiry: {productData.expiry}</Text>
-        <Text>Created: {productData.created_at}</Text>
-        <Text>Last updated at: {productData.updated_at}</Text>
+        <Text>Expiry: {new Date(productData.expiry).toLocaleDateString()}</Text>
+        <Text>
+          Created: {new Date(productData.created_at).toLocaleString()}
+        </Text>
+        <Text>
+          Last updated at: {new Date(productData.updated_at).toLocaleString()}
+        </Text>
         <Box mt="5">
           <Button
             variant="outline"
@@ -82,7 +79,7 @@ export default function ViewProductData() {
             <Text color="brand.400">Edit</Text>
           </Button>
           {productData.is_suspended ? (
-            <Button bg="blueGray.600" onPress={() => handleUnsuspend()}>
+            <Button bg="blueGray.600" onPress={() => handleSuspend(false)}>
               Unsuspend
             </Button>
           ) : (
@@ -99,7 +96,7 @@ export default function ViewProductData() {
         isOpen={isAlertOpen}
         onClose={() => setAlertOpen(false)}
         onSubmit={() => {
-          handleSuspend();
+          handleSuspend(true);
           setAlertOpen(false);
         }}
       />
