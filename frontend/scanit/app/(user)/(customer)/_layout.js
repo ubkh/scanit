@@ -10,7 +10,7 @@ import { useAuth } from "../../../context/AuthContext";
 
 const links = [
 ];
-  
+
 export default function CustomerLayout() {
   const { userType, user } = useAuth();
   const globalContext = useContext(Context);
@@ -69,8 +69,9 @@ export default function CustomerLayout() {
                     }}>
                 </Tabs.Screen>
                 <Tabs.Screen 
-                    name="Basket"
+                    name="basket"
                     options={{
+                        title: "Basket",
                         headerShown: false,
                         tabBarIcon: ({ color, size }) => (
                         <Ionicons name="cart-outline" color={color} size={size} />
@@ -89,6 +90,16 @@ export default function CustomerLayout() {
                             marginLeft: 5,
                             paddingTop: 2,
                         },
+                    }}>
+                </Tabs.Screen>
+                <Tabs.Screen 
+                    name="Purchases"
+                    options={{
+                        headerShown: false,
+                        tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="newspaper-outline" color={color} size={size} />
+                        ),
+                        //backgroundColor: '#0f0f0f',
                     }}>
                 </Tabs.Screen>
                 <Tabs.Screen 
