@@ -325,9 +325,12 @@ def retailerAddProduct(request):
         if (product_query.count()):
             product_obj = product_query.first()
             updated_quantity = product_obj.quantity + product_data['quantity']
-            product_data['quantity'] = updated_quantity
-            for (key, value) in product_data.items():
-                setattr(product_obj, key, value)
+            product_obj.quantity = updated_quantity
+            
+            # in case the retailer changed the details of the product while updating the quantity
+            # product_data['quantity'] = updated_quantity
+            # for (key, value) in product_data.items():
+            #     setattr(product_obj, key, value)
             product_obj.save()
         else:
             Product.objects.create(**product_data, retailer = user)

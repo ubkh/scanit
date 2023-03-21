@@ -1,13 +1,10 @@
 import { Box, Text, Button, HStack, VStack } from "native-base";
-import { useState, useContext } from "react";
-import { Context } from "../context/GlobalContext";
+import { useContext } from "react";
 import { useRouter } from "expo-router";
 import { ProductDataContext } from "../context/RetailerProductContext";
 import { Platform } from "react-native";
 
 function ProductsListItem({ item }) {
-  // const globalContext = useContext(Context);
-  // const { domain } = globalContext;
   const { setProductData } = useContext(ProductDataContext);
   const router = useRouter();
   const isOnWeb = Platform.OS === "web";
@@ -18,8 +15,8 @@ function ProductsListItem({ item }) {
         <Text flex={2} _web={{ maxW: "35%" }} pr="5">
           {item.name}
           {item.is_suspended && (
-            <Text color="orange.600" flex={1}>
-              - [Suspended]
+            <Text color="orange.600" flex={1} fontWeight="semibold" ml={2}>
+              [Suspended]
             </Text>
           )}
         </Text>

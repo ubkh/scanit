@@ -3,7 +3,6 @@ import {
   Button,
   Heading,
   HStack,
-  View,
   Spinner,
   Divider,
   Box,
@@ -20,9 +19,8 @@ function Products() {
   const [suspendedProducts, setSuspendedProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showSuspended, setShowSuspended] = useState(false);
-
-  const globalContext = useContext(Context);
-  const { domain } = globalContext;
+  // const [shouldUpdate, setShouldUpdate] = useState(true);
+  const { domain } = useContext(Context);
 
   useEffect(() => {
     // useEffect has problem with async function. Create the async function and call it
@@ -31,8 +29,10 @@ function Products() {
       const res = await fetch(`http://${domain}/api/retailer/get-products/`, {
         credentials: "include",
       });
-      const productsData = await res.json();
-      setProducts(productsData);
+      if (res.ok) {
+        const productsData = await res.json();
+        setProducts(productsData);
+      }
       setIsLoading(false);
     })();
   }, []);
@@ -55,11 +55,12 @@ function Products() {
     }
   }
 
-  const router = useRouter();
+  // const router = useRouter();
   // const isOnWeb = Platform.OS === "web";
 
   return (
-    <View
+    <Box
+      safeAreaTop
       style={BarCodeScanStyle.container}
       _dark={{ bg: "black" }}
       _light={{ bg: "white" }}
@@ -68,10 +69,10 @@ function Products() {
         width="100%"
         flex={1}
         alignSelf="center"
-        paddingLeft={10}
-        paddingRight={10}
+        px="5"
+        _web={{ px: 10 }}
       >
-        <Heading size="lg" mb="7">
+        <Heading size="lg" _web={{ mb: "7" }} mb="4" mt="3">
           Products
         </Heading>
         <HStack alignItems="center">
@@ -111,7 +112,7 @@ function Products() {
           </Box>
         )}
       </ScrollView>
-    </View>
+    </Box>
   );
 }
 
