@@ -5,7 +5,7 @@ export default function AddProduct() {
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="scanner" options={{ headerTitle: "" }} />
-      <Stack.Screen name="form" options={{ headerTitle: "" }} />
+      <Stack.Screen name="form" options={{ headerTitle: "Add a product" }} />
     </Stack>
   );
 }

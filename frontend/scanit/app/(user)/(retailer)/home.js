@@ -11,8 +11,6 @@ import {
 import { Platform } from "react-native";
 import LogOutButton from "../../../components/LogOutButtonComponent";
 import { useForm } from "react-hook-form";
-
-// import CustomButton from '../../../components/CustomButton.js';
 import { useRouter, Navigator, Link } from "expo-router";
 
 function Home() {
@@ -76,6 +74,15 @@ function Home() {
           onPress={() => router.push("/(retailer)/add-product")}
         >
           Add a product to the system
+        </Button>
+        <Text>&nbsp;</Text>
+        <Button
+          bg="brand.400"
+          width="100%"
+          maxWidth="300px"
+          onPress={() => router.push("/(retailer)/products")}
+        >
+          Products
         </Button>
         {Platform.OS !== "web" && <LogOutButton />}
 

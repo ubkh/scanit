@@ -97,7 +97,6 @@ class GetProductViewTestCase(TestCase):
     def send_req(self):
         return self.client.get(reverse("retailer-get-product", args=[self.barcode]))
 
-    
     def test_unauth_retailer_get_product(self):
         # with self.assertRaises(AuthenticationFailed):
         res = self.send_req()
@@ -115,4 +114,37 @@ class GetProductViewTestCase(TestCase):
         res = self.send_req()
         self.assertEqual(res.status_code, 400)
 
-        
+class UpdateProductViewTestCase(TestCase):
+    pass
+    # fixtures = [
+    #     "api/tests/fixtures/default_retailer.json", 
+    #     "api/tests/fixtures/default_product.json",
+    # ]
+
+    # def setUp(self):
+    #     self.barcode = "5050404"    # default_product fixture barcode
+    #     self.retailer = get_user_model().objects.get(user_id = 1)
+    #     self.should_suspend = "true"
+
+    # def send_req(self):
+    #     return self.client.post(reverse('set-suspended',  args=[self.barcode, self.should_suspend]))
+
+    # def log_in(self):
+    #     return self.client.post(reverse("user_login"), {"email": self.retailer.email, "password": UNHASHED_RETAILER_PASS})
+
+    # def test_set_suspended_true(self):
+    #     self.log_in()
+    #     res = self.send_req()
+    #     self.assertEqual(res.status_code, 200)
+
+    # def test_set_suspended_false(self):
+    #     self.log_in()
+    #     self.should_suspend = "false"
+    #     res = self.send_req()
+    #     self.assertEqual(res.status_code, 200)
+
+    # def test_invalid_arg_set_suspended(self):
+    #     self.log_in()
+    #     self.should_suspend = "invalid"
+    #     res = self.send_req()
+    #     self.assertEqual(res.status_code, 400)

@@ -103,6 +103,9 @@ class Product(models.Model):
     expiry = models.DateField()
     barcode = models.CharField(max_length=20)
     retailer = models.ForeignKey(User, on_delete= models.CASCADE)
+    is_suspended = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def is_expiry_date_past(self):
         if self.expiry < datetime.date.today():
