@@ -26,7 +26,7 @@ export default function RetailerLayout() {
   // if (userType !== "retailer") {
   //   return <Redirect href={`/(${userType})/${segments[2]}`} />;
   // }
-  if (userType === 1) {
+  if (userType !== "retailer") {
     return <Redirect href={`/(${userType})/${segments[2]}`} />;
   }
 

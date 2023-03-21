@@ -400,6 +400,7 @@ def send_account_verification_code(request):
 
 class TransactionByBarcodeList(generics.ListAPIView):
     serializer_class = TransactionSerializer
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         barcode = self.request.query_params.get('barcode', None)
@@ -410,6 +411,7 @@ class TransactionByBarcodeList(generics.ListAPIView):
         
 class TransactionByIDList(generics.ListAPIView):
     serializer_class = TransactionSerializer
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         transaction_id = self.request.query_params.get('transaction_id', None)
@@ -420,6 +422,7 @@ class TransactionByIDList(generics.ListAPIView):
 
 class StoreByBarcodeList(generics.ListAPIView):
     serializer_class = StoreSerializer
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         barcode = self.request.query_params.get('barcode', None)
