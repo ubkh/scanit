@@ -10,7 +10,7 @@ import {
 } from "native-base";
 import { Alert } from "react-native";
 import CurrencyInput from "react-native-currency-input";
-import { Formik } from "formik";
+import { useForm, Controller } from "react-hook-form";
 import { Context } from "../context/GlobalContext";
 import { ProductDataContext } from "../context/RetailerProductContext";
 import validateForm from "./forms-validations/RetailerProduct";
@@ -18,35 +18,24 @@ import { useRouter } from "expo-router";
 
 function RetailerProductForm({ isUpdate = false }) {
   const { productData, setProductData } = useContext(ProductDataContext);
-  const globalContext = useContext(Context);
-  const { domain } = globalContext;
-  // const errorStyle = { color: "#c20808" };
+  const { domain } = useContext(Context);
   const router = useRouter();
-
-  // if product was not found in the db then productData has only the barcode. This prevents price from becoming a NaN
-  // function getProductPrice() {
-  //   return productData.price ? (productData.price / 100).toString() : "0";
-  // }
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({ defaultValues: getInitialValues(), mode: "onBlur" });
 
   function getInitialValues() {
     const vals = {
       name: productData.name ? productData.name : "",
       description: productData.description ? productData.description : "",
-      price: productData.price ? (productData.price / 100).toFixed(2) : "0",
+      price: productData.price ? (productData.price / 100).toFixed(2) : "0.00",
       quantity: productData.quantity ? productData.quantity.toString() : "",
       expiry: productData.expiry ? productData.expiry : "",
       barcode: productData.barcode ? productData.barcode : "",
     };
-    // if (productData) {
-    //   return {
-    //     ...vals,
-    //     name: productData.name,
-    //     description: productData.description,
-    //     priceproductData.price,
-    //     productData.quantity,
-    //     price: getProductPrice(),
-    //   };
-    // }
+
     return vals;
   }
 
@@ -104,79 +93,78 @@ function RetailerProductForm({ isUpdate = false }) {
     }
   }
 
+  const onSubmit = (vals) =>
+    isUpdate ? updateSubmitHandler(vals) : addSubmitHandler(vals);
+
   return (
-    <Formik
-      initialValues={getInitialValues()}
-      onSubmit={(vals) => {
-        isUpdate ? updateSubmitHandler(vals) : addSubmitHandler(vals);
-      }}
-      validate={validateForm}
+    <ScrollView
+      width="100%"
+      flex={1}
+      alignSelf="center"
+      paddingLeft={10}
+      paddingRight={10}
     >
-      {({
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        values,
-        errors,
-        touched,
-        isSubmitting,
-      }) => (
-        <ScrollView
-          width="100%"
-          flex={1}
-          alignSelf="center"
-          paddingLeft={10}
-          paddingRight={10}
-        >
-          <Text>&nbsp;</Text>
-          {!isUpdate && <Text>Please fill in the details of the product.</Text>}
-          <Text>&nbsp;</Text>
-          <VStack space={4}>
-            <FormControl
-              isRequired
-              isInvalid={"name" in errors && touched.name}
-            >
-              <FormControl.Label>Name</FormControl.Label>
+      <Text>&nbsp;</Text>
+      {!isUpdate && <Text>Please fill in the details of the product.</Text>}
+      <Text>&nbsp;</Text>
+      <VStack space={4}>
+        <FormControl isRequired isInvalid={"name" in errors}>
+          <FormControl.Label>Name</FormControl.Label>
+          <Controller
+            control={control}
+            name={"name"}
+            rules={{ validate: (val) => validateForm.name(val) }}
+            render={({ field: { onChange, onBlur, value } }) => (
               <Input
                 maxLength={100}
-                onChangeText={handleChange("name")}
-                onBlur={handleBlur("name")}
-                value={values.name}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                value={value}
                 isReadOnly={!isUpdate && productData.name ? true : false}
                 isDisabled={!isUpdate && productData.name ? true : false}
               />
-              <FormControl.ErrorMessage>
-                {touched.name && errors.name}
-              </FormControl.ErrorMessage>
-            </FormControl>
-            <FormControl
-              isInvalid={"description" in errors && touched.description}
-            >
-              <FormControl.Label>Description</FormControl.Label>
+            )}
+          />
+          <FormControl.ErrorMessage>
+            {errors.name?.message}
+          </FormControl.ErrorMessage>
+        </FormControl>
+
+        <FormControl isInvalid={"description" in errors}>
+          <FormControl.Label>Description</FormControl.Label>
+          <Controller
+            control={control}
+            name={"description"}
+            rules={{ validate: (val) => validateForm.description(val) }}
+            render={({ field: { onChange, onBlur, value } }) => (
               <TextArea
                 maxLength={750}
-                onChangeText={handleChange("description")}
-                onBlur={handleBlur("description")}
-                value={values.description}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                value={value.description}
                 isReadOnly={!isUpdate && productData.description ? true : false}
                 isDisabled={!isUpdate && productData.description ? true : false}
               />
-              <FormControl.ErrorMessage>
-                {touched.description && errors.description}
-              </FormControl.ErrorMessage>
-            </FormControl>
-            <FormControl
-              isRequired
-              isInvalid={"price" in errors && touched.price}
-            >
-              <FormControl.Label>Price</FormControl.Label>
+            )}
+          />
+          <FormControl.ErrorMessage>
+            {errors.description?.message}
+          </FormControl.ErrorMessage>
+        </FormControl>
+
+        <FormControl isRequired isInvalid={"price" in errors}>
+          <FormControl.Label>Price</FormControl.Label>
+          <Controller
+            control={control}
+            name={"price"}
+            rules={{ validate: (val) => validateForm.price(val) }}
+            render={({ field: { onChange, onBlur, value } }) => (
               <CurrencyInput
-                label="Price"
                 onChangeValue={(val) => {
-                  handleChange("price")((val || 0).toFixed(2));
+                  onChange((val || 0).toFixed(2));
                 }}
-                onBlur={handleBlur("price")}
-                value={values.price}
+                onBlur={onBlur}
+                value={value}
                 keyboardType="numeric"
                 separator="."
                 delimiter=""
@@ -190,169 +178,91 @@ function RetailerProductForm({ isUpdate = false }) {
                   />
                 )}
               />
-              <FormControl.ErrorMessage>
-                {touched.price && errors.price}
-              </FormControl.ErrorMessage>
-            </FormControl>
-            <FormControl
-              isRequired
-              isInvalid={"quantity" in errors && touched.quantity}
-            >
-              <FormControl.Label>Quantity</FormControl.Label>
+            )}
+          />
+          <FormControl.ErrorMessage>
+            {errors.price?.message}
+          </FormControl.ErrorMessage>
+        </FormControl>
+
+        <FormControl isRequired isInvalid={"quantity" in errors}>
+          <FormControl.Label>Quantity</FormControl.Label>
+          <Controller
+            control={control}
+            name={"quantity"}
+            rules={{ validate: (val) => validateForm.quantity(val) }}
+            render={({ field: { onChange, onBlur, value } }) => (
               <Input
                 maxLength={5}
                 keyboardType="numeric"
-                onChangeText={(text) =>
-                  handleChange("quantity")(text.replace(/([^0-9])|(\b0+)/g, ""))
+                onChangeText={(val) =>
+                  onChange(val.replace(/([^0-9])|(\b0+)/, ""))
                 }
-                onBlur={handleBlur("quantity")}
-                value={values.quantity}
+                onBlur={onBlur}
+                value={value}
               />
-              <FormControl.ErrorMessage>
-                {touched.quantity && errors.quantity}
-              </FormControl.ErrorMessage>
-            </FormControl>
-            <FormControl
-              isRequired
-              isInvalid={"expiry" in errors && touched.expiry}
-            >
-              <FormControl.Label>Expiry</FormControl.Label>
+            )}
+          />
+          <FormControl.ErrorMessage>
+            {errors.quantity?.message}
+          </FormControl.ErrorMessage>
+        </FormControl>
+        <FormControl isRequired isInvalid={"expiry" in errors}>
+          <FormControl.Label>Expiry</FormControl.Label>
+          <Controller
+            control={control}
+            name={"expiry"}
+            rules={{ validate: (val) => validateForm.expiry(val) }}
+            render={({ field: { onChange, onBlur, value } }) => (
               <Input
                 placeholder="YYYY-MM-DD"
                 keyboardType="numeric"
                 maxLength={10}
-                onChangeText={(val) =>
-                  handleChange("expiry")(val.replace(/([^0-9-])/g, ""))
-                }
-                onBlur={handleBlur("expiry")}
-                value={values.expiry}
+                onChangeText={(val) => onChange(val.replace(/([^0-9-])/, ""))}
+                onBlur={onBlur}
+                value={value}
               />
-              <FormControl.ErrorMessage>
-                {touched.expiry && errors.expiry}
-              </FormControl.ErrorMessage>
-            </FormControl>
-            <FormControl
-              isRequired
-              isInvalid={"barcode" in errors && touched.barcode}
-            >
-              <FormControl.Label>Barcode</FormControl.Label>
+            )}
+          />
+          <FormControl.ErrorMessage>
+            {errors.expiry?.message}
+          </FormControl.ErrorMessage>
+        </FormControl>
+
+        <FormControl isRequired isInvalid={"barcode" in errors}>
+          <FormControl.Label>Barcode</FormControl.Label>
+          <Controller
+            control={control}
+            name={"barcode"}
+            rules={{ validate: (val) => validateForm.barcode(val) }}
+            render={({ field: { onChange, onBlur, value } }) => (
               <Input
                 placeholder="##############"
                 keyboardType="numeric"
-                onChangeText={(val) =>
-                  handleChange("barcode")(val.replace(/([^0-9])/g, ""))
-                }
-                onBlur={handleBlur("barcode")}
-                value={values.barcode}
+                onChangeText={(val) => onChange(val.replace(/([^0-9])/, ""))}
+                onBlur={onBlur}
+                value={value}
                 maxLength={13}
                 isReadOnly={productData.barcode ? true : false}
                 isDisabled={productData.barcode ? true : false}
               />
-              <FormControl.ErrorMessage>
-                {touched.barcode && errors.barcode}
-              </FormControl.ErrorMessage>
-            </FormControl>
-
-            {/* <Input
-            label="Name"
-            maxLength={100}
-            onChangeText={handleChange("name")}
-            onBlur={handleBlur("name")}
-            value={values.name}
-            errorStyle={errorStyle}
-            errorMessage={errors.name && touched.name ? errors.name : ""}
-          />
-          <Input
-            label="Description"
-            multiline
-            maxLength={750}
-            onChangeText={handleChange("description")}
-            onBlur={handleBlur("description")}
-            value={values.description}
-            errorStyle={errorStyle}
-            errorMessage={
-              errors.description && touched.description
-                ? errors.description
-                : ""
-            }
-          />
-
-          <CurrencyInput
-            label="Price"
-            onChangeValue={(val) => {
-              handleChange("price")((val || 0).toString());
-            }}
-            onBlur={handleBlur("price")}
-            value={values.price}
-            keyboardType="numeric"
-            separator="."
-            delimiter=""
-            minValue={0}
-            precision={2}
-            renderTextInput={(textInputProps) => (
-              <Input {...textInputProps} variant="filled" />
             )}
-            errorStyle={errorStyle}
-            errorMessage={errors.price && touched.price ? errors.price : ""}
           />
+          <FormControl.ErrorMessage>
+            {errors.barcode?.message}
+          </FormControl.ErrorMessage>
+        </FormControl>
 
-          <Input
-            label="Quantity"
-            maxLength={5}
-            keyboardType="numeric"
-            onChangeText={(text) =>
-              handleChange("quantity")(text.replace(/([^0-9])|(\b0+)/g, ""))
-            }
-            onBlur={handleBlur("quantity")}
-            value={values.quantity}
-            errorStyle={errorStyle}
-            errorMessage={
-              errors.quantity && touched.quantity ? errors.quantity : ""
-            }
-          />
-
-          <Input
-            label="Expiry"
-            placeholder="YYYY-MM-DD"
-            keyboardType="numeric"
-            maxLength={10}
-            onChangeText={(val) =>
-              handleChange("expiry")(val.replace(/([^0-9-])/g, ""))
-            }
-            onBlur={handleBlur("expiry")}
-            value={values.expiry}
-            errorStyle={errorStyle}
-            errorMessage={errors.expiry && touched.expiry ? errors.expiry : ""}
-          />
-
-          <Input
-            label="Barcode"
-            placeholder="##############"
-            keyboardType="numeric"
-            onChangeText={(val) =>
-              handleChange("barcode")(val.replace(/([^0-9])/g, ""))
-            }
-            onBlur={handleBlur("barcode")}
-            value={values.barcode}
-            errorStyle={errorStyle}
-            errorMessage={
-              errors.barcode && touched.barcode ? errors.barcode : ""
-            }
-            maxLength={13}
-          /> */}
-
-            <Button
-              bg="brand.400"
-              onPress={handleSubmit}
-              disabled={isSubmitting}
-            >
-              {isUpdate ? "Confirm edit" : "Add product"}
-            </Button>
-            <Text>&nbsp;</Text>
-          </VStack>
-        </ScrollView>
-      )}
-    </Formik>
+        <Button
+          bg="brand.400"
+          onPress={handleSubmit(onSubmit)}
+          disabled={isSubmitting}
+        >
+          {isUpdate ? "Confirm edit" : "Add product"}
+        </Button>
+        <Text>&nbsp;</Text>
+      </VStack>
+    </ScrollView>
   );
 }
 

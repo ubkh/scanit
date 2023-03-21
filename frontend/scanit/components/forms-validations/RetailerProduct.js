@@ -1,50 +1,61 @@
-const validateForm = (values) => {
-  const errors = {};
+validateForm = {
+  name: (value) => {
+    if (!value) {
+      return "Required";
+    } else if (value.length > 100) {
+      return "Must be 100 characters or less";
+    }
+    return true;
+  },
 
-  if (!values.name) {
-    errors.name = "Required";
-  } else if (values.name.length > 100) {
-    errors.name = "Must be 100 characters or less";
-  }
+  description: (value) => {
+    if (value.length > 750) {
+      return "Must be 750 characters or less";
+    }
+    return true;
+  },
 
-  if (values.description.length > 750) {
-    errors.description = "Must be 750 characters or less";
-  }
+  price: (value) => {
+    if (!value || value === "0.00") {
+      return "Required";
+    } else if (!/^(([1-9]+0*)+|0{1})\.{1}[0-9]{2}$/.test(value)) {
+      return "Invalid price";
+    }
+    return true;
+  },
 
-  if (!values.price) {
-    errors.price = "Required";
-  } else if (
-    !/^(([1-9]+0*)+|0{1})\.{1}[0-9]{2}$/.test(values.price) ||
-    values.price === "0.00"
-  ) {
-    errors.price = "Invalid price";
-  }
+  quantity: (value) => {
+    if (!value) {
+      return "Required";
+    } else if (/\b0+/.test(value)) {
+      return "Invalid quantity";
+    }
+    return true;
+  },
 
-  if (!values.quantity) {
-    errors.quantity = "Required";
-  } else if (/\b0+/.test(values.quantity)) {
-    errors.quantity = "Invalid quantity";
-  }
+  expiry: (value) => {
+    if (!value) {
+      return "Required";
+    } else if (
+      !/((?:20|21)[0-9][0-9])\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])/.test(
+        value
+      )
+    ) {
+      return "Invalid expiry date";
+    } else if (new Date(value) < new Date()) {
+      return "Expiry date cannot be in the past";
+    }
+    return true;
+  },
 
-  if (!values.expiry) {
-    errors.expiry = "Required";
-  } else if (
-    !/((?:20|21)[0-9][0-9])\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])/i.test(
-      values.expiry
-    )
-  ) {
-    errors.expiry = "Invalid expiry date";
-  } else if (new Date(values.expiry) < new Date()) {
-    errors.expiry = "Expiry date cannot be in the past";
-  }
-
-  if (!values.barcode) {
-    errors.barcode = "Required";
-  } else if (values.barcode.length > 13) {
-    errors.barcode = "Must be 13 or less";
-  }
-
-  return errors;
+  barcode: (value) => {
+    if (!value) {
+      return "Required";
+    } else if (value.length > 13) {
+      return "Must be 13 or less";
+    }
+    return true;
+  },
 };
 
 export default validateForm;
