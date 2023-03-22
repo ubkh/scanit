@@ -8,7 +8,7 @@ function Account() {
   const colorMode = useColorMode();
   const toast = useToast();
   const barcodeRef = useRef(null);
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
 
   const saveBarcodeImage = async () => {
     
