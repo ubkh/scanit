@@ -1,11 +1,30 @@
 import { Slot, SplashScreen } from "expo-router";
 import { AuthProvider } from "../context/AuthContext";
-import { extendTheme, NativeBaseProvider } from "native-base";
+import { extendTheme, NativeBaseProvider, StorageManager } from "native-base";
 import { ColorTheme, Components, Config } from "../Theme.js";
 import { useFonts } from "expo-font";
 import ContextProvider from "../context/GlobalContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const theme = extendTheme({ colors: ColorTheme, components: Components });
+
+const colorModeManager = {
+  get: async () => {
+    try {
+      let val = await AsyncStorage.getItem('@color-mode');
+      return val === 'dark' ? 'dark' : 'light';
+    } catch (e) {
+      return 'light';
+    }
+  },
+  set: async (value) => {
+    try {
+      await AsyncStorage.setItem('@color-mode', value);
+    } catch (e) {
+      console.log(e);
+    }
+  },
+};
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -20,7 +39,7 @@ export default function RootLayout() {
   }
   return (
     // Setup the auth context and render our layout inside of it.
-    <NativeBaseProvider theme={theme} config={Config}>
+    <NativeBaseProvider theme={theme} config={Config} colorModeManager={colorModeManager}>
         <AuthProvider>
         <ContextProvider>
             <Slot />
