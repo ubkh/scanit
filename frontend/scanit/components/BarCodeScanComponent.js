@@ -217,10 +217,12 @@ function BarCodeScanComponent(props){
         // STORE BARCODE SCANNING
         if (!isRetailerScanned) {
           try {
+            // AWAIT THE RESPONSE SO WE DON'T CONTINUE WITHOUT THIS
             const response = await fetch(`http://${globalContext.domain}/api/stores-by-barcode/?barcode=${data}`, {
               method: "GET",
             });
 
+            // AWAIT THE RESPONSE TO AVOID UNDEFINED ERRORS
             const resultList = await response.json();
             console.log(resultList);
 
