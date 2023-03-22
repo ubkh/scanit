@@ -6,6 +6,7 @@ import { TabRouter } from "@react-navigation/native";
 import NavBarComponent from "../../../components/NavBarComponent";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../../../context/AuthContext";
+import ProductDataProvider from "../../../context/RetailerProductContext";
 
 const links = [
     { label: 'Home', url: '/(retailer)/home' },
@@ -13,11 +14,12 @@ const links = [
     { label: 'Add Item', url: '/addItem' },
     { label: 'Assign Staff', url: '/assignStaffPage' },
     { label: "Add a product", url: "/(retailer)/add-product" },
+    { label: "Products", url: "/products" },
     { label: "Account", url: "/Account" },
 ];
 
 export default function RetailerLayout() {
-  const { userType } = useAuth();
+  const { userType, loading } = useAuth();
   const segments = useSegments();
   const { colorMode } = useColorMode();
 
@@ -37,43 +39,54 @@ export default function RetailerLayout() {
     setIsSmallScreen(width < 600);
   }, [width]);
 
-  if (Platform.OS !== "web") {
-    return (
-      <Tabs
-        screenOptions={{
-          tabBarActiveTintColor: "#34d399",
-          tabBarStyle: {
-            backgroundColor: colorMode == "dark" ? "black" : "white",
-          },
-        }}
-      >
-        <Tabs.Screen
-          name="home"
-          options={{
-            title: "Home",
-            headerShown: false,
-            tabBarIcon: ({ color, size }) => (
-              <Ionicons name="home-outline" color={color} size={size} />
-            ),
-          }}
-        ></Tabs.Screen>
-        <Tabs.Screen
-          name="add-product"
-          options={{
-            title: "Add product",
-            headerShown: false,
-            tabBarIcon: ({ color, size }) => (
-              <Ionicons name="add-outline" color={color} size={size} />
-            ),
-          }}
-        ></Tabs.Screen>
-      </Tabs>
-    );
-  }
   return (
-    <Navigator router={TabRouter}>
-      <NavBarComponent links={links} isSmallScreen={isSmallScreen} />
-      <Slot />
-    </Navigator>
+    <ProductDataProvider>
+      {Platform.OS !== "web" ? (
+        <Tabs
+          screenOptions={{
+            tabBarActiveTintColor: "#34d399",
+            tabBarStyle: {
+              backgroundColor: colorMode == "dark" ? "black" : "white",
+            },
+          }}
+        >
+          <Tabs.Screen
+            name="home"
+            options={{
+              title: "Home",
+              headerShown: false,
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="home-outline" color={color} size={size} />
+              ),
+            }}
+          ></Tabs.Screen>
+          <Tabs.Screen
+            name="add-product"
+            options={{
+              title: "Add product",
+              headerShown: false,
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="add-outline" color={color} size={size} />
+              ),
+            }}
+          ></Tabs.Screen>
+          <Tabs.Screen
+            name="products"
+            options={{
+              title: "Products",
+              headerShown: false,
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="list" color={color} size={size} />
+              ),
+            }}
+          ></Tabs.Screen>
+        </Tabs>
+      ) : (
+        <Navigator router={TabRouter}>
+          <NavBarComponent links={links} isSmallScreen={isSmallScreen} />
+          <Slot />
+        </Navigator>
+      )}
+    </ProductDataProvider>
   );
 }

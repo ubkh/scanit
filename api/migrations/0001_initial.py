@@ -41,7 +41,7 @@ class Migration(migrations.Migration):
                 ('quantity', models.PositiveIntegerField(validators=[django.core.validators.MinValueValidator(1)])),
                 ('expiry', models.DateField()),
                 ('barcode', models.CharField(max_length=20)),
-                ('store', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.store')),
+                ('retailer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
