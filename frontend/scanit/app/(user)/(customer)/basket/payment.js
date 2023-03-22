@@ -86,7 +86,10 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
   const handleSubmit = () => {
     let currentMonth = new Date().getMonth() + 1;
     let currentYear = new Date().getFullYear();
-    if (cardNumber.length !== 16) {
+    if(name.length <= 3){
+      Alert.alert('Invalid Name', 'Please enter your full name');
+    }
+    else if (cardNumber.length !== 16) {
       Alert.alert('Invalid card number', 'Please enter a valid 16-digit card number');
     }
     else if(parseInt(expiryMonth) <= currentMonth && parseInt(expiryYear) <= currentYear){
@@ -124,24 +127,26 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
       <StatusBar barStyle={colorMode === 'light' ? 'dark-content' : 'light-content'} animated={true}/>
 
     <View style={PaymentStyle.container}>
-      <Text style={PaymentStyle.label}>Name on Card</Text>
+      {/* <Text style={PaymentStyle.label}>Name on Card</Text> */}
       <Input
         style={PaymentStyle.input}
         placeholder="Enter Name on Card"
         value={name}
         onChangeText={handleNameOnCard}
         maxLength={30}
+        variant="underlined"
       />
-      <Text style={PaymentStyle.label}>Card Number</Text>
+      {/* <Text style={PaymentStyle.label}>Card Number</Text> */}
       <Input
         style={PaymentStyle.input}
-        placeholder="Enter card number"
+        placeholder="Enter Card Number"
         keyboardType="numeric"
         value={cardNumber}
         onChangeText={handleCardNumberChange}
         maxLength={16}
+        variant="underlined"
       />
-      <Text style={PaymentStyle.label}>Expiry Date</Text>
+      {/* <Text style={PaymentStyle.label}>Expiry Date</Text> */}
         <View style = {{flexDirection: "row"}}>
           <View style={{flex:1}}>
             <Input
@@ -151,6 +156,7 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
               value={expiryMonth}
               onChangeText={handleExpiryMonth}
               maxLength={2}
+              variant="underlined"
             />
           </View>
           <View style={{flex:1}}>
@@ -161,11 +167,12 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
               value={expiryYear}
               onChangeText={handleExpiryYear}
               maxLength={4}
+              variant="underlined"
             />
           </View>
         </View>
 
-      <Text style={PaymentStyle.label}>CVV</Text>
+      {/* <Text style={PaymentStyle.label}>CVV</Text> */}
       <Input
         style={PaymentStyle.input}
         placeholder="Enter CVV"
@@ -173,6 +180,7 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
         value={cvv}
         onChangeText={handleCvvChange}
         maxLength={3}
+        variant="underlined"
       />
 
       <TouchableOpacity style={PaymentStyle.button} onPress={handleSubmit}>

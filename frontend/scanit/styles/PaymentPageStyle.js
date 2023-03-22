@@ -11,7 +11,7 @@ const PaymentStyle = StyleSheet.create({
       marginBottom: 5,
     },
     input: {
-      height: 40,
+      height: 50,
       //borderColor: '#ccc',
       // borderWidth: 1,
       // borderRadius: 5,
@@ -20,7 +20,7 @@ const PaymentStyle = StyleSheet.create({
 
     },
     inputMonth: {
-      height: 40,
+      height: 50,
       //borderColor: '#ccc',
       // borderWidth: 1,
       // borderRadius: 5,
@@ -29,7 +29,7 @@ const PaymentStyle = StyleSheet.create({
       justifyContent: 'flex-start',
     },
     inputYear: {
-      height: 40,
+      height: 50,
       //borderColor: '#ccc',
       // borderWidth: 1,
       // borderRadius: 5,
@@ -42,6 +42,7 @@ const PaymentStyle = StyleSheet.create({
       borderRadius: 5,
       padding: 10,
       alignItems: 'center',
+      marginTop: 30,
     },
     buttonText: {
       color: '#fff',
