@@ -114,9 +114,27 @@ function Home() {
               }}
             >
               <Text color="white" style={{ fontFamily: "Rubik-Bold" }}>
-                Shopping with
+                Shopping with{" "}
               </Text>
-              <Text color="white">Store: {retailerBarcodeData && retailerBarcodeData.length > 0 ? retailerBarcodeData[0].name + "\nBarcode: " + retailerBarcodeData[0].barcode : "Unknown"}</Text>
+              <Text color="white">
+                Store: {retailerBarcodeData && retailerBarcodeData.length > 0 ?
+                <Text style={{ fontFamily: "Rubik-Bold" }}>
+                  {retailerBarcodeData[0].name}
+                </Text>
+                :
+                "Unknown"
+                }
+                {"\nBarcode: "}
+                {retailerBarcodeData && retailerBarcodeData.length > 0 ?
+                <Text style={{ fontFamily: "Rubik-Bold" }}>
+                  {retailerBarcodeData[0].barcode}
+                </Text>
+                :
+                "Unknown"
+                }
+              </Text>
+
+
               <Text>&nbsp;</Text>
               <Button
                 bg="brand.400"

@@ -296,7 +296,7 @@ function BarCodeScanComponent(props){
       if (hasPermission === null) {
         return (
           <View style={BarCodeScanStyle.container}>
-            <Text>Requesting for camera permission</Text>
+            <Text style={{ margin: 10, fontWeight: "bold", fontSize: 20 }}>Requesting for camera permission</Text>
           </View>)
       }
 
