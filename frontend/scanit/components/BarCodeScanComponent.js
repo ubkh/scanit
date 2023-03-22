@@ -226,8 +226,8 @@ function BarCodeScanComponent(props){
 
             if (resultList.length === 0) {
               Alert.alert(
-                'Barcode not recognised',
-                'Please try again',
+                'Barcode not recognised!',
+                'Please try again\n\nEnsure the barcode is correct and you have a stable connection',
                 [
                   {
                     text: 'Ok',
