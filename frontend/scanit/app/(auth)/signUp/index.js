@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 const PASSWORD_REGEX = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,64})/;
 
-const SignUpScreen = () =>  {
+function SignUpScreen(props) {
     const globalContext = useContext(Context)
     const {domain, userID, setUserID} = globalContext;
     const router = useRouter();

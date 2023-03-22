@@ -61,6 +61,8 @@ function AssignStaffPage(props) {
             setUserID(json.user_id)
             console.log(json.user_id)
             console.log(userID)
+            router.push("/home");
+
         })
         .catch(error => {
             console.log(error)
