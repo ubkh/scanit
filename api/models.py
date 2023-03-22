@@ -170,8 +170,11 @@ class Transaction(models.Model):
     def calculate_amount(self):
         total_amount = 0
         for product in self.products:
-            total_amount += product.get('price', 0)
+            price = product.get('price', 0)
+            quantity = product.get('quantity', 1)
+            total_amount += price * quantity
         return total_amount
+
     
     
 
