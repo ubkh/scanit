@@ -12,6 +12,7 @@ import {
   Center,
   KeyboardAvoidingView,
 } from "native-base";
+import { Platform } from "react-native";
 import CustomInput from "../../../components/CustomInput.js";
 import { useRouter, Link } from "expo-router";
 import { Context } from "../../../context/GlobalContext.js";

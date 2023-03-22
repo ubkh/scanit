@@ -92,7 +92,7 @@ class StaffRegistrationAPIView(APIView):
             user = user_model.objects.get(email=email)
             user.is_staff=True
             user.is_verified=True
-            # user.retailer_id=request.data.get('retailer_id')
+            user.store_address=request.data.get('store_address')
             # user.retailer_id = current_user.retailer_id
             user.save()
 
@@ -134,6 +134,7 @@ class UserLoginAPIView(APIView):
             response.set_cookie(key='access_token', value=user_access_token, httponly=True)
             response.data = {
                 'access_token': user_access_token,
+                # 'retailer_barcode': user_instance.retailer_barcode,
                 'user': {
                     'user_id': user_instance.user_id,
                     'email': user_instance.email,
