@@ -1,6 +1,6 @@
 import { Slot, Navigator, Tabs, useSegments, Redirect } from "expo-router";
 import React, { useState, useEffect, useContext } from "react";
-import { useWindowDimensions, Platform } from "react-native";
+import { Platform } from "react-native";
 import { useColorMode } from "native-base";
 import { TabRouter } from "@react-navigation/native";
 import NavBarComponent from "../../../components/NavBarComponent";
@@ -27,13 +27,6 @@ export default function RetailerLayout() {
   if (userType !== "retailer") {
     return <Redirect href={`/(${userType})/${segments[2]}`} />;
   }
-
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
-  const { width } = useWindowDimensions();
-
-  useEffect(() => {
-    setIsSmallScreen(width < 600);
-  }, [width]);
 
   return (
     <ProductDataProvider>
@@ -79,7 +72,7 @@ export default function RetailerLayout() {
         </Tabs>
       ) : (
         <Navigator router={TabRouter}>
-          <NavBarComponent links={links} isSmallScreen={isSmallScreen} />
+          <NavBarComponent links={links} />
           <Slot />
         </Navigator>
       )}

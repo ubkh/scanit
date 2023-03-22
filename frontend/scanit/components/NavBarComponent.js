@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useWindowDimensions } from 'react-native';
 import { Link, usePathname, useRouter } from 'expo-router';
-import { View, Box, HStack, Text, IconButton, Icon, Flex, Divider, useColorMode } from 'native-base';
+import { View, Box, HStack, Text, IconButton, Icon, Flex, Divider, useColorMode, Select, CheckIcon } from 'native-base';
 import { useAuth } from '../context/AuthContext';
 import LogOutButton from "./LogOutButtonComponent";
 import ThemeButton from './ThemeButton';
 import ScanitLogo from './ScanitLogoComponent';
+import { Ionicons } from '@expo/vector-icons';
 
-const NavBarComponent = ({ links, isSmallScreen }) => {
+const NavBarComponent = ({ links }) => {
   const pathname = usePathname();
   const { signOut } = useAuth();
   const router = useRouter();
@@ -31,45 +33,33 @@ const NavBarComponent = ({ links, isSmallScreen }) => {
         paddingRight={20}
         elevation={4}
         zIndex={4}
-        marginBottom={colorMode === 'dark' ? 0 : 1} // temporary fix - need better solution
+        marginBottom={colorMode === 'dark' ? 0 : 1}
         borderBottomColor="muted.700"
         borderBottomWidth={colorMode === 'dark' ? 1 : 0}
       >
         <HStack alignItems="center">
-          {/* <Text color="brand.400" fontSize="20" fontWeight="bold">
-            ScanIt
-          </Text> */}
-          <ScanitLogo transform={`scale(0.82)`}/>
+          <ScanitLogo transform={`scale(0.82)`} style={{marginLeft: -60}}/>
         </HStack>
-        {isSmallScreen ? (
-          <HStack alignItems="center">
-            {/* This doesn't do anything yet, just an icon! Maybe add drawer functionality here? */}
-            <IconButton
-              icon={<Icon size="sm" as={MaterialIcons} name="menu" color="white" />}
-            />
-          </HStack>
-        ) : (
-          <HStack alignItems="center">
-            <Flex direction="row" h="9" p="2">
-              {links.map((link, index) => (
-                <React.Fragment key={index}>
-                  <Text>
-                    <Link 
-                      href={link.url}
-                      style={[link.url.endsWith(pathname) && { fontWeight: 'bold' }]}>
-                        {link.label}
-                    </Link>
-                  </Text>
-                  {index !== links.length - 1 && (
-                    <Divider bg="brand.400" thickness="2" mx="2" orientation="vertical" />
-                  )}
-                </React.Fragment>
-              ))}
-            </Flex>
-            <ThemeButton />
-            <LogOutButton style={{marginLeft: 10}} />
-          </HStack>
-        )}
+        <HStack alignItems="center">
+          <Flex direction="row" h="9" p="2">
+            {links.map((link, index) => (
+              <React.Fragment key={index}>
+                <Text>
+                  <Link 
+                    href={link.url}
+                    style={[link.url.endsWith(pathname) && { fontWeight: 'bold' }]}>
+                      {link.label}
+                  </Link>
+                </Text>
+                {index !== links.length - 1 && (
+                  <Divider bg="brand.400" thickness="2" mx="2" orientation="vertical" />
+                )}
+              </React.Fragment>
+            ))}
+          </Flex>
+          <ThemeButton />
+          <LogOutButton style={{marginLeft: 10, marginRight: -42}} />
+        </HStack>
       </HStack>
     </View>
   );
