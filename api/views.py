@@ -424,7 +424,7 @@ class RetailerUploadItemAPIView(APIView):
         
         if serializer.is_valid():
             product_data = request.data
-            product_query = Product.objects.filter(barcode=product_data['barcode'], store=Store.objects.get(id=product_data['store']),)
+            product_query = Product.objects.filter(barcode=product_data['barcode'], store=product_data['store'])
 
             if (product_query.count()):
                 product_obj = product_query.first()
@@ -518,8 +518,6 @@ def retailerGetProduct(request, barcode):
         return JsonResponse({'name': product_obj.name, 'description': product_obj.description, 'price': product_obj.price, 'barcode': product_obj.barcode})
     else:
         return HttpResponseBadRequest()
-<<<<<<< HEAD
-=======
 
 @csrf_exempt
 def retailerGetAllProducts(request):
@@ -559,4 +557,3 @@ def retailerUpdateProduct(request):
         return HttpResponseBadRequest()
     except:
         return HttpResponseServerError()
->>>>>>> main
