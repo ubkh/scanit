@@ -583,10 +583,12 @@ def retailerUpdateProduct(request):
     
     try:
         product_data = json.loads(request.body)
-        product_query = Product.objects.filter(barcode=product_data['barcode'], expiry=product_data['expiry'], retailer=user)
+        product_query = Product.objects.filter(barcode=product_data['barcode'], retailer=user)
         if (product_query.count()):
             product_obj = product_query.first()
             for (key, value) in product_data.items():
+                if (key == 'barcode'):  # should not be able to change the barcode
+                    continue
                 setattr(product_obj, key, value)
             product_obj.save()
             return HttpResponse(status=200)
