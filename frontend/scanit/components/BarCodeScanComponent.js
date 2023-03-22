@@ -227,6 +227,7 @@ function BarCodeScanComponent(props){
             console.log(resultList);
 
             if (resultList.length === 0) {
+              globalContext.setRetailerScanned(false);
               Alert.alert(
                 'Barcode not recognised!',
                 'Please try again\n\nEnsure the barcode is correct and you have a stable connection',
