@@ -17,7 +17,7 @@ const links = [
 ];
 
 export default function RetailerLayout() {
-  const { userType } = useAuth();
+  const { userType, loading } = useAuth();
   const segments = useSegments();
 
   const { colorMode } = useColorMode();
