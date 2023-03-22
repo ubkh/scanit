@@ -19,11 +19,12 @@ import {
   useColorMode,
 } from "native-base";
 import { Link, useRouter, useSearchParams } from "expo-router";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { TouchableOpacity, Alert, Platform } from "react-native";
 import { Context } from "../../../../context/GlobalContext";
 
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
+import NumericInput from 'react-native-numeric-input';
 
 function getTestList(setSampleText, domain) {
   return fetch(`http://${domain}/api/list`, {
@@ -49,6 +50,7 @@ function Home() {
   const params = useSearchParams();
   const { data, type } = params || {};
   const { colorMode } = useColorMode();
+  const [quantityCounter, setQuantityCounter] = useState(<Text> a </Text>);
 
   const { domain } = globalContext;
   const { basketList } = globalContext;
@@ -56,6 +58,7 @@ function Home() {
   const { setRetailerScanned } = globalContext;
   const { retailerBarcodeData, retailerBarcodeType } = globalContext;
   const { setRetailerBarcodeData, setRetailerBarcodeType } = globalContext;
+  const { quantityValue, setQuantityValue} = globalContext;
 
   const resetRetailerBarcode = () => {
     globalContext.setRetailerScanned(false);
@@ -69,6 +72,41 @@ function Home() {
   console.log(`Most recent barcode type: ${type}`);
   console.log(basketList);
   console.log(`Has retailer been scanned? ${isRetailerScanned}`);
+
+  useEffect(() => {
+    setQuantityCounter(
+      <View>
+      <NumericInput
+          //key={`${item.data}`}
+          value={quantityValue}
+          onChange={value => {
+          if (value > 0) {
+            setQuantityValue(value);
+            //handleQuantityChange(index, value);
+          }
+          else {
+                Alert.alert(
+                        'Enter a valid quantity',
+                        'Quantity must be 1 or more!',
+                        [
+                          {
+                            text: 'Ok',
+                            style: 'default',
+                          },
+                        ],
+                      )
+                    }
+                  }} 
+                  minValue={1}
+                  rounded={true}
+                  textColor={colorMode === 'light' ? 'black' : 'white'}
+                  totalHeight={40}
+                  totalWidth={100}
+                />
+        </View>
+    )
+  }, [quantityValue]);
+  
 
   return (
     <View style={{ flex: 1 }} _dark={{ bg: "black" }} _light={{ bg: "white" }}>
@@ -210,7 +248,38 @@ function Home() {
             </Center>
           </Box>
         </TouchableOpacity>
+        {quantityCounter}
+        {/* <View>
+            <NumericInput
+                //key={`${item.data}`}
+                value={quantityValue}
+                onChange={value => {
+                if (value > 0) {
+                  setQuantityValue(value);
+                  //handleQuantityChange(index, value);
+                }
+                else {
+                      Alert.alert(
+                              'Enter a valid quantity',
+                              'Quantity must be 1 or more!',
+                              [
+                                {
+                                  text: 'Ok',
+                                  style: 'default',
+                                },
+                              ],
+                            )
+                          }
+                        }} 
+                        minValue={1}
+                        rounded={true}
+                        textColor={colorMode === 'light' ? 'black' : 'white'}
+                        totalHeight={40}
+                        totalWidth={100}
+                      />
+                    </View> */}
         <Spacer />
+        
       </Flex>
     </View>
   );

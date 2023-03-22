@@ -193,7 +193,8 @@ function BarCodeScanComponent(props){
     const globalContext = useContext(Context);
     //const { basketList } = globalContext;
     const { isRetailerScanned, setRetailerScanned } = globalContext;
-    const [quantityInput, setQuantityInput] = useState(1);
+    //const [quantityInput, setQuantityInput] = useState(1);
+    const{quantityValue, setQuantityValue} = globalContext;
     // const { retailerBarcodeData, retailerBarcodeType } = globalContext;
     // const { setRetailerBarcodeData, setRetailerBarcodeType } = globalContext;
 
@@ -218,7 +219,7 @@ function BarCodeScanComponent(props){
           console.log("Retailer Barcode Scanned!")
           globalContext.setRetailerBarcodeData(data)
           globalContext.setRetailerBarcodeType(type)
-          router.push({ pathname: '/home', params: { data, type } });
+          //router.push({ pathname: '/home', params: { data, type } });
         }
         else {
           let foundObject = null
@@ -249,9 +250,11 @@ function BarCodeScanComponent(props){
             )
           } 
           else {
-              globalContext.setBasketList([...globalContext.basketList, { 'data': data, 'type': type, 'quantity': 1 }])
-              router.push({ pathname: '/home', params: { data, type } });
-              router.push({ pathname: '/basket', params: { data, type } });
+              globalContext.setBasketList([...globalContext.basketList, { 'data': data, 'type': type, 'quantity': quantityValue }])
+              Alert.alert('Item Scanned', 'Check basket to change quantity');
+              setQuantityValue(1);
+              //router.push({ pathname: '/home', params: { data, type } });
+              //router.push({ pathname: '/basket', params: { data, type } });
               // Wanted to have an alert display if 'doneFirstScan' if false to let the user know
               // that they need to go to the basket to edit quantities, but the alert was causing
               // the app to crash, works above though...
@@ -260,7 +263,7 @@ function BarCodeScanComponent(props){
 
         
         //navigation.navigate('HomeScreen', { data, type });
-        //router.push({ pathname: '/home', params: { data, type } });
+        router.push({ pathname: '/home', params: { data, type } });
       };
     
       if (hasPermission === null) {

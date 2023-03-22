@@ -16,6 +16,7 @@ export default function ContextProvider(props) {
   const [basketList, setBasketList] = useState([]);
   const [isRetailerScanned, setRetailerScanned] = useState(false);
   const[previousPurchases, setPreviousPurchases] = useState([]);
+  const[quantityValue, setQuantityValue] = useState(1);
 
   //const [ userType, setUserType ] = useState('retailer'); //'customer' or 'retailer'
   const [userID, setUserID] = useState(undefined); // ?
@@ -36,6 +37,8 @@ export default function ContextProvider(props) {
     setPreviousPurchases,
     userID,
     setUserID,
+    quantityValue,
+    setQuantityValue,
   };
 
   return (
