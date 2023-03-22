@@ -1,11 +1,6 @@
 import React, { useState, useContext } from 'react';
-//import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import {TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-
-//import {StatusBar, useColorMode} from 'native-base';
-import { View, Container, Text, useColorMode, StatusBar,Input } from 'native-base';
-
-
+import { TouchableOpacity, Alert } from 'react-native';
+import { View,  Text, useColorMode, StatusBar,Input } from 'native-base';
 import { useRouter } from "expo-router";
 import { Context } from '../../../../context/GlobalContext';
 import PaymentStyle from '../../../../styles/PaymentPageStyle';
@@ -14,7 +9,8 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
 
   function CardDetails(props) {
 
-    const { colorMode } = useColorMode();
+  const { colorMode } = useColorMode();
+  const router = useRouter();
 
 
   const [name, setName] = useState('');
@@ -28,27 +24,19 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
   const { retailerBarcodeType, setRetailerBarcodeType } = useContext(Context);
   const { isRetailerScanned, setRetailerScanned } = useContext(Context);
 
-
-
-  const router = useRouter();
-
   const getFullDate = () => {
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0');
     var yyyy = today.getFullYear();
-
     return dd + '/' + mm + '/' + yyyy;
-
   };
 
   const getFullTime = () => {
- 
     var d = new Date(),
     h = (d.getHours()<10?'0':'') + d.getHours(),
     m = (d.getMinutes()<10?'0':'') + d.getMinutes();
     return  h + ':' + m;
-
   };
 
   const resetFields =() => {
@@ -127,7 +115,6 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
       <StatusBar barStyle={colorMode === 'light' ? 'dark-content' : 'light-content'} animated={true}/>
 
     <View style={PaymentStyle.container}>
-      {/* <Text style={PaymentStyle.label}>Name on Card</Text> */}
       <Input
         style={PaymentStyle.input}
         placeholder="Enter Name on Card"
@@ -136,7 +123,6 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
         maxLength={30}
         variant="underlined"
       />
-      {/* <Text style={PaymentStyle.label}>Card Number</Text> */}
       <Input
         style={PaymentStyle.input}
         placeholder="Enter Card Number"
@@ -146,7 +132,6 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
         maxLength={16}
         variant="underlined"
       />
-      {/* <Text style={PaymentStyle.label}>Expiry Date</Text> */}
         <View style = {{flexDirection: "row"}}>
           <View style={{flex:1}}>
             <Input
@@ -172,7 +157,6 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
           </View>
         </View>
 
-      {/* <Text style={PaymentStyle.label}>CVV</Text> */}
       <Input
         style={PaymentStyle.input}
         placeholder="Enter CVV"
@@ -192,54 +176,6 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
   );
 }
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     padding: 20,
-//   },
-//   label: {
-//     fontSize: 16,
-//     marginBottom: 5,
-//   },
-//   input: {
-//     height: 40,
-//     borderColor: '#ccc',
-//     borderWidth: 1,
-//     borderRadius: 5,
-//     paddingHorizontal: 10,
-//     marginBottom: 10,
-//   },
-//   inputMonth: {
-//     height: 40,
-//     borderColor: '#ccc',
-//     borderWidth: 1,
-//     borderRadius: 5,
-//     paddingHorizontal: 10,
-//     marginBottom: 10,
-//     justifyContent: 'flex-start',
-//   },
-//   inputYear: {
-//     height: 40,
-//     borderColor: '#ccc',
-//     borderWidth: 1,
-//     borderRadius: 5,
-//     paddingHorizontal: 10,
-//     marginBottom: 10,
-//     justifyContent: 'flex-end',
-//   },
-//   button: {
-//     backgroundColor: '#50C878',
-//     borderRadius: 5,
-//     padding: 10,
-//     alignItems: 'center',
-//   },
-//   buttonText: {
-//     color: '#fff',
-//     fontSize: 16,
-//   },
-// });
-
-CardDetails.displayName = 'CardDetails';
 
 export default CardDetails;
 

@@ -12,29 +12,15 @@ const PaymentStyle = StyleSheet.create({
     },
     input: {
       height: 50,
-      //borderColor: '#ccc',
-      // borderWidth: 1,
-      // borderRadius: 5,
-      // paddingHorizontal: 10,
-      // marginBottom: 10,
-
     },
     inputMonth: {
       height: 50,
-      //borderColor: '#ccc',
-      // borderWidth: 1,
-      // borderRadius: 5,
       paddingHorizontal: 10,
-      // marginBottom: 10,
       justifyContent: 'flex-start',
     },
     inputYear: {
       height: 50,
-      //borderColor: '#ccc',
-      // borderWidth: 1,
-      // borderRadius: 5,
        paddingHorizontal: 10,
-      // marginBottom: 10,
       justifyContent: 'flex-end',
     },
     button: {

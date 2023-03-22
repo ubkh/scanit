@@ -112,42 +112,6 @@ const GroceryTrips = () => {
     </View> 
   );
 
-  // return (
-  //   <ScrollView>
-  //     <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Previous Grocery Trips:</Text>
-  //     {previousPurchases.map((trip, index) => (
-  //       <View key={index} style={{ paddingVertical: 5 }}>
-  //         <Text>Date: {trip.date}</Text>
-  //         <Text>Time: {trip.time}</Text>
-  //         <Text>Location: {trip.location}</Text>
-  //         <Text>Items:</Text>
-  //         <View style={{ marginLeft: 20 }}>
-  //           {trip.items.map((item, index) => (
-  //             <><Text key={index}>{item.data}</Text><View style={{ flexDirection: "row", justifyContent: "flex-end" }} key={index}>
-  //               <TouchableOpacity
-  //                 onPress={() => removeItem(index)}
-  //               >
-  //                 <View
-  //                   style={{
-  //                     backgroundColor: 'red',
-  //                     borderRadius: 20,
-  //                     padding: 10,
-  //                   }}
-  //                 >
-  //                   <Ionicons
-  //                     name="trash-outline"
-  //                     size={25}
-  //                     color="white" />
-  //                 </View>
-  //               </TouchableOpacity>
-  //             </View></>
-  //           ))}
- 
-  //         </View>
-  //       </View>
-  //     ))}
-  //   </ScrollView>
-  // );
 }
 
 const styles = StyleSheet.create({

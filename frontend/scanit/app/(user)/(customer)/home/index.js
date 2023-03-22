@@ -24,7 +24,6 @@ import { TouchableOpacity, Alert, Platform } from "react-native";
 import { Context } from "../../../../context/GlobalContext";
 
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
-import NumericInput from 'react-native-numeric-input';
 
 function getTestList(setSampleText, domain) {
   return fetch(`http://${domain}/api/list`, {
@@ -45,12 +44,10 @@ function Home() {
   const globalContext = useContext(Context);
 
   const [sampleText, setSampleText] = useState("Hello, World!");
-  //route = useRoute();
   const router = useRouter();
   const params = useSearchParams();
   const { data, type } = params || {};
   const { colorMode } = useColorMode();
-  const [quantityCounter, setQuantityCounter] = useState(<Text> a </Text>);
 
   const { domain } = globalContext;
   const { basketList } = globalContext;
@@ -58,7 +55,6 @@ function Home() {
   const { setRetailerScanned } = globalContext;
   const { retailerBarcodeData, retailerBarcodeType } = globalContext;
   const { setRetailerBarcodeData, setRetailerBarcodeType } = globalContext;
-  const { quantityValue, setQuantityValue} = globalContext;
 
   const resetRetailerBarcode = () => {
     globalContext.setRetailerScanned(false);
@@ -73,40 +69,6 @@ function Home() {
   console.log(basketList);
   console.log(`Has retailer been scanned? ${isRetailerScanned}`);
 
-  useEffect(() => {
-    setQuantityCounter(
-      <View>
-      <NumericInput
-          //key={`${item.data}`}
-          value={quantityValue}
-          onChange={value => {
-          if (value > 0) {
-            setQuantityValue(value);
-            //handleQuantityChange(index, value);
-          }
-          else {
-                Alert.alert(
-                        'Enter a valid quantity',
-                        'Quantity must be 1 or more!',
-                        [
-                          {
-                            text: 'Ok',
-                            style: 'default',
-                          },
-                        ],
-                      )
-                    }
-                  }} 
-                  minValue={1}
-                  rounded={true}
-                  textColor={colorMode === 'light' ? 'black' : 'white'}
-                  totalHeight={40}
-                  totalWidth={100}
-                />
-        </View>
-    )
-  }, [quantityValue]);
-  
 
   return (
     <View style={{ flex: 1 }} _dark={{ bg: "black" }} _light={{ bg: "white" }}>
@@ -248,155 +210,11 @@ function Home() {
             </Center>
           </Box>
         </TouchableOpacity>
-        {quantityCounter}
-        {/* <View>
-            <NumericInput
-                //key={`${item.data}`}
-                value={quantityValue}
-                onChange={value => {
-                if (value > 0) {
-                  setQuantityValue(value);
-                  //handleQuantityChange(index, value);
-                }
-                else {
-                      Alert.alert(
-                              'Enter a valid quantity',
-                              'Quantity must be 1 or more!',
-                              [
-                                {
-                                  text: 'Ok',
-                                  style: 'default',
-                                },
-                              ],
-                            )
-                          }
-                        }} 
-                        minValue={1}
-                        rounded={true}
-                        textColor={colorMode === 'light' ? 'black' : 'white'}
-                        totalHeight={40}
-                        totalWidth={100}
-                      />
-                    </View> */}
         <Spacer />
-        
       </Flex>
     </View>
   );
 
-  // return (
-  //     <View style={ContainerStyle.container}>
-  //         <Heading size="lg" fontSize={30} bold justifyContent="flex-start" style={{ fontFamily: 'Rubik-Bold' }}>Home</Heading>
-  //         <Text style={{ fontFamily: 'Rubik-Bold' }}>Welcome to ScanIt!</Text>
-  //         <Text>&nbsp;</Text>
-
-  //         <TouchableOpacity onPress={() => router.push('/home/Scan')}>
-  //             <Box size={150} width={300} borderRadius={10}
-  //                 bg={{linearGradient: {
-  //                     colors: ['#0984e3', 'violet.800'],
-  //                     start: [0, 0],
-  //                     end: [1, 0]
-  //                 }}}>
-  //             <Center size={150} width={300} borderRadius={10}>
-  //                 <Icon size={30} color={"white"} as={Entypo} name="shop" />
-  //                 <Text>&nbsp;</Text>
-  //                 <Text color={"white"} style={{ fontFamily: 'Rubik-Bold' }}>Scan Retailer Barcode</Text>
-  //             </Center>
-  //             </Box>
-  //         </TouchableOpacity>
-
-  //         <Text>&nbsp;</Text>
-
-  //         <TouchableOpacity onPress={() => router.push('/home/Scan')}
-  //             disabled={!isRetailerScanned}>
-  //             <Box size={150} width={300} borderRadius={10}
-  //                 bg={ isRetailerScanned ?
-  //                     {linearGradient: {
-  //                     colors: ['lightBlue.300', 'brand.400'],
-  //                     start: [0, 0],
-  //                     end: [1, 0]}}
-  //                     : "#b3b3b3"
-  //                 }>
-  //             <Center size={150} width={300} borderRadius={10}>
-  //                 <Icon size={30} color={isRetailerScanned ? "white" : "gray.300"} as={MaterialCommunityIcons} name="barcode-scan" />
-  //                 <Text>&nbsp;</Text>
-  //                 <Text color={ isRetailerScanned ? "white" : "gray.300"} style={{ fontFamily: 'Rubik-Bold' }}>Scan Product Barcode</Text>
-  //             </Center>
-  //             </Box>
-  //         </TouchableOpacity>
-
-  //         {isRetailerScanned ?
-  //             <View style={{justifyContent: 'flex-start', padding: 20,}}>
-  //             <Text style={{fontWeight: 'bold'}}>
-  //                 Currently shopping with retailer with barcode: {retailerBarcodeData}
-  //             </Text>
-  //             </View>
-  //             : null
-  //         }
-  //         {/* <Text>{sampleText}</Text>
-  //         <Text>&nbsp;</Text> */}
-  //         {/* <Button onPress={() => getTestList(setSampleText, domain)}
-  //             bg={{linearGradient: {
-  //                 colors: ['lightBlue.300', 'violet.800'],
-  //                 start: [0, 0],
-  //                 end: [1, 0]
-  //             }}}>
-  //             GET data
-  //         </Button> */}
-  //         {/* <Text>&nbsp;</Text>
-  //         <Button onPress={() => router.push('/home/Scan')}
-  //             disabled={isRetailerScanned} shadow={2} bg={isRetailerScanned ? "#b3b3b3" : "brand.400"}>
-  //             Scan Retailer Barcode!
-  //         </Button> */}
-  //         {isRetailerScanned ?
-  //             <View>
-  //                 <TouchableOpacity onPress={() => {
-  //                     Alert.alert(
-  //                         'Clear Retailer',
-  //                         'Are you sure you want to clear the retailer you are shopping with?\n\nYour basket will be emptied!',
-  //                         [
-  //                             {
-  //                             text: 'Ok',
-  //                             onPress: () => resetRetailerBarcode(),
-  //                             style: 'default',
-  //                             },
-  //                             {
-  //                             text: 'Cancel',
-  //                             style: 'cancel',
-  //                             },
-  //                         ],
-  //                     )
-  //                 }
-  //             }>
-  //                 <Text style={{fontStyle: "italic", textDecorationLine: "underline"}}>Reset retailer</Text>
-  //             </TouchableOpacity>
-  //             <Text>&nbsp;</Text>
-  //             </View>
-  //             : null}
-  //         <Text>&nbsp;</Text>
-
-  //         {/* <Text>Retailer barcode info:</Text>
-  //         <Text>&nbsp;</Text>
-  //         {retailerBarcodeData ? <Text>Data: {JSON.stringify(retailerBarcodeData)}</Text> : <Text>Nothing yet</Text>}
-  //         {retailerBarcodeType ? <Text>Type: {JSON.stringify(retailerBarcodeType)}</Text> : <Text>Nothing yet</Text>} */}
-
-  //         <Text>&nbsp;</Text>
-  //         {/* <Button bg={!isRetailerScanned ? "#b3b3b3" : "brand.400"} onPress={() => router.push('/home/Scan')}
-  //             disabled={!isRetailerScanned}>
-  //                 Scan Product Barcode!
-  //         </Button> */}
-
-  //         {/* <Text>&nbsp;</Text>
-  //         <Text>Info on most recent barcode scanned (retailer/product):</Text>
-  //         <Text>&nbsp;</Text>
-  //         {data ? <Text>Data: {JSON.stringify(data)}</Text> : <Text>Nothing yet</Text>}
-  //         {type ? <Text>Type: {JSON.stringify(type)}</Text> : <Text>Nothing yet</Text>} */}
-
-  //         <Text>&nbsp;</Text>
-  //         {/* <StatusBar style="auto" /> */}
-  //         <StatusBar barStyle={'light-content'} animated={true}/>
-  //     </View>
-  // );
 }
 
 export default Home;
