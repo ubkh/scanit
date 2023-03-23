@@ -559,3 +559,22 @@ def retailerUpdateProduct(request):
         return HttpResponseBadRequest()
     except:
         return HttpResponseServerError()
+    
+class RetailerBarcodeAPIView(APIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (AllowAny,)
+
+    def post(self, request):
+        store_id = request.data.get("store_id")
+        
+        try:
+            store = Store.objects.get(id=store_id)
+
+            return Response(data={"barcode": store.barcode})
+            #return Response({'success': 'Password reset email sent.'}, status=status.HTTP_200_OK)
+
+        except:
+            HttpResponse("Store does not exist!", status=status.HTTP_400_BAD_REQUEST)
+       
+
+

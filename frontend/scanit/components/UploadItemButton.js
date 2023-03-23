@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from 'native-base';
+import { ScrollView, Platform, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useContext , useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from "expo-router";
@@ -15,6 +16,7 @@ const UploadItemButton = ({validProducts}) => {
     const { user } = useAuth();
     const { control, handleSubmit } = useForm();
     // const[error, setError] = useState('');
+    const [ valid, setValid ] = useState(true);
 
     const onUploadProducts = async () =>{
 
@@ -23,6 +25,12 @@ const UploadItemButton = ({validProducts}) => {
             uploadProduct(product);
 
         })
+
+        if (!valid) {
+            alert('Some items are invalid and have not been uploaded! Redirecting to products page.');
+        }
+
+        router.push({pathname: '(retailer)/products/'})
         
     }
 
@@ -51,12 +59,10 @@ const UploadItemButton = ({validProducts}) => {
                 return res.json()
             } else {
                 console.log(res);
+                setValid(false);
                 setError('error in uploading items')
                 throw res.json()
             }
-        })
-        .then(json => {
-            router.push({pathname: '/signUp/verify'})
         })
         .catch(error => {
             console.log(error)
