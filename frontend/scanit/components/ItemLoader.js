@@ -2,7 +2,8 @@ import { View, Text, Button, Box, Heading, StatusBar, Center, Icon } from 'nativ
 import { useEffect, useState } from 'react';
 import UploadItemButton, { UploadButton } from "./UploadItemButton.js";
 import Product from './Product';
-import * as XLSX from "xlsx";
+import * as XLSX from "xlsx"
+import { useAuth } from '../context/AuthContext';
 
 const ItemLoader = () => {
   const [selectedFile, setSelectedFile] = useState(undefined);
@@ -45,8 +46,14 @@ const ItemLoader = () => {
   function validateProducts(productsList) {  // name , description, price, quantity, expirydate
   
     var validProducts;
-    
+
     validProducts = productsList.filter((product) => {
+
+      // console.log("before ");
+      // console.log(product);
+      // isItemValid(product)
+      // console.log("affta");
+      // console.log(product);
 
       return isItemValid(product);
 
@@ -58,10 +65,10 @@ const ItemLoader = () => {
   
   function isItemValid(product) {
     try {
-      if(product.barcodeID == undefined){
+      if(product.barcode == undefined){
         return false;
       }
-      if(product.barcodeID == ''){
+      if(product.barcode == ''){
         return false;
       }
 
@@ -108,10 +115,17 @@ const ItemLoader = () => {
       if (product.expiry == undefined) {
         return false;
       }
-  
+
+    
+
       const current_date = new Date();
       const timestamp = Date.parse(product.expiry);
       const item_date = new Date(timestamp);
+      var dateString = new Date(item_date.getTime() - (item_date.getTimezoneOffset() * 60000 ))
+                    .toISOString()
+                    .split("T")[0];
+      product.expiry = dateString;
+      
 
       if (item_date < current_date) {
         return false;
@@ -152,8 +166,6 @@ const ItemLoader = () => {
       /* Convert array of arrays */
       const data = XLSX.utils.sheet_to_csv(ws, { header: 1 });
       /* Update state */
-      console.log("Data>>>" + data);// shows that excel data is read
-      console.log(convertToJson(data)); // shows data in json format
       convertToJson(data).map(x => x); // shows data in json format
       var validData = validateProducts(convertToJson(data));
       setJsonProductData(validData);
@@ -207,12 +219,13 @@ const ItemLoader = () => {
         {jsonProductData.map((p,index) => (
           <Product
             key={index}
-            barcodeID={p.barcodeID}
+            barcode={p.barcode}
             name={p.name}
             description={p.description}
             price={p.price}
             quantity={p.quantity}
             expiry={p.expiry}
+            store_id={useAuth().user.employed_at_id}
           />
           ))}
       </div>

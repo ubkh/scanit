@@ -1,28 +1,4 @@
 
-// const Theme = extendTheme({
-//     colors: {
-//         // Add new color
-//         primary: {
-//             50: '#E3F2FD',
-//             100: '#BBDEFB',
-//             200: '#90CAF9',
-//             300: '#64B5F6',
-//             400: '#34D399',
-//             500: '#2196F3',
-//             600: '#1E88E5',
-//         },
-//         // Redefinig only one shade, rest of the color will remain same.
-//         amber: {
-//             400: '#d97706',
-//         }
-//     },
-//     config: {
-//         // Changing initialColorMode to 'dark'
-//         useSystemColorMode: true,
-//         initialColorMode: 'light'
-//     }
-// });
-
 import { LinearGradient } from "expo-linear-gradient";
 
 const ColorTheme = {
@@ -31,19 +7,15 @@ const ColorTheme = {
         800: "#7c83db",
         700: "#b3bef6",
     },
-};
-
-const Components = {
-    ButtonGroup: {
-        variants: {
-            brand: ({ colorScheme }) => {
-              return {
-                bg: "#34d399" ,
-              };
-            },
-        },
+    primary: {
+        200: "#34d399",
+        300: "#34d399",
+        400: "#34d399",
+        500: "#34d399",
+        600: "#34d399",
+        700: "#10ac84",
     }
-}
+};
 
 const Config = {
     dependencies: {
@@ -51,4 +23,4 @@ const Config = {
     }
 }
 
-export { ColorTheme, Components, Config };
+export { ColorTheme, Config };

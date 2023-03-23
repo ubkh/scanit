@@ -38,7 +38,7 @@ function RetailerBarcodeScanner() {
         Alert.alert("Product found", "Please fill in the quantity and expiry.");
         setProductData(resData);
         router.back();
-        router.push("/add-product/form");
+        router.push("/addProduct/form");
       } else if (res.status === 400) {
         Alert.alert(
           "Not found",
@@ -46,7 +46,7 @@ function RetailerBarcodeScanner() {
         );
         setProductData({ barcode: data });
         router.back();
-        router.push("/add-product/form");
+        router.push("/addProduct/form");
       }
       setScanned(false);
     } catch (error) {

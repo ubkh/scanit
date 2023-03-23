@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
-import { StyleSheet, Text, View, Image,Button, useWindowDimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { Button, View, Text, Box, StatusBar, useColorMode, Heading, Divider } from 'native-base';
 import CustomInput from '../../../components/CustomInput.js';
 import { useRouter, useSearchParams } from "expo-router";
 import { Context } from '../../../context/GlobalContext.js';
@@ -15,7 +16,8 @@ function assignStaffPage(props) {
     const[number, setNumber] = useState('');
     const[store_address, setStoreAddress] = useState('');
     const router = useRouter();
-
+    const { colorMode } = useColorMode();
+ 
     // const[firstName, setFirstName] = useState('');
     // const[lastName, setLastName] = useState('');
     // const[email, setEmail] = useState('');
@@ -34,7 +36,7 @@ function assignStaffPage(props) {
             'first_name': data.first_name,
             'last_name': data.last_name,
             'number': number,
-            'employed_at_id': 4,
+            'employed_at_id': user.user.employed_at_id,
             'password': data.password,
             'account_type': 2,
         })
@@ -66,13 +68,36 @@ function assignStaffPage(props) {
     }
 
     return (
-        <View style={styles.container}>
-            <Text>&nbsp;</Text>
-            <Text>&nbsp;</Text>
-            <Text>&nbsp;</Text>
+    <Box _dark={{ bg: "black" }} flex={1} _light={{ bg: "white" }} safeAreaTop>
+        <StatusBar
+            barStyle={colorMode === "light" ? "dark-content" : "light-content"}
+            animated={true}
+        />
+
+        <Heading size="lg" style={{ fontFamily: "Rubik-Bold" }}
+            fontSize={30}
+            bold
+            justifyContent="flex-start"
+            alignSelf={"center"}
+            _web={{ mb: "5", mt:"5", mx:"8", alignSelf:"flex-start" }}>
+          Assign Staff
+        </Heading>
+
+        {Platform.OS !== "web" && <Divider
+          my="2"
+          _light={{
+            bg: "muted.200",
+          }}
+          _dark={{
+            bg: "muted.500",
+          }}
+        />}
+
+        <View mx="8">
             
-            <Text style={styles.title}>Create an account</Text>
+            <Text textAlign={"center"} _web={{textAlign: "start"}}>Create an account for new staff.</Text>
             
+            <Text>&nbsp;</Text>
             <CustomInput 
                 name='first_name'
                 placeholder='First name'
@@ -93,6 +118,12 @@ function assignStaffPage(props) {
                     required: 'Email is required',
                 }} 
             />
+
+
+
+
+
+            
       
             <CustomInput 
                 name = 'password'
@@ -107,11 +138,11 @@ function assignStaffPage(props) {
                 }} 
                 secureTextEntry
             />
-        
-            <Button bg="brand.400" width="100%" maxWidth="300px" onPress={handleSubmit(onRegisterPressed)} title={"Assign Staff"}>Assign staff</Button>
-            <Text style = {styles.text}>
-            </Text>
-        </View>
+            <Text>&nbsp;</Text>
+            <Button bg="brand.400" width="100%" maxWidth="300px" onPress={handleSubmit(onRegisterPressed)} title={"Assign staff"}>Assign staff</Button>
+            <Text>&nbsp;</Text>
+            </View>
+        </Box>
         
     )
 }

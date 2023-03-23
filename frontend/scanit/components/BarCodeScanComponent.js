@@ -226,6 +226,7 @@ function BarCodeScanComponent(props){
             const resultList = await response.json();
             console.log(resultList);
 
+            // WORK ON THE RESPONSE
             if (resultList.length === 0) {
               globalContext.setRetailerScanned(false);
               Alert.alert(

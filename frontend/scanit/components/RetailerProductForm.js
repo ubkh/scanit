@@ -5,6 +5,7 @@ import {
   TextArea,
   Input,
   ScrollView,
+  KeyboardAvoidingView,
   FormControl,
   VStack,
 } from "native-base";
@@ -15,6 +16,7 @@ import { Context } from "../context/GlobalContext";
 import { ProductDataContext } from "../context/RetailerProductContext";
 import validateForm from "./forms-validations/RetailerProduct";
 import { useRouter } from "expo-router";
+import { useAuth } from "../context/AuthContext.js"
 
 function RetailerProductForm({ isUpdate = false }) {
   const { productData, setProductData } = useContext(ProductDataContext);
@@ -25,6 +27,7 @@ function RetailerProductForm({ isUpdate = false }) {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm({ defaultValues: getInitialValues(), mode: "onBlur" });
+  const { user } = useAuth();
 
   function getProductData() {
     return {
@@ -55,11 +58,15 @@ function RetailerProductForm({ isUpdate = false }) {
       ...values,
       price: Math.ceil(parseFloat(values.price) * 100), // some inputs like "300.09" becomes 30008.9999999 for some reason, hence Math.ceil
       quantity: parseInt(values.quantity),
+      store: user.user.employed_at_id,
     });
   }
 
   async function addSubmitHandler(values) {
     const jsonObj = dataToJSON(values);
+
+    // console.log(jsonObj);
+
     const res = await fetch(`http://${domain}/api/retailer/add-product/`, {
       method: "POST",
       // mode: "cors",
@@ -68,7 +75,7 @@ function RetailerProductForm({ isUpdate = false }) {
       },
       body: jsonObj,
       credentials: "include",
-    });
+    })
     if (res.ok) {
       Alert.alert("Success", "Product was successfully added to the system.");
       router.back();
