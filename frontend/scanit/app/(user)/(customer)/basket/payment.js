@@ -3,7 +3,7 @@ import React, { useState, useContext } from 'react';
 import {TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 
 //import {StatusBar, useColorMode} from 'native-base';
-import { View, Container, Text, useColorMode, StatusBar,Input } from 'native-base';
+import { View, Container, Text, useColorMode, StatusBar, Input, Heading } from 'native-base';
 
 
 import { useRouter } from "expo-router";
@@ -108,7 +108,7 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
       //console.warn(basketList);
       setPreviousPurchases([
 
-        {date: getFullDate(), time: getFullTime(), location: retailerBarcodeData , items: basketList },
+        {date: getFullDate(), time: getFullTime(), location: retailerBarcodeData[0].barcode , items: basketList },
         ...previousPurchases
       ])
       console.warn(previousPurchases)
@@ -121,7 +121,6 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
 
     <View style={{flex: 1}} _dark={{bg: "black"}} _light={{bg: "white"}}>
       <StatusBar barStyle={colorMode === 'light' ? 'dark-content' : 'light-content'} animated={true}/>
-
     <View style={PaymentStyle.container}>
       <Text style={PaymentStyle.label}>Name on Card</Text>
       <Input

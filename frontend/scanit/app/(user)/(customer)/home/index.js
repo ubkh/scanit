@@ -69,6 +69,7 @@ function Home() {
   console.log(`Most recent barcode type: ${type}`);
   console.log(basketList);
   console.log(`Has retailer been scanned? ${isRetailerScanned}`);
+  console.log(globalContext.userID)
 
   return (
     <View style={{ flex: 1 }} _dark={{ bg: "black" }} _light={{ bg: "white" }}>

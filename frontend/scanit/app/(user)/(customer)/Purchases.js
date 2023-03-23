@@ -73,14 +73,14 @@ const GroceryTrips = () => {
             <Text><B>Items:</B></Text>
             <View style={{ marginLeft: 20 }}>
               {trip.items.map((item, index) => (
-                <><Text key={index}>{item.data}</Text><View style={{ flexDirection: "row", justifyContent: "flex-end" }} key={index}>
-                  <TouchableOpacity
-                  style={styles.button}
-                    onPress={() => removeItem(index,trip.date)}
-                  >
-                    <Ionicons name="arrow-undo-outline" color="white" />
-                  </TouchableOpacity>
-                </View></>
+                <>
+                  <Text key={index}>Name: {item.name + "\n"}Barcode: {item.barcode + "\n"}Price: {"£" + (item.price / 100) + "\n"}</Text>
+                    <View style={{ flexDirection: "row", justifyContent: "flex-end" }} key={index}>
+                      <TouchableOpacity style={styles.button} onPress={() => removeItem(index,trip.date)}>
+                        <Ionicons name="arrow-undo-outline" color="white" />
+                      </TouchableOpacity>
+                    </View>
+                </>
               ))}
             </View>
           </View>
