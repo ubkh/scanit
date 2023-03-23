@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Slot, SplashScreen } from "expo-router";
-import { useWindowDimensions, View, Text } from "react-native";
+import { useWindowDimensions, View, Text, Platform } from "react-native";
 import { AuthProvider } from "../context/AuthContext";
 import { extendTheme, NativeBaseProvider } from "native-base";
 import { ColorTheme, Components, Config } from "../Theme.js";
@@ -39,7 +39,7 @@ export default function RootLayout() {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
 
   useEffect(() => {
-      setIsSmallScreen(width < 700);
+      setIsSmallScreen(width < 700 && Platform.OS === 'web');
   }, [width]);
 
   if (isSmallScreen) {

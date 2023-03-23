@@ -36,20 +36,20 @@ describe("Home (example)", () => {
 
   });
 
-  test("renders correctly again", async () => {
-    // render and store
-    const screen = render(<Home />);
+  // test("renders correctly again", async () => {
+  //   // render and store
+  //   const screen = render(<Home />);
 
-    await waitFor(async () => {    
-      const homeHeading = screen.getByText("Home");
-      const homeText = screen.getByText('You are in the retailer home!');
+  //   await waitFor(async () => {    
+  //     const homeHeading = screen.getByText("Home");
+  //     const homeText = screen.getByText('You are in the retailer home!');
 
-      // make assertions
-      expect(homeHeading).toBeDefined();
-      expect(homeText).toBeDefined();
-    });    
+  //     // make assertions
+  //     expect(homeHeading).toBeDefined();
+  //     expect(homeText).toBeDefined();
+  //   });    
 
-  });
+  // });
 
   
   

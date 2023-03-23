@@ -7,6 +7,8 @@ import {
   Divider,
   Box,
   Text,
+  StatusBar,
+  useColorMode
 } from "native-base";
 import BarCodeScanStyle from "../../../../styles/BarCodeScanStyle";
 import { useRouter } from "expo-router";
@@ -21,6 +23,7 @@ function Products() {
   const [showSuspended, setShowSuspended] = useState(false);
   // const [shouldUpdate, setShouldUpdate] = useState(true);
   const { domain } = useContext(Context);
+  const { colorMode } = useColorMode();
 
   useEffect(() => {
     // useEffect has problem with async function. Create the async function and call it
@@ -32,6 +35,7 @@ function Products() {
       if (res.ok) {
         const productsData = await res.json();
         setProducts(productsData);
+        setIsLoading(false);
       }
       setIsLoading(false);
     })();
@@ -51,7 +55,7 @@ function Products() {
         <ProductListItem item={item} key={item.id} />
       ));
     } else {
-      return <Text>There are no suspended products</Text>;
+      return <Text textAlign="center" _web={{textAlign: "start"}}>There are no suspended products</Text>;
     }
   }
 
@@ -61,21 +65,41 @@ function Products() {
   return (
     <Box
       safeAreaTop
-      style={BarCodeScanStyle.container}
       _dark={{ bg: "black" }}
       _light={{ bg: "white" }}
+      flex={1}
     >
+      <StatusBar
+        barStyle={colorMode === "light" ? "dark-content" : "light-content"}
+        animated={true}
+      />
+      
+      <Heading size="lg" style={{ fontFamily: "Rubik-Bold" }}
+          fontSize={30}
+          bold
+          justifyContent="flex-start"
+          alignSelf={"center"}
+          _web={{ mb: "5", mt:"5", mx:"8", alignSelf:"flex-start" }}>
+        Products
+      </Heading>
+
+      {Platform.OS !== "web" && <Divider
+        my="2"
+        _light={{
+          bg: "muted.200",
+        }}
+        _dark={{
+          bg: "muted.500",
+        }}
+      />}
+
       <ScrollView
         width="100%"
         flex={1}
         alignSelf="center"
-        px="5"
-        _web={{ px: 10 }}
+        _web={{ px: 8 }}
       >
-        <Heading size="lg" _web={{ mb: "7" }} mb="4" mt="3">
-          Products
-        </Heading>
-        <HStack alignItems="center">
+        <HStack alignItems="center" alignSelf="center" _web={{alignSelf: "flex-start"}}>
           <Button
             variant="link"
             px="0"
@@ -86,7 +110,7 @@ function Products() {
           </Button>
           <Divider
             h="25"
-            bg="emerald.500"
+            bg="brand.400"
             thickness="2"
             mx="2"
             orientation="vertical"
