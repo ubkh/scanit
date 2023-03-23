@@ -27,13 +27,6 @@ export default function CustomerLayout() {
 
   const { basketList } = globalContext;
 
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
-  const { width } = useWindowDimensions();
-
-  useEffect(() => {
-      setIsSmallScreen(width < 600);
-  }, [width]);
-
   function getNumberOfBasketItems() {
     let total = 0;
     for (let i = 0; i < basketList.length; i++) {
@@ -124,7 +117,7 @@ export default function CustomerLayout() {
   // for now no customer support on web, but can make it limited if we need to
   return (
     <Navigator router={TabRouter}>
-        <NavBarComponent links={ links } isSmallScreen={ isSmallScreen } />
+        <NavBarComponent links={ links }/>
         <View _dark={{bg: "black"}} style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
              <Text bold>The customer side is not supported on web.</Text>
              <Text>&nbsp;</Text>
