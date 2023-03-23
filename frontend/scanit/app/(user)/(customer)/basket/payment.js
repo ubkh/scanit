@@ -93,7 +93,7 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
       Alert.alert('Invalid CVV', 'Please enter a valid 3-digit CVV');
     } 
     else {
-      console.log('Payment successful');
+      //console.log('Payment successful');
       //console.warn('Card details submitted');
       router.push("/basket/Basket");
       router.push("/home")
@@ -103,7 +103,7 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
         {date: getFullDate(), time: getFullTime(), location: retailerBarcodeData , items: basketList },
         ...previousPurchases
       ])
-      console.warn(previousPurchases)
+      //console.warn(previousPurchases)
       resetFields();
     }
   
