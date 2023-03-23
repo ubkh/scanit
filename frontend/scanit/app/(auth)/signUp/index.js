@@ -32,8 +32,11 @@ function SignUpScreen (props) {
             'last_name': data.last_name,
             'number': data.number,
             'store_address': data.store_address,
+            'store_name': data.store_name,
+            'store_description': data.store_description,
             'password': data.password,
-            'is_retailer': selectedIndex == 1 ? true : false
+            // 'is_retailer': selectedIndex == 1 ? true : false
+            'account_type': selectedIndex == 1 ? 3 : 1 // 1 == CUSTOMER, 3 == RETAIL_OWNER
         })
 
         fetch(`http://${domain}/api/user/register/`,{
@@ -134,6 +137,30 @@ function SignUpScreen (props) {
                             control={control} 
                             rules = {{
                                 required: 'address is required', 
+                            
+                            }} 
+                        />  
+                    }
+
+                    {selectedIndex == 1 &&
+                        <CustomInput 
+                            name = 'store_name'
+                            placeholder = 'Store name' 
+                            control={control} 
+                            rules = {{
+                                required: 'Name is required', 
+                            
+                            }} 
+                        />  
+                    }
+
+                    {selectedIndex == 1 &&
+                        <CustomInput 
+                            name = 'store_description'
+                            placeholder = 'Store description' 
+                            control={control} 
+                            rules = {{
+                                required: 'description is required', 
                             
                             }} 
                         />  

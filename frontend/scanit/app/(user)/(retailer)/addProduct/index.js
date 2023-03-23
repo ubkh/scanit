@@ -52,12 +52,24 @@ function AddProduct() {
         </Text>
       )}
       <Text>&nbsp;</Text>
-      {!isOnWeb && (
+      {!isOnWeb ? (
         <Button
           bg="brand.400"
           onPress={() => router.push("addProduct/scanner")}
         >
           Scan barcode
+        </Button>
+      ) : (
+        <Button
+          _web={{width:"20%"}}
+          variant="outline"
+          colorScheme="emerald"
+          onPress={() => {
+            setProductData({});
+            router.push("addProduct/loadProducts");
+          }}
+        >
+          <Text color="brand.400">Upload Products from file</Text>
         </Button>
       )}
       <Text>&nbsp;</Text>
@@ -72,6 +84,10 @@ function AddProduct() {
       >
         <Text color="brand.400">Enter details manually</Text>
       </Button>
+
+  
+
+
       </View>
     </Box>
   );
