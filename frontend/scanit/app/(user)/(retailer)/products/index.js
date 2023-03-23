@@ -28,16 +28,26 @@ function Products() {
   useEffect(() => {
     // useEffect has problem with async function. Create the async function and call it
     (async () => {
-      setIsLoading(true);
-      const res = await fetch(`http://${domain}/api/retailer/get-products/`, {
-        credentials: "include",
-      });
-      if (res.ok) {
-        const productsData = await res.json();
-        setProducts(productsData);
-        setIsLoading(false);
+      try {
+        setIsLoading(true);
+        const res = await fetch(`http://${domain}/api/retailer/get-products/`, {
+          credentials: "include",
+        });
+  
+        if (res.ok) {
+          const productsData = await res.json();
+          setProducts(productsData);
+          setIsLoading(false);
+        } else {
+          // Handle non-ok responses here, if needed
+          console.error("Failed to fetch products:", res.status);
+        }
+      } catch (error) {
+        // Handle network errors or any other errors here
+        console.error("Error fetching products:", error);
+      } finally {
+        //setIsLoading(false);
       }
-      setIsLoading(false);
     })();
   }, []);
 
