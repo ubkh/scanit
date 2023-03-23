@@ -108,7 +108,7 @@ function assignStaffPage(props) {
                 secureTextEntry
             />
         
-            <Button bg="brand.400" width="100%" maxWidth="300px" onPress={handleSubmit(onRegisterPressed)}>Assign staff</Button>
+            <Button bg="brand.400" width="100%" maxWidth="300px" onPress={handleSubmit(onRegisterPressed)} title={"Assign Staff"}>Assign staff</Button>
             <Text style = {styles.text}>
             </Text>
         </View>
