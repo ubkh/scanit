@@ -7,6 +7,8 @@ import {
   Divider,
   Box,
   Text,
+  StatusBar,
+  useColorMode
 } from "native-base";
 import BarCodeScanStyle from "../../../../styles/BarCodeScanStyle";
 import { useRouter } from "expo-router";
@@ -21,19 +23,31 @@ function Products() {
   const [showSuspended, setShowSuspended] = useState(false);
   // const [shouldUpdate, setShouldUpdate] = useState(true);
   const { domain } = useContext(Context);
+  const { colorMode } = useColorMode();
 
   useEffect(() => {
     // useEffect has problem with async function. Create the async function and call it
     (async () => {
-      setIsLoading(true);
-      const res = await fetch(`http://${domain}/api/retailer/get-products/`, {
-        credentials: "include",
-      });
-      if (res.ok) {
-        const productsData = await res.json();
-        setProducts(productsData);
+      try {
+        setIsLoading(true);
+        const res = await fetch(`http://${domain}/api/retailer/get-products/`, {
+          credentials: "include",
+        });
+  
+        if (res.ok) {
+          const productsData = await res.json();
+          setProducts(productsData);
+          setIsLoading(false);
+        } else {
+          // Handle non-ok responses here, if needed
+          console.error("Failed to fetch products:", res.status);
+        }
+      } catch (error) {
+        // Handle network errors or any other errors here
+        console.error("Error fetching products:", error);
+      } finally {
+        //setIsLoading(false);
       }
-      setIsLoading(false);
     })();
   }, []);
 
@@ -51,7 +65,7 @@ function Products() {
         <ProductListItem item={item} key={item.id} />
       ));
     } else {
-      return <Text>There are no suspended products</Text>;
+      return <Text textAlign="center" _web={{textAlign: "start"}}>There are no suspended products</Text>;
     }
   }
 
@@ -61,21 +75,41 @@ function Products() {
   return (
     <Box
       safeAreaTop
-      style={BarCodeScanStyle.container}
       _dark={{ bg: "black" }}
       _light={{ bg: "white" }}
+      flex={1}
     >
+      <StatusBar
+        barStyle={colorMode === "light" ? "dark-content" : "light-content"}
+        animated={true}
+      />
+      
+      <Heading size="lg" style={{ fontFamily: "Rubik-Bold" }}
+          fontSize={30}
+          bold
+          justifyContent="flex-start"
+          alignSelf={"center"}
+          _web={{ mb: "5", mt:"5", mx:"8", alignSelf:"flex-start" }}>
+        Products
+      </Heading>
+
+      {Platform.OS !== "web" && <Divider
+        my="2"
+        _light={{
+          bg: "muted.200",
+        }}
+        _dark={{
+          bg: "muted.500",
+        }}
+      />}
+
       <ScrollView
         width="100%"
         flex={1}
         alignSelf="center"
-        px="5"
-        _web={{ px: 10 }}
+        _web={{ px: 8 }}
       >
-        <Heading size="lg" _web={{ mb: "7" }} mb="4" mt="3">
-          Products
-        </Heading>
-        <HStack alignItems="center">
+        <HStack alignItems="center" alignSelf="center" _web={{alignSelf: "flex-start"}}>
           <Button
             variant="link"
             px="0"
@@ -86,7 +120,7 @@ function Products() {
           </Button>
           <Divider
             h="25"
-            bg="emerald.500"
+            bg="muted.400"
             thickness="2"
             mx="2"
             orientation="vertical"
@@ -101,7 +135,7 @@ function Products() {
           </Button>
         </HStack>
         {isLoading ? (
-          <Spinner size="lg" color="blue.400" />
+          <Spinner size="lg" color="brand.400" />
         ) : (
           <Box>
             {showSuspended
