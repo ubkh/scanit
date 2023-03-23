@@ -69,7 +69,7 @@ function Account() {
             <Barcode value={user.user.retailer_barcode} format="EAN13" />
             <Text>{user.user.retailer_barcode}</Text>
             <Text>&nbsp;</Text>
-            <Button shadow={2} bg={"blue.600"} leftIcon={<Icon as={Ionicons} name="download-outline" size="md"/>}
+            <Button shadow={2} bg={"brand.400"} leftIcon={<Icon as={Ionicons} name="download-outline" size="md"/>}
                   onPress={async () => {
                   await saveBarcodeImage();
                   toast.show({description: "Downloaded PDF!"})

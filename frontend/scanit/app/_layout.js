@@ -3,12 +3,12 @@ import { Slot, SplashScreen } from "expo-router";
 import { useWindowDimensions, View, Text, Platform } from "react-native";
 import { AuthProvider } from "../context/AuthContext";
 import { extendTheme, NativeBaseProvider } from "native-base";
-import { ColorTheme, Components, Config } from "../Theme.js";
+import { ColorTheme, Config } from "../Theme.js";
 import { useFonts } from "expo-font";
 import ContextProvider from "../context/GlobalContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const theme = extendTheme({ colors: ColorTheme, components: Components });
+const theme = extendTheme({ colors: ColorTheme });
 
 const colorModeManager = {
   get: async () => {

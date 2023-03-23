@@ -87,7 +87,6 @@ export function AuthProvider(props) {
           setAuth(null);
           removeItem();
           setUserType(undefined);
-          set
           removeLastRoute();
           setAuthenticated(false);
         },

@@ -110,7 +110,7 @@ function Products() {
           </Button>
           <Divider
             h="25"
-            bg="brand.400"
+            bg="muted.400"
             thickness="2"
             mx="2"
             orientation="vertical"
@@ -125,7 +125,7 @@ function Products() {
           </Button>
         </HStack>
         {isLoading ? (
-          <Spinner size="lg" color="blue.400" />
+          <Spinner size="lg" color="brand.400" />
         ) : (
           <Box>
             {showSuspended
