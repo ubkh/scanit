@@ -455,7 +455,7 @@ class ProductByBarcodeAndStoreList(generics.ListAPIView):
         store_barcode = self.request.query_params.get('store_barcode', None)
 
         if barcode is not None and store_barcode is not None:
-            return Product.objects.filter(barcode=barcode, retailer__employed_at__barcode=store_barcode)
+            return Product.objects.filter(barcode=barcode, store__barcode=store_barcode)
         else:
             return Product.objects.none()
 

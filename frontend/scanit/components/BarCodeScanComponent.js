@@ -218,16 +218,17 @@ function BarCodeScanComponent(props){
         if (!isRetailerScanned) {
           try {
             // AWAIT THE RESPONSE SO WE DON'T CONTINUE WITHOUT THIS
-            const response = await fetch(`http://${globalContext.domain}/api/stores-by-barcode/?barcode=${data}`, {
+            const response = await fetch(`http://${globalContext.domain}/api/stores-by-barcode/?barcode=${data}`,
+            {
               method: "GET",
             });
 
             // AWAIT THE RESPONSE TO AVOID UNDEFINED ERRORS
-            const resultList = await response.json();
-            console.log(resultList);
+            const storeList = await response.json();
+            console.log(storeList);
 
             // WORK ON THE RESPONSE
-            if (resultList.length === 0) {
+            if (storeList.length === 0) {
               globalContext.setRetailerScanned(false);
               Alert.alert(
                 'Barcode not recognised!',
@@ -245,7 +246,7 @@ function BarCodeScanComponent(props){
             } else {
               globalContext.setRetailerScanned(true);
               console.log("Retailer Barcode Scanned!");
-              globalContext.setRetailerBarcodeData(resultList);
+              globalContext.setRetailerBarcodeData(storeList);
               globalContext.setRetailerBarcodeType(type);
             }
           } catch (error) {
@@ -254,43 +255,79 @@ function BarCodeScanComponent(props){
         }
 
         // PRODUCT SCANNING
-        else { 
-          let foundObject = null
-          let index = 0
+        else {
+          try {
 
-          for (let i = 0; i < globalContext.basketList.length; i++) {
-            const obj = globalContext.basketList[i];
-            if (obj.type === type && obj.data === data) {
-              foundObject = obj;
-              index = i
-              break;
+            // AWAIT THE RESPONSE SO WE DON'T CONTINUE WITHOUT THIS
+            const response = await fetch(
+              `http://${globalContext.domain}/api/check-product/?barcode=${data}&store_barcode=${globalContext.retailerBarcodeData[0].barcode}`,
+            {
+              method: "GET",
             }
-          }
+            );
 
-          if (foundObject) {
-            Alert.alert(
-              'Item already in basket',
-              'Adjust the quantity in the basket!',
-              [
-                {
-                  text: 'Ok',
-                  onPress: () => {
-                    console.log("User acknowledged warning")
+            // AWAIT THE RESPONSE TO AVOID UNDEFINED ERRORS
+            const productList = await response.json();
+            console.log(productList);
+
+            if (productList.length === 0) {
+              Alert.alert(
+                'Barcode not recognised!',
+                'Please try again\n\nEnsure the barcode is correct and you have a stable connection\n\nPlease ensure the product is sold at this store!',
+                [
+                  {
+                    text: 'Ok',
+                    onPress: () => {
+                      console.log("User acknowledged warning");
+                    },
+                    style: 'default',
                   },
-                  style: 'default',
-                },
-              ],
-            )
-          } 
-          else {
-              globalContext.setBasketList([...globalContext.basketList, { 'data': data, 'type': type, 'quantity': 1 }])
-              // Wanted to have an alert display if 'doneFirstScan' if false to let the user know
-              // that they need to go to the basket to edit quantities, but the alert was causing
-              // the app to crash, works above though...
-          }
+                ],
+              );
+            }
+            else {
+              let foundObject = null
+              let index = 0
+
+              for (let i = 0; i < globalContext.basketList.length; i++) {
+                const obj = globalContext.basketList[i];
+                if (obj.barcode === data) {
+                  foundObject = obj;
+                  index = i
+                  break;
+                }
+              }
+
+              if (foundObject) {
+                Alert.alert(
+                  'Item already in basket',
+                  'Adjust the quantity in the basket!',
+                  [
+                    {
+                      text: 'Ok',
+                      onPress: () => {
+                        console.log("User acknowledged warning")
+                        console.log(productList[0].price)
+                      },
+                      style: 'default',
+                    },
+                  ],
+                )
+              } 
+              else {
+                  globalContext.setBasketList([...globalContext.basketList, {'name': productList[0].name, 'barcode': data, 'quantity': 1, 'price': parseInt(productList[0].price) }])
+                  // Wanted to have an alert display if 'doneFirstScan' if false to let the user know
+                  // that they need to go to the basket to edit quantities, but the alert was causing
+                  // the app to crash, works above though...
+              }
+            }            
+        }
+        catch (error) {
+          console.error(error);
+        }
+          
         }
 
-        
         //navigation.navigate('HomeScreen', { data, type });
         router.push({ pathname: '/home', params: { data, type } });
       };

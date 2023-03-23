@@ -124,7 +124,7 @@ class StoreSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ProductSerializer(serializers.ModelSerializer):
-    retailer = UserSerializer()
+    store = StoreSerializer()
 
     class Meta:
         model = Product
