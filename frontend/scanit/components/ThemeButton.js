@@ -12,14 +12,14 @@ const ThemeButton = () => {
     toggleColorMode();
     Animated.timing(animatedValue, {
       toValue: isDarkMode ? 0 : 1,
-      duration: 1000,
+      duration: 500,
       useNativeDriver: false,
     }).start();
   };
 
   const backgroundColor = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: isDarkMode ? ['#fff', '#fff'] : ['#000', '#000'],
+    outputRange: isDarkMode ? ['#fff', '#fff'] : ['#ecf0f1', '#bdc3c7'],
   });
 
   return (
@@ -29,7 +29,7 @@ const ThemeButton = () => {
           {isDarkMode ? (
             <MaterialCommunityIcons name="weather-night" size={20} color="#000" />
           ) : (
-            <Ionicons name="sunny-outline" size={20} color="#fff" />
+            <Ionicons name="sunny-outline" size={20} color="#000" />
           )}
         </Animated.View>
       </View>

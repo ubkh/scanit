@@ -1,6 +1,6 @@
 import { Slot, Navigator, Tabs, useSegments, Redirect } from "expo-router";
 import React, { useState, useEffect, useContext } from "react";
-import { useWindowDimensions, Platform } from "react-native";
+import { Platform } from "react-native";
 import { useColorMode } from "native-base";
 import { TabRouter } from "@react-navigation/native";
 import NavBarComponent from "../../../components/NavBarComponent";
@@ -9,13 +9,11 @@ import { useAuth } from "../../../context/AuthContext";
 import ProductDataProvider from "../../../context/RetailerProductContext";
 
 const links = [
-    { label: 'Home', url: '/(retailer)/home' },
-    { label: 'Something Else', url: '/other' },
-    { label: 'Add Item', url: '/addItem' },
-    { label: 'Assign Staff', url: '/assignStaffPage' },
-    { label: "Add a product", url: "/(retailer)/add-product" },
-    { label: "Products", url: "/products" },
-    { label: "Account", url: "/Account" },
+  { label: "Home", url: "/(retailer)/home" },
+  { label: "Products", url: "/products" },
+  { label: "Add a Product", url: "/addProduct" },
+  { label: "Assign Staff", url: "/assignStaff" },
+  { label: "Account", url: "/account" },
 ];
 
 export default function RetailerLayout() {
@@ -31,13 +29,6 @@ export default function RetailerLayout() {
   if (userType !== "retailer") {
     return <Redirect href={`/(${userType})/${segments[2]}`} />;
   }
-
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
-  const { width } = useWindowDimensions();
-
-  useEffect(() => {
-    setIsSmallScreen(width < 600);
-  }, [width]);
 
   return (
     <ProductDataProvider>
@@ -61,7 +52,7 @@ export default function RetailerLayout() {
             }}
           ></Tabs.Screen>
           <Tabs.Screen
-            name="add-product"
+            name="addProduct"
             options={{
               title: "Add product",
               headerShown: false,
@@ -76,14 +67,34 @@ export default function RetailerLayout() {
               title: "Products",
               headerShown: false,
               tabBarIcon: ({ color, size }) => (
-                <Ionicons name="list" color={color} size={size} />
+                <Ionicons name="list-outline" color={color} size={size} />
+              ),
+            }}
+          ></Tabs.Screen>
+          <Tabs.Screen
+            name="assignStaff"
+            options={{
+              title: "Assign Staff",
+              headerShown: false,
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="person-add-outline" color={color} size={size} />
+              ),
+            }}
+          ></Tabs.Screen>
+          <Tabs.Screen
+            name="account"
+            options={{
+              title: "Account",
+              headerShown: false,
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="person-circle-outline" color={color} size={size} />
               ),
             }}
           ></Tabs.Screen>
         </Tabs>
       ) : (
         <Navigator router={TabRouter}>
-          <NavBarComponent links={links} isSmallScreen={isSmallScreen} />
+          <NavBarComponent links={links} />
           <Slot />
         </Navigator>
       )}
