@@ -31,16 +31,19 @@ const UploadItemButton = ({validProducts}) => {
         console.log(user);
 
         product.store = user.user.employed_at_id;
+        // product.user_id = user.user.user_id;
         let bodyData = JSON.stringify(product);
         console.log(bodyData);
 
 
-        fetch(`http://${domain}/api/retailer/load-product/`,{
+        fetch(`http://${domain}/api/retailer/add-product/`,{
+            
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json'
             },
             body:bodyData,
+            credentials: "include",
         })
         .then(res => {
             if (res.ok) {

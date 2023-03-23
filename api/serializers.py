@@ -173,8 +173,6 @@ class RetailerUploadItemSerializer(serializers.ModelSerializer):
         return value
     
     def validate_store(self, value):
-
-        print("id is ", value)
         # print("store is ", Store.objects.filter(id=value))
         # stores = Store.objects.get(id = value)
 

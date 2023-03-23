@@ -9,7 +9,7 @@ from .views import (
     UserPasswordResetView,
 	UserPasswordResetConfirmView,
     RetailerUploadItemAPIView,
-    retailerAddProduct,
+    # retailerAddProduct,
     retailerGetProduct,
     retailerGetAllProducts,
     retailerUpdateProduct
