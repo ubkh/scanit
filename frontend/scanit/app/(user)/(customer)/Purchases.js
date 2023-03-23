@@ -73,7 +73,7 @@ const GroceryTrips = () => {
             <Text><B>Items:</B></Text>
             <View style={{ marginLeft: 20 }}>
               {trip.items.map((item, index) => (
-                <><Text key={index}>{item.data}</Text><View style={{ flexDirection: "row", justifyContent: "flex-end" }} key={index}>
+                <><Text key={index}>{item.data}</Text><View style={{ flexDirection: "row", justifyContent: "flex-end" }} key={index}>               
                   <TouchableOpacity
                   style={styles.button}
                     onPress={() => removeItem(index,trip.date)}
