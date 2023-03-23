@@ -36,23 +36,23 @@ export function AuthProvider(props) {
   const [user, setAuth] = useState(undefined);
   const [ userType, setUserType ] = useState(undefined);
 
-  React.useEffect(() => {
-    getItem().then((json) => {
-      //console.log("json", json);
-      if (json != null) {
-        const parsed = JSON.parse(json);
+  // React.useEffect(() => {
+  //   getItem().then((json) => {
+  //     //console.log("json", json);
+  //     if (json != null) {
+  //       const parsed = JSON.parse(json);
 
-        //removeItem();
-        setAuth(parsed);
-        setUserType(parsed.user.is_retailer ? 'retailer' : 'customer')
-      } else {
-        setAuth(null);
-        setUserType(undefined)
-      }
-    });
-    // const json = getItem();
-    // setAuth(json);
-  }, []);
+  //       //removeItem();
+  //       setAuth(parsed);
+  //       setUserType(parsed.user.is_retailer ? 'retailer' : 'customer')
+  //     } else {
+  //       setAuth(null);
+  //       setUserType(undefined)
+  //     }
+  //   });
+  //   // const json = getItem();
+  //   // setAuth(json);
+  // }, []);
 
   useProtectedRoute(user);
 
