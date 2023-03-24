@@ -20,7 +20,6 @@ from .views import (
     RetailerStaffAPIView,
     CreateTransactionAPIView,
     RetailerEditStaffAPIView,
-    # retailerAddProduct,
     retailerGetProduct,
     retailerGetAllProducts,
     retailerUpdateProduct,
@@ -51,9 +50,7 @@ urlpatterns = [
     path('stores-by-barcode/', StoreByBarcodeList.as_view(), name='get-stores-by-barcode'),
     path('create-transaction/', CreateTransactionAPIView.as_view(), name='create-transaction'),
     path('stores-by-shop-id/', StoreByUserID.as_view(), name='get-stores-by-shop-id'),
-    
 	path('check-product/', ProductByBarcodeAndStoreList.as_view(), name='check-product'),
-    
 	path('retailer/all/', RetailerList.as_view(), name='get-all-retailers'),
     path('staff/register/', StaffRegistrationAPIView.as_view()),
 	path('retailer/add-product/', RetailerUploadItemAPIView.as_view(),name='retailer-add-product'),

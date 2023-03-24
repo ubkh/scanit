@@ -3,8 +3,6 @@ import React, { useState } from "react";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { Platform } from "react-native";
 
-
-
 const AuthContext = React.createContext(null);
 
 // This hook can be used to access the user info.
@@ -60,8 +58,7 @@ export function AuthProvider(props) {
       if (json != null) {
         const parsed = JSON.parse(json);
         //removeItem();
-        // console.log("parsed is ")
-        // console.log(parsed)
+
         setAuth(parsed);
 
         // setUserType(parsed.user.is_retailer ? 'retailer' : 'customer')
@@ -96,8 +93,6 @@ export function AuthProvider(props) {
           setItem(JSON.stringify(json));
           // setUserType(json.user.is_retailer ? 'retailer' : 'customer')
           removeLastRoute();
-
-          // console.log("reece st john commey : " + json.user.employed_at_id)
 
           if (json.user.account_type === 1) {
             setUserType('customer');

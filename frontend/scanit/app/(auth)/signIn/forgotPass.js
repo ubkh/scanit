@@ -34,7 +34,6 @@ function ForgotPasswordScreen(props) {
         })
         .then(res => {
             if (res.ok) {
-                console.log('A link was sent to your email to reset your password')
                 router.push("/signIn");
                 return res.json()
             } else {

@@ -103,8 +103,7 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
       Alert.alert('Invalid CVV', 'Please enter a valid 3-digit CVV');
     } 
     else {
-      //console.log('Payment successful');
-      //console.warn('Card details submitted');
+
       router.push("/basket/Basket");
       router.push("/home")
       //console.warn(basketList);
@@ -125,10 +124,6 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
       };
       
       const test = new Date().toISOString().slice(0, 10)
-
-      console.log(JSON.stringify(transactionData))
-      console.log("Body above here")
-      console.log(retailerBarcodeData)
 
       fetch(`http://${globalContext.domain}/api/create-transaction/`, {
         method: 'POST',

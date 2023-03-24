@@ -14,7 +14,6 @@ const ItemLoader = () => {
   
     if (file && (file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file.type === 'text/csv')) {
       setSelectedFile(file);
-      // console.log(file);
 
       readFile(file);
 
@@ -48,13 +47,7 @@ const ItemLoader = () => {
     var validProducts;
 
     validProducts = productsList.filter((product) => {
-
-      // console.log("before ");
-      // console.log(product);
-      // isItemValid(product)
-      // console.log("affta");
-      // console.log(product);
-
+      
       return isItemValid(product);
 
     });

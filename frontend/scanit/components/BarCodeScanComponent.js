@@ -31,7 +31,9 @@ function BarCodeScanComponent(props){
       const handleBarCodeScanned = async ({ type, data }) => {
         setScanned(true);
         setText(data);
-        console.log('Type: ' + type + '\nData: ' + data);
+
+        // This executes after recognising a barcode, we decide what to do with
+        // the data
 
         // STORE BARCODE SCANNING
         if (!isRetailerScanned) {
@@ -56,7 +58,6 @@ function BarCodeScanComponent(props){
                   {
                     text: 'Ok',
                     onPress: () => {
-                      console.log("User acknowledged warning");
                     },
                     style: 'default',
                   },
@@ -87,7 +88,6 @@ function BarCodeScanComponent(props){
 
             // AWAIT THE RESPONSE TO AVOID UNDEFINED ERRORS
             const productList = await response.json();
-            console.log(productList);
 
             if (productList.length === 0) {
               Alert.alert(
@@ -125,8 +125,6 @@ function BarCodeScanComponent(props){
                     {
                       text: 'Ok',
                       onPress: () => {
-                        console.log("User acknowledged warning")
-                        console.log(productList[0].price)
                       },
                       style: 'default',
                     },
@@ -138,9 +136,6 @@ function BarCodeScanComponent(props){
                   globalContext.setBasketList([...globalContext.basketList, {'name': productList[0].name, 'barcode': data, 'quantity': quantityValue, 'price': parseInt(productList[0].price) }])
                   Alert.alert('Item Scanned', 'Check basket to change quantity');
                   setQuantityValue(1);
-                  // Wanted to have an alert display if 'doneFirstScan' if false to let the user know
-                  // that they need to go to the basket to edit quantities, but the alert was causing
-                  // the app to crash, works above though...
               }
             }            
         }

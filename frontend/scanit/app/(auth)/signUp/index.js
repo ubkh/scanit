@@ -14,14 +14,8 @@ function SignUpScreen (props) {
     const {domain, protocol, userID, setUserID} = globalContext;
     const router = useRouter();
     const { colorMode } = useColorMode();
-
     const {control, handleSubmit, watch} = useForm();
     const [selectedIndex, setSelectedIndex] = useState(0);
-
-
-    // const[storeAddress, setStoreAddress] = useState('');
-  
-    // const[error, setError] = useState('');
     const pwd = watch('password');
     const[error, setError] = useState('');
 
@@ -35,10 +29,8 @@ function SignUpScreen (props) {
             'store_name': data.store_name,
             'store_description': data.store_description,
             'password': data.password,
-            // 'is_retailer': selectedIndex == 1 ? true : false
             'account_type': selectedIndex == 1 ? 3 : 1 // 1 == CUSTOMER, 3 == RETAIL_OWNER
         })
-
         fetch(`${protocol}://${domain}/api/user/register/`,{
             method: 'POST',
             headers: { 
@@ -56,8 +48,6 @@ function SignUpScreen (props) {
         })
         .then(json => {
             setUserID(json.user_id)
-            console.log(json.user_id)
-            console.log(userID)
             router.push({pathname: '/signUp/verify', params: {user_id: json.user_id}})
         })
         .catch(error => {
@@ -130,7 +120,6 @@ function SignUpScreen (props) {
                             }
                         }} 
                     />
-
                     {selectedIndex == 1 &&
                         <CustomInput 
                             name = 'store_address'
@@ -142,7 +131,6 @@ function SignUpScreen (props) {
                             }} 
                         />  
                     }
-
                     {selectedIndex == 1 &&
                         <CustomInput 
                             name = 'store_name'
@@ -154,7 +142,6 @@ function SignUpScreen (props) {
                             }} 
                         />  
                     }
-
                     {selectedIndex == 1 &&
                         <CustomInput 
                             name = 'store_description'
@@ -166,7 +153,6 @@ function SignUpScreen (props) {
                             }} 
                         />  
                     }
-
                     <CustomInput 
                         name = 'password'
                         placeholder = 'Password' 
@@ -189,14 +175,12 @@ function SignUpScreen (props) {
                         }} 
                         secureTextEntry
                     />
-                
                     <Text>&nbsp;</Text>
                     <Button bg="brand.400" width="100%" maxWidth="300px" onPress={handleSubmit(onRegisterPressed)}>Sign Up</Button>
                     <Text>&nbsp;</Text>
                     <Text>Already have an account? <Link style={{fontWeight:"bold"}} href="/signIn">Sign in</Link></Text>
                 </Center>
             </Box>
-
             <Spacer />
         </Flex>
         </ScrollView>

@@ -6,14 +6,11 @@ import { Context } from '../../../context/GlobalContext.js';
 import { useForm } from 'react-hook-form';
 
 function VerificationScreen(props) {
-    const[code, setCode] = useState('');
-    const[ error, setError ] = useState('');
-
+    const [ code, setCode] = useState('');
+    const [ error, setError ] = useState('');
     const {control, handleSubmit} = useForm();
-
     const router = useRouter();
     const { colorMode } = useColorMode();
-
     const { user_id } = useSearchParams();
     const globalContext = useContext(Context)
     const {domain, protocol} = globalContext;
@@ -38,7 +35,6 @@ function VerificationScreen(props) {
             }
         })
         .then(json => {
-            console.log("successfully verified!")
             router.push('/signIn')
         })
         .catch(error => {

@@ -5,8 +5,6 @@ import EditStaffButton from './EditStaffButton';
 
 const Staff = ({ email, first_name, last_name, data }) => {
     
-    // const { userData, setUserData } = useState(data);
-
     return (
         <View style={styles.container}>
 
@@ -26,9 +24,6 @@ const Staff = ({ email, first_name, last_name, data }) => {
                 <EditStaffButton
                     data={data}
                 />
-                {/* <Button>
-                    <Text>Button for {first_name} {last_name}</Text>
-                </Button> */}
             </View>
         
         </View>

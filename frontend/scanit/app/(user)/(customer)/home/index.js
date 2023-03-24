@@ -48,15 +48,7 @@ function Home() {
     setRetailerBarcodeData(null);
     setRetailerBarcodeType(null);
     globalContext.setBasketList([]);
-    // console.log("Reset retailer and basket");
   };
-
-  console.log(`Most recent barcode data: ${data}`);
-  console.log(`Most recent barcode type: ${type}`);
-  console.log(basketList);
-  console.log(`Has retailer been scanned? ${isRetailerScanned}`);
-  console.log(user.user.user_id)
-
 
   return (
     <View style={{ flex: 1 }} _dark={{ bg: "black" }} _light={{ bg: "white" }}>

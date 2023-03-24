@@ -29,9 +29,7 @@ export default function Purchases() {
           });
     
           const transactions = await response.json();
-          //console.log("--------------------")
-          //console.log(transactions);
-    
+
           setUserPurchases(transactions);
     
         } catch (error) {

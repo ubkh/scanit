@@ -41,8 +41,6 @@ const UploadItemButton = ({validProducts}) => {
         product.store = user.user.employed_at_id;
         // product.user_id = user.user.user_id;
         let bodyData = JSON.stringify(product);
-        console.log(bodyData);
-
 
         fetch(`http://${domain}/api/retailer/add-product/`,{
             
