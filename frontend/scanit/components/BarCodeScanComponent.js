@@ -209,53 +209,125 @@ function BarCodeScanComponent(props){
       }, []);
 
     
-      const handleBarCodeScanned = ({ type, data }) => {
+      const handleBarCodeScanned = async ({ type, data }) => {
         setScanned(true);
-        setText(data)
-        console.log('Type: ' + type + '\nData: ' + data)
+        setText(data);
+        console.log('Type: ' + type + '\nData: ' + data);
+
+        // STORE BARCODE SCANNING
         if (!isRetailerScanned) {
-          globalContext.setRetailerScanned(true)
-          console.log("Retailer Barcode Scanned!")
-          globalContext.setRetailerBarcodeData(data)
-          globalContext.setRetailerBarcodeType(type)
-        }
-        else {
-          let foundObject = null
-          let index = 0
+          try {
+            // AWAIT THE RESPONSE SO WE DON'T CONTINUE WITHOUT THIS
+            const response = await fetch(`http://${globalContext.domain}/api/stores-by-barcode/?barcode=${data}`,
+            {
+              method: "GET",
+            });
 
-          for (let i = 0; i < globalContext.basketList.length; i++) {
-            const obj = globalContext.basketList[i];
-            if (obj.type === type && obj.data === data) {
-              foundObject = obj;
-              index = i
-              break;
-            }
-          }
+            // AWAIT THE RESPONSE TO AVOID UNDEFINED ERRORS
+            const storeList = await response.json();
+            console.log(storeList);
 
-          if (foundObject) {
-            Alert.alert(
-              'Item already in basket',
-              'Adjust the quantity in the basket!',
-              [
-                {
-                  text: 'Ok',
-                  onPress: () => {
-                    console.log("User acknowledged warning")
+            // WORK ON THE RESPONSE
+            if (storeList.length === 0) {
+              globalContext.setRetailerScanned(false);
+              Alert.alert(
+                'Barcode not recognised!',
+                'Please try again\n\nEnsure the barcode is correct and you have a stable connection',
+                [
+                  {
+                    text: 'Ok',
+                    onPress: () => {
+                      console.log("User acknowledged warning");
+                    },
+                    style: 'default',
                   },
-                  style: 'default',
-                },
-              ],
-            )
-          } 
-          else {
-              globalContext.setBasketList([...globalContext.basketList, { 'data': data, 'type': type, 'quantity': 1 }])
-              // Wanted to have an alert display if 'doneFirstScan' if false to let the user know
-              // that they need to go to the basket to edit quantities, but the alert was causing
-              // the app to crash, works above though...
+                ],
+              );
+            } else {
+              globalContext.setRetailerScanned(true);
+              console.log("Retailer Barcode Scanned!");
+              globalContext.setRetailerBarcodeData(storeList);
+              globalContext.setRetailerBarcodeType(type);
+            }
+          } catch (error) {
+            console.error(error);
           }
         }
 
-        
+        // PRODUCT SCANNING
+        else {
+          try {
+
+            // AWAIT THE RESPONSE SO WE DON'T CONTINUE WITHOUT THIS
+            const response = await fetch(
+              `http://${globalContext.domain}/api/check-product/?barcode=${data}&store_barcode=${globalContext.retailerBarcodeData[0].barcode}`,
+            {
+              method: "GET",
+            }
+            );
+
+            // AWAIT THE RESPONSE TO AVOID UNDEFINED ERRORS
+            const productList = await response.json();
+            console.log(productList);
+
+            if (productList.length === 0) {
+              Alert.alert(
+                'Barcode not recognised!',
+                'Please try again\n\nEnsure the barcode is correct and you have a stable connection\n\nPlease ensure the product is sold at this store!',
+                [
+                  {
+                    text: 'Ok',
+                    onPress: () => {
+                      console.log("User acknowledged warning");
+                    },
+                    style: 'default',
+                  },
+                ],
+              );
+            }
+            else {
+              let foundObject = null
+              let index = 0
+
+              for (let i = 0; i < globalContext.basketList.length; i++) {
+                const obj = globalContext.basketList[i];
+                if (obj.barcode === data) {
+                  foundObject = obj;
+                  index = i
+                  break;
+                }
+              }
+
+              if (foundObject) {
+                Alert.alert(
+                  'Item already in basket',
+                  'Adjust the quantity in the basket!',
+                  [
+                    {
+                      text: 'Ok',
+                      onPress: () => {
+                        console.log("User acknowledged warning")
+                        console.log(productList[0].price)
+                      },
+                      style: 'default',
+                    },
+                  ],
+                )
+              } 
+              else {
+                  globalContext.setBasketList([...globalContext.basketList, {'name': productList[0].name, 'barcode': data, 'quantity': 1, 'price': parseInt(productList[0].price) }])
+                  // Wanted to have an alert display if 'doneFirstScan' if false to let the user know
+                  // that they need to go to the basket to edit quantities, but the alert was causing
+                  // the app to crash, works above though...
+              }
+            }            
+        }
+        catch (error) {
+          console.error(error);
+        }
+          
+        }
+
         //navigation.navigate('HomeScreen', { data, type });
         router.push({ pathname: '/home', params: { data, type } });
       };
@@ -263,7 +335,7 @@ function BarCodeScanComponent(props){
       if (hasPermission === null) {
         return (
           <View style={BarCodeScanStyle.container}>
-            <Text>Requesting for camera permission</Text>
+            <Text style={{ margin: 10, fontWeight: "bold", fontSize: 20 }}>Requesting for camera permission</Text>
           </View>)
       }
 

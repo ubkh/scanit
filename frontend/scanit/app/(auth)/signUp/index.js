@@ -1,6 +1,6 @@
 import React, { useState, useContext, useRef, useEffect } from 'react';
 import { Platform } from 'react-native';
-import { View, Text, StatusBar, Flex, Spacer, Button, Box, Heading, useColorMode, Center, KeyboardAvoidingView } from 'native-base';
+import { View, Text, StatusBar, Flex, Spacer, Button, Box, Heading, useColorMode, Center, KeyboardAvoidingView, ScrollView } from 'native-base';
 import CustomInput from '../../../components/CustomInput.js';
 import { useRouter, Link } from "expo-router";
 import { Context } from '../../../context/GlobalContext.js';
@@ -71,6 +71,7 @@ function SignUpScreen (props) {
             lg: "auto"
             }} behavior={Platform.OS === "ios" ? "padding" : "height"} style={{flex: 1}} _dark={{bg: "black"}} _light={{bg: "white"}}>
         <StatusBar barStyle={colorMode === 'light' ? 'dark-content' : 'light-content'} animated={true}/>
+        <ScrollView>
         <Flex flex={1} alignItems="center" safeAreaTop>
             <Spacer />
 
@@ -198,6 +199,7 @@ function SignUpScreen (props) {
 
             <Spacer />
         </Flex>
+        </ScrollView>
         </KeyboardAvoidingView>
     );
 }

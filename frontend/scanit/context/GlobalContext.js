@@ -11,14 +11,15 @@ export const Context = createContext();
 export default function ContextProvider(props) {
   const [domain, setDomain] = useState(DJANGO);
 
-  const [retailerBarcodeData, setRetailerBarcodeData] = useState("");
+  const [retailerBarcodeData, setRetailerBarcodeData] = useState([]);
   const [retailerBarcodeType, setRetailerBarcodeType] = useState("");
   const [basketList, setBasketList] = useState([]);
+  const [total, setTotal] = useState(0);
   const [isRetailerScanned, setRetailerScanned] = useState(false);
   const[previousPurchases, setPreviousPurchases] = useState([]);
 
   //const [ userType, setUserType ] = useState('retailer'); //'customer' or 'retailer'
-  const [userID, setUserID] = useState(undefined); // ?
+  const [userID, setUserID] = useState(undefined); // Using this to store the JSON that is passed when logging in. Allows us to get the user ID for transactions etc.
 
   useEffect(() => {}, []);
 
@@ -36,6 +37,8 @@ export default function ContextProvider(props) {
     setPreviousPurchases,
     userID,
     setUserID,
+    total,
+    setTotal
   };
 
   return (
