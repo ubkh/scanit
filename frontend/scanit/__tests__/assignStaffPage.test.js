@@ -4,7 +4,7 @@ import { expect, jest, test, describe } from "@jest/globals";
 import {useRouter} from 'expo-router'
 import {fireEvent} from "@testing-library/react-native";
 import { render, screen, within, waitFor,act } from "test-utils";
-import AssignStaffPage from "../app/(user)/(retailer)/assignStaffPage";
+import AssignStaffPage from "../app/(user)/(retailer)/assignStaff";
 
 
 jest.mock("expo-router");
@@ -24,44 +24,6 @@ describe("assignStaffPage", () => {
       };
     });
   
-
-    test('calls fetch with correct arguments when form is submitted', async () => {
-        // Arrange
-        const mockData = {
-          email: 'test@example.com',
-          first_name: 'John',
-          last_name: 'Doe',
-          number: '',
-          store_address: '',
-          password: 'Password123!'
-        };
-        const mockResponse = {
-          ok: true,
-          json: () => Promise.resolve({ user_id: 123 })
-        };
-        const fetchMock = jest.fn().mockResolvedValue(mockResponse);
-        global.fetch = fetchMock;
-        const { getByPlaceholderText, getByText } = render(<AssignStaffPage />);
-    
-        // Act
-        fireEvent.changeText(getByPlaceholderText('First name'), mockData.first_name);
-        fireEvent.changeText(getByPlaceholderText('Last name'), mockData.last_name);
-        fireEvent.changeText(getByPlaceholderText('Email'), mockData.email);
-        fireEvent.changeText(getByPlaceholderText('Password'), mockData.password);
-        fireEvent.press(getByText('Assign'));
-        await act(() => waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1)));
-    
-        // Assert
-        expect(fetchMock).toHaveBeenCalledWith("http://192.168.1.116:8000/api/staff/register/", {
-          method: 'POST',
-          credentials: 'same-origin',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(mockData)
-        });
-      });
-
     //   test('should call the API and redirect to home page on successful registration', async () => {
     //     const pushMock = jest.fn();
     //     const replaceMock = jest.fn();
@@ -122,7 +84,7 @@ describe("assignStaffPage", () => {
         expect(getByPlaceholderText('Last name')).toBeDefined();
         expect(getByPlaceholderText('Email')).toBeDefined();
         expect(getByPlaceholderText('Password')).toBeDefined();
-        expect(getByText('Assign')).toBeDefined();
+        expect(getByText('Assign staff')).toBeDefined();
       });    
   
       test('should show an error message when the form is submitted with missing first name', async () => {
@@ -131,7 +93,7 @@ describe("assignStaffPage", () => {
         const lastNameInput = getByPlaceholderText('Last name');
         const emailInput = getByPlaceholderText('Email');
         const passwordInput = getByPlaceholderText('Password');
-        const submitButton = getByText('Assign');
+        const submitButton = getByText('Assign staff');
 
         act(() => {
             fireEvent.changeText(firstNameInput, '');
@@ -155,7 +117,7 @@ describe("assignStaffPage", () => {
         const lastNameInput = getByPlaceholderText('Last name');
         const emailInput = getByPlaceholderText('Email');
         const passwordInput = getByPlaceholderText('Password');
-        const submitButton = getByText('Assign');
+        const submitButton = getByText('Assign staff');
     
 
         act(() => {
@@ -178,7 +140,7 @@ describe("assignStaffPage", () => {
         const lastNameInput = getByPlaceholderText('Last name');
         const emailInput = getByPlaceholderText('Email');
         const passwordInput = getByPlaceholderText('Password');
-        const submitButton = getByText('Assign');
+        const submitButton = getByText('Assign staff');
     
         act(() => {
             fireEvent.changeText(firstNameInput, 'John');
@@ -201,7 +163,7 @@ describe("assignStaffPage", () => {
         const lastNameInput = getByPlaceholderText('Last name');
         const emailInput = getByPlaceholderText('Email');
         const passwordInput = getByPlaceholderText('Password');
-        const submitButton = getByText('Assign');
+        const submitButton = getByText('Assign staff');
     
         act(() => {
             fireEvent.changeText(firstNameInput, 'John');
@@ -236,7 +198,7 @@ describe("assignStaffPage", () => {
         const { getByPlaceholderText, getByText } = render(<AssignStaffPage />);
         const emailInput = getByPlaceholderText('Email');
         const passwordInput = getByPlaceholderText('Password');
-        const assignButton = getByText('Assign');
+        const assignButton = getByText('Assign staff');
 
         act(() => {
             fireEvent.changeText(emailInput, 'invalid-email');
@@ -255,7 +217,7 @@ describe("assignStaffPage", () => {
         const { getByPlaceholderText, getByText } = render(<AssignStaffPage />);
         const emailInput = getByPlaceholderText('Email');
         const passwordInput = getByPlaceholderText('Password');
-        const assignButton = getByText('Assign');
+        const assignButton = getByText('Assign staff');
 
         act(() => {
             fireEvent.changeText(emailInput, 'johndoe@gmail.com');

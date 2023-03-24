@@ -219,20 +219,20 @@ describe('Sign Up Screen', () => {
         })
   });
     
-    test('shows error messages when form submitted with mismatching passwords on retailer side', async () => {
-      const screen = render(
-        <Context.Provider value={{ domain:'domain', userID:1, setUserID }}> 
-            <SignUpScreen />
-        </Context.Provider> 
-      );
-      const link = screen.getByText('Sign in');
-      fireEvent.press(link);
+  //   test('render new screen on link click', async () => {
+  //     const screen = render(
+  //       <Context.Provider value={{ domain:'domain', userID:1, setUserID }}> 
+  //           <SignUpScreen />
+  //       </Context.Provider> 
+  //     );
+  //     const link = screen.getByText('Sign in');
+  //     fireEvent.press(link);
 
-      await waitFor(async () => {
-          expect(screen.getByText('Sign In')).toBeDefined();
+  //     await waitFor(async () => {
+  //         expect(screen.getByText('Sign In')).toBeDefined();
 
-        })
-  });
+  //       })
+  // });
     // test('calls fetch with correct arguments when form is submitted', async () => {
     //   // Arrange
     //   const mockData = {

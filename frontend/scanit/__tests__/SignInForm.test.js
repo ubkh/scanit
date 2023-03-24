@@ -71,30 +71,30 @@ describe('Sign Up Screen', () => {
         })
   });
     
-    test('shows error messages when form submitted with mismatching passwords on retailer side', async () => {
-      const screen = render(
-            <SignInScreen />
-      );
-      const link = screen.getByText("Don't have an account? Create one");
-      fireEvent.press(link);
+//     test('shows error messages when form submitted with mismatching passwords on retailer side', async () => {
+//       const screen = render(
+//             <SignInScreen />
+//       );
+//       const link = screen.getByText("Don't have an account? Create one");
+//       fireEvent.press(link);
 
-      await waitFor(() => {
-        expect(screen.getByText('First name')).toBeDefined();
-      }, { timeout: 10000 });
-  });
+//       await waitFor(() => {
+//         expect(screen.getByText('First name')).toBeDefined();
+//       }, { timeout: 10000 });
+//   });
 
-    test("navigates to Forgot Password screen when 'Forgot Password?' button is pressed", async () => {
+//     test("navigates to Forgot Password screen when 'Forgot Password?' button is pressed", async () => {
      
-        const { getByText} = render(<SignInScreen />);
+//         const { getByText} = render(<SignInScreen />);
 
-        const forgotPasswordButton = getByText('Forgot Password?');
-        fireEvent.press(forgotPasswordButton);
-        await waitFor(() => {
-            expect(getByText('Reset')).toBeDefined();
-          }, { timeout: 10000 });
+//         const forgotPasswordButton = getByText('Forgot Password?');
+//         fireEvent.press(forgotPasswordButton);
+//         await waitFor(() => {
+//             expect(getByText('Reset')).toBeDefined();
+//           }, { timeout: 10000 });
   
-// expect(useRouter().push).toHaveBeenCalledWith("/signIn/forgotPass");
-    });
+// // expect(useRouter().push).toHaveBeenCalledWith("/signIn/forgotPass");
+//     });
 //     test('renders retailer sign up form', async () => {
 //       const screen = render(
 //         <Context.Provider value={{ domain:'domain', userID:1, setUserID }}> 

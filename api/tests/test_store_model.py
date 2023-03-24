@@ -12,10 +12,10 @@ class StoreModelTests(TestCase):
         self.assertIsNotNone(store.id)
         self.assertIsNotNone(store.barcode)
 
-        # # Try saving another store instance with the same barcode
-        store2 = Store(name='Another Test Store', description='This is another test store', barcode=store.barcode)
-        store2.save()
-        self.assertRaises(IntegrityError)
+        # # # Try saving another store instance with the same barcode
+        # store2 = Store(name='Another Test Store', description='This is another test store', barcode=store.barcode)
+        # store2.save()
+        # self.assertRaises(IntegrityError)
 
 
     def test_generate_barcode(self):
@@ -53,12 +53,12 @@ class StoreModelTests(TestCase):
         # Check that the store instance does not have a description
         self.assertEqual(store.description, '')
 
-    # def test_barcode_uniqueness(self):
-    #     # Create a store instance with a specific barcode
-    #     store = Store(name='Test Store', description='This is a test store', barcode='1234567890123')
-    #     store.save()
+    def test_barcode_uniqueness(self):
+        # Create a store instance with a specific barcode
+        store = Store(name='Test Store', description='This is a test store', barcode='1234567890123')
+        store.save()
 
-    #     # Try creating another store instance with the same barcode
-    #     with self.assertRaises(IntegrityError):
-    #         store2 = Store(name='Another Test Store', description='This is another test store', barcode='1234567890123')
-    #         store2.save()
+        # Try creating another store instance with the same barcode
+        with self.assertRaises(IntegrityError):
+            store2 = Store(name='Another Test Store', description='This is another test store', barcode='1234567890123')
+            store2.save()
