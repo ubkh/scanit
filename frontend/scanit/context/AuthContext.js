@@ -54,37 +54,37 @@ export function AuthProvider(props) {
   const [ userType, setUserType ] = useState(undefined);
   const [authenticated, setAuthenticated] = useState(false);
 
-  React.useEffect(() => {
-    setAuthenticated(true); // temp to deal with when user is undefined on reload
-    getItem().then((json) => {
-      if (json != null) {
-        const parsed = JSON.parse(json);
-        //removeItem();
-        // console.log("parsed is ")
-        // console.log(parsed)
-        setAuth(parsed);
+  // React.useEffect(() => {
+  //   setAuthenticated(true); // temp to deal with when user is undefined on reload
+  //   getItem().then((json) => {
+  //     if (json != null) {
+  //       const parsed = JSON.parse(json);
+  //       //removeItem();
+  //       // console.log("parsed is ")
+  //       // console.log(parsed)
+  //       setAuth(parsed);
 
-        // setUserType(parsed.user.is_retailer ? 'retailer' : 'customer')
+  //       // setUserType(parsed.user.is_retailer ? 'retailer' : 'customer')
 
-        if (parsed.user.account_type === 1) { // CUSTOMER 
-          setUserType('customer');
-        } else if (parsed.user.account_type === 2) { // RETAIL STAFF
-          setUserType('retailer');
-        } else if (parsed.user.account_type === 3){ // RETAIL OWNER
-          setUserType('retailer');
-        } else { // DIRECTOR
-          setUserType('director');
-        }
+  //       if (parsed.user.account_type === 1) { // CUSTOMER 
+  //         setUserType('customer');
+  //       } else if (parsed.user.account_type === 2) { // RETAIL STAFF
+  //         setUserType('retailer');
+  //       } else if (parsed.user.account_type === 3){ // RETAIL OWNER
+  //         setUserType('retailer');
+  //       } else { // DIRECTOR
+  //         setUserType('director');
+  //       }
 
-      } else {
-        setAuth(null);
-        setUserType(undefined)
-        setAuthenticated(false);
-      }
-    });
-    const json = getItem();
-    setAuth(json);
-  }, []);
+  //     } else {
+  //       setAuth(null);
+  //       setUserType(undefined)
+  //       setAuthenticated(false);
+  //     }
+  //   });
+  //   const json = getItem();
+  //   setAuth(json);
+  // }, []);
 
   useProtectedRoute(user);
 

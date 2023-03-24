@@ -12,8 +12,6 @@ const PASSWORD_REGEX = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,64})/;
 
 
 function AssignStaffPage(props) {
-    const { colorMode } = useColorMode();
-
     const globalContext = useContext(Context)
     const {domain, userID, setUserID} = globalContext;
     const {control, handleSubmit, watch} = useForm();
