@@ -65,6 +65,7 @@ function SignInScreen(props) {
         // setUserType(json.user.is_retailer ? 'retailer' : 'customer')
         // console.log(json.user.is_retailer)
         // console.log(userType)
+        globalContext.setUserID(json)
         signIn(json);
       })
       .catch((error) => {

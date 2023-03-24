@@ -115,7 +115,7 @@ export function AuthProvider(props) {
           removeItem();
           setUserType(undefined);
           removeLastRoute();
-          setAuthenticated(false);;
+          setAuthenticated(false);
         },
         user,
         userType,

@@ -5,7 +5,8 @@ from django.core.validators import RegexValidator
 from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
-
+from django.core.serializers.json import DjangoJSONEncoder
+import uuid
 import datetime
 import barcode
 from barcode.writer import ImageWriter
@@ -41,7 +42,7 @@ class Store(models.Model):
 	id = models.AutoField(primary_key=True)
 	name = models.CharField(max_length=100, blank=False)
 	description = models.CharField(max_length=750, blank=True)
-	barcode = models.CharField(max_length=25, blank=False)
+	barcode = models.CharField(max_length=25, blank=False, unique=True)
 	address = models.CharField(max_length=100, blank=True, null=True)
         
 	def save(self, *args, **kwargs):
@@ -150,3 +151,16 @@ class Product(models.Model):
         self.full_clean()
         super().save(*args, **kwargs)
 
+class Transaction(models.Model):
+    transaction_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    shop = models.ForeignKey(Store, related_name='transactions_as_store', on_delete=models.CASCADE)
+    customer = models.ForeignKey(User, related_name='transactions_as_customer', on_delete=models.CASCADE)
+    products = models.JSONField(encoder=DjangoJSONEncoder)
+    date = models.DateField(auto_now_add=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
+    
+    
+
+
+  

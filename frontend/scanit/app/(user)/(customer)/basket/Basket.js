@@ -1,17 +1,50 @@
-import { ScrollView, Platform, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { View, Container, Text, Heading, Button, StatusBar, Center, Flex, Divider, Spacer, useColorMode } from 'native-base';
-import { useState, useContext, useEffect } from 'react';
+import { ScrollView, TouchableOpacity, StyleSheet, Alert, Animated} from 'react-native';
+import { View, Text, Heading, Button, StatusBar, Flex, Divider, Spacer, useColorMode } from 'native-base';
+import { useState, useContext, useEffect, useRef } from 'react';
 // import { useNavigation, useRoute } from '@react-navigation/native';
 import { Context } from '../../../../context/GlobalContext';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from "expo-router";
 import NumericInput from 'react-native-numeric-input'; // https://github.com/himelbrand/react-native-numeric-input for props and info
 
+const Pulse = (props) => {
+  const [scaleValue] = useState(new Animated.Value(0.5));
 
+  useEffect(() => {
+    Animated.timing(scaleValue, {
+      toValue: 1.2,
+      duration: 700,
+      useNativeDriver: false,
+    }).start(() => {
+      Animated.timing(scaleValue, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: false,
+        delay: 1200,
+      }).start();
+    });
+  }, []);
+
+  return (
+    <View style={styles.pulseContainer}>
+      <Animated.View
+        style={[
+          styles.pulse,
+          { transform: [{ scale: scaleValue }] },
+        ]}
+      />
+      <View style={styles.item}>
+        {props.children}
+      </View>
+    </View>
+  );
+};
 
 function Basket(props) {
+    const globalContext = useContext(Context);
     const { colorMode } = useColorMode();
     const { basketList, setBasketList } = useContext(Context);
+    const { total, setTotal } = useContext(Context);
     const [basketItems, setBasketItems] = useState(<Text> Your basket is empty </Text>);
     const router = useRouter();
 
@@ -48,6 +81,17 @@ function Basket(props) {
       });
       setBasketList(updatedBasketList);
     };
+
+    const calculateTotalString = () => {
+      let sum = 0;
+      for (let i = 0; i < basketList.length; i++) {
+        sum += basketList[i].price * basketList[i].quantity
+      }
+
+      setTotal(sum);
+
+      return "£" + (sum / 100)
+    }
     
     useEffect(() => {
         setBasketList(basketList);
@@ -57,15 +101,21 @@ function Basket(props) {
         } else {
           setBasketItems(
         <View style={styles.basketList}>
-          <ScrollView>
+          <ScrollView
+         ref={ref => {this.scrollView = ref}}
+         onContentSizeChange={() => this.scrollView.scrollToEnd({animated: true})}>
           <Text style={styles.basketHeader}>{basketList.length} products</Text>
             {basketList.map((item, index) => (
               <View style={styles.basketEntry} key={index}>
-                  <View key={index}>
-                      <Text>Barcode ID: {item.data}</Text>
+                  <Pulse key={index}>
+                      {/* <Text>Barcode ID: {item.data}</Text>
                       <Text>Barcode Type: {item.type}</Text>
+                  <View key={index}> */}
+                      <Text>Name: {item.name}</Text>
+                      <Text>Barcode ID: {item.barcode}</Text>
                       <Text>Quantity: {item.quantity}</Text>
-
+                      <Text>Price: {"£" + (item.price / 100)}</Text>
+                      <Text>&nbsp;</Text>
                     <View testID={`numeric-input-${index}`}>
                       <NumericInput
                         key={`${item.data}`}
@@ -90,6 +140,9 @@ function Basket(props) {
                         minValue={1}
                         rounded={true}
                         textColor={colorMode === 'light' ? 'black' : 'white'}
+                        rightButtonBackgroundColor={colorMode === 'light' ? 'white' : '#313332'}
+                        leftButtonBackgroundColor={colorMode === 'light' ? 'white' : '#313332'}
+                        iconStyle={colorMode === 'light' ? { fontSize: 18, color: 'black' } : {fontSize: 18, color: 'white'}}
                         totalHeight={40}
                         totalWidth={100}
                       />
@@ -116,13 +169,13 @@ function Basket(props) {
                           </View>
                         </TouchableOpacity>
                       </View>
-                  </View>
+                  </Pulse>
                   <Text>&nbsp;</Text>
               </View>
             ))}
             <View style={{width: '90%', alignSelf: "center"}}>
                 <Button shadow={2} bg="brand.400" style={{ marginBottom: 100 }}onPress= {() => router.push("basket/payment")}>
-                  <Text style={{fontWeight: "bold", color: "white", fontSize: 20}}>Checkout!</Text>
+                  <Text style={{fontWeight: "bold", color: "white", fontSize: 20}}>Checkout! • {calculateTotalString()}</Text>
                 </Button>
               </View>
           </ScrollView>
@@ -167,9 +220,6 @@ function Basket(props) {
         
     },
     basketEntry: {
-        // position: 'absolute',
-        // top: 0,
-        // left: 0,
         padding: 10,
         alignSelf: 'flex-start',
         justifyContent: 'flex-start',
@@ -182,6 +232,22 @@ function Basket(props) {
       right: 0,
       alignItems: "center",
       justifyContent: "center",
+    },
+    pulseContainer: {
+      marginVertical: 10,
+      borderWidth: 1,
+      borderColor:'#50C878',
+      borderRadius: 5,
+      padding: 10,
+    },
+    pulse: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(125, 225, 10, 0.3)',
+      borderRadius: 5,
     },
 });
 
