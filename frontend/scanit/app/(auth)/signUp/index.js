@@ -137,7 +137,7 @@ function SignUpScreen (props) {
                             placeholder = 'Store address' 
                             control={control} 
                             rules = {{
-                                required: 'address is required', 
+                                required: 'Address is required', 
                             
                             }} 
                         />  

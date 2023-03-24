@@ -1,5 +1,7 @@
 import React, { useState, useContext } from "react";
+
 import { StyleSheet, useWindowDimensions } from "react-native";
+import { Platform } from 'react-native';
 import {
   View,
   Text,
