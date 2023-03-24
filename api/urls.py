@@ -37,7 +37,6 @@ urlpatterns = [
 	# ADMIN (RETAILER) URL PATHS
 	# path('retailer/dashboard'),
 	# path('retailer/add-product/', retailerAddProduct, name='retailer-add-product'),
-    path('retailer/get-product/<str:barcode>', retailerGetProduct, name='retailer-get-product'),
 	
 	# ADMIN (DIRECTOR) URL PATHS
 	path('staff/register/', StaffRegistrationAPIView.as_view()),
@@ -54,7 +53,8 @@ urlpatterns = [
 	path('retailer/all/', RetailerList.as_view(), name='get-all-retailers'),
     path('staff/register/', StaffRegistrationAPIView.as_view()),
 	path('retailer/add-product/', RetailerUploadItemAPIView.as_view(),name='retailer-add-product'),
-    path('retailer/get-products/', retailerGetAllProducts, name='retailer-get-all-products'),
+    path('retailer/get-product/<str:barcode>/', retailerGetProduct, name='retailer-get-product'),
+    path('retailer/get-all-products/<int:store_id>/', retailerGetAllProducts, name='retailer-get-all-products'),
     path('retailer/update-product/', retailerUpdateProduct, name='update-product'),
     path('retailer/get-barcode/', RetailerBarcodeAPIView.as_view(),name='retailer-get-barcode'),
 ]
