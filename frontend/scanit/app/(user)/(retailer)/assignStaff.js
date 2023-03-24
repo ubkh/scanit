@@ -47,7 +47,7 @@ function assignStaffPage(props) {
 
         fetch(`${protocol}://${domain}/api/staff/register/`,{
             method: 'POST',
-            credentials: "same-origin",
+            include: 'credentials',
             headers: { 
                 'Content-Type': 'application/json'
             },

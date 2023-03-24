@@ -8,11 +8,34 @@ import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../../../context/AuthContext";
 import ProductDataProvider from "../../../context/RetailerProductContext";
 
+// if (user.user.account_type == 1) { // THEY ARE RETAIL STAFF
+//   const links = [
+//     { label: "Home", url: "/(retailer)/home" },
+//     { label: "Products", url: "/products" },
+//     { label: "Add a Product", url: "/addProduct" },
+//     { label: "Account", url: "/account" },
+//   ];
+// } else if (user.user.account_type == 2) { // THEY ARE RETAIL OWNER
+//   const links = [
+//     { label: "Home", url: "/(retailer)/home" },
+//     { label: "Products", url: "/products" },
+//     { label: "Add a Product", url: "/addProduct" },
+//     { label: "Assign Staff", url: "/assignStaff" },
+//     { label: "Manage Staff", url: "/manageStaff" },
+//     { label: "Account", url: "/account" },
+//   ];
+// } else if (user.user.account_type == 4) { // THEY ARE A DIRECTOR
+//   // TODO: ADD URLS
+//   const links = [];
+// }
+
 const links = [
   { label: "Home", url: "/(retailer)/home" },
   { label: "Products", url: "/products" },
   { label: "Add a Product", url: "/addProduct" },
   { label: "Assign Staff", url: "/assignStaff" },
+  { label: "Manage Staff", url: "/manageStaff" },
+  // { label: "edit", url: "/editStaff" },
   { label: "Account", url: "/account" },
 ];
 
