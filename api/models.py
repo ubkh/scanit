@@ -173,11 +173,8 @@ class Product(models.Model):
 
     def save(self, *args, **kwargs):
         # even though full_clean() should call clean_fields() before clean(), it does not, and expiry date is not checked if valid
-        print("in here")
         self.clean_fields()
-        print("cleaning")
         self.full_clean()
-        print("done")
         super().save(*args, **kwargs)
 
 #Model to store the reciepts

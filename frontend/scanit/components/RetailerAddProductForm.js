@@ -55,6 +55,7 @@ function RetailerAddProductForm() {
       quantity: parseInt(values.quantity),
       store: user.user.employed_at_id,
     });
+    console.log(jsonObj);
     await fetch(`http://${domain}/api/retailer/add-product/`, {
       method: "POST",
       // mode: "cors",
