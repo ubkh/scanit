@@ -23,6 +23,8 @@ function Products() {
   const [suspendedProducts, setSuspendedProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showSuspended, setShowSuspended] = useState(false);
+  const [error, setError] = useState("");
+
   // const [shouldUpdate, setShouldUpdate] = useState(true);
   const { domain } = useContext(Context);
   const { colorMode } = useColorMode();
