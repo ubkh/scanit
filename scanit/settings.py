@@ -15,6 +15,7 @@ import datetime
 from datetime import timedelta
 
 import os
+import dj_database_url
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -57,9 +58,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# ALTER FOR PRODUCTION
-CORS_ORIGIN_ALLOW_ALL = True
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*', 'https://scanit.fly.dev', 'https://scanit.pubjeemobail.surge.sh']
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 ROOT_URLCONF = 'scanit.urls'
 
@@ -85,26 +85,9 @@ WSGI_APPLICATION = 'scanit.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-# Check if PostgreSQL environment variables are set
-if os.getenv('POSTGRES_URL') and os.getenv('PGNAME') and os.getenv('PGUSER') and os.getenv('POSTGRES_PASSWORD') and os.getenv('PGHOST') and os.getenv('PGPORT'):
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'URL': os.getenv('POSTGRES_URL'),
-            'NAME': os.getenv('PGNAME'),
-            'USER': os.getenv('PGUSER'),
-            'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-            'HOST': os.getenv('PGHOST'),
-            'PORT': os.getenv('PGPORT'),
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
+DATABASES = {
+    'default': dj_database_url.config(default='sqlite:///{}'.format(BASE_DIR / 'db.sqlite3'))
+}
 
 
 # Password validation
