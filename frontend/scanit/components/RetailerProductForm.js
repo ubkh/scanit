@@ -90,6 +90,7 @@ function RetailerProductForm({ isUpdate = false }) {
 
   async function updateSubmitHandler(values) {
     const jsonObj = dataToJSON(values);
+    console.log(jsonObj);
     // check if values have not changed
     // properties order is important in JSON comparison
     if (JSON.stringify(getProductData()) === jsonObj) {

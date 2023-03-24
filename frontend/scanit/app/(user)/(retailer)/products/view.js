@@ -14,6 +14,7 @@ export default function ViewProductData() {
   const router = useRouter();
 
   async function handleSuspend(shouldSuspend) {
+    console.log(productData);
     const res = await fetch(`http://${domain}/api/retailer/update-product/`, {
       method: "POST",
       headers: {
@@ -23,6 +24,7 @@ export default function ViewProductData() {
         barcode: productData.barcode,
         expiry: productData.expiry,
         is_suspended: shouldSuspend,
+        store_id: productData.store_id,
       }),
       credentials: "include",
     });
