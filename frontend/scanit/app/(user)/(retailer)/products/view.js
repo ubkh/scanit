@@ -9,13 +9,12 @@ import AlertDialogComponent from "../../../../components/AlertDialog";
 
 export default function ViewProductData() {
   const { productData } = useContext(ProductDataContext);
-  const { domain } = useContext(Context);
+  const { domain, protocol } = useContext(Context);
   const [isAlertOpen, setAlertOpen] = useState(false);
   const router = useRouter();
 
   async function handleSuspend(shouldSuspend) {
-    console.log(productData);
-    const res = await fetch(`http://${domain}/api/retailer/update-product/`, {
+    const res = await fetch(`${protocol}://${domain}/api/retailer/update-product/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

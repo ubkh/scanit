@@ -5,8 +5,11 @@ import { AuthProvider } from "../context/AuthContext";
 import { extendTheme, NativeBaseProvider } from "native-base";
 import { ColorTheme, Config } from "../Theme.js";
 import { useFonts } from "expo-font";
+import * as Font from "expo-font";
 import ContextProvider from "../context/GlobalContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Asset } from "expo-asset";
+import { Ionicons, FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 
 const theme = extendTheme({ colors: ColorTheme });
 
@@ -28,12 +31,34 @@ const colorModeManager = {
   },
 };
 
+function cacheFonts(fonts) {
+  return fonts.map(font => Font.loadAsync(font));
+}
+
 export default function RootLayout() {
+  const [appIsReady, setAppIsReady] = useState(false);
+
   const [fontsLoaded] = useFonts({
     'Rubik': require('../assets/fonts/Rubik-Regular.ttf'),
     'Rubik-Bold': require('../assets/fonts/Rubik-Bold.ttf'),
-    'Rubik-Medium': require('../assets/fonts/Rubik-Medium.ttf'),
+    'Rubik-Medium': require('../assets/fonts/Rubik-Medium.ttf')
   });
+
+  useEffect(() => {
+    async function loadResourcesAndDataAsync() {
+      try {
+        const fontAssets = cacheFonts([FontAwesome.font, Ionicons.font, MaterialCommunityIcons.font]);
+
+        await Promise.all([...fontAssets]);
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setAppIsReady(true);
+      }
+    }
+
+    loadResourcesAndDataAsync();
+  }, []);
         
   const { width } = useWindowDimensions();
   const [isSmallScreen, setIsSmallScreen] = useState(false);
@@ -51,7 +76,7 @@ export default function RootLayout() {
     );
   }
 
-  if (!fontsLoaded) {
+  if (!fontsLoaded || !appIsReady) {
     return <SplashScreen />;
   }
   return (
