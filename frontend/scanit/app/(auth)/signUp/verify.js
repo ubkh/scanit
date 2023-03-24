@@ -5,24 +5,32 @@ import { useRouter, useSearchParams, Link } from "expo-router";
 import { Context } from '../../../context/GlobalContext.js';
 import { useForm } from 'react-hook-form';
 
+// Define a React component called VerificationScreen
 function VerificationScreen(props) {
+    // Define two pieces of state using the useState hook
     const[code, setCode] = useState('');
     const[ error, setError ] = useState('');
 
+    // Use the useForm hook from react-hook-form to create a form object
     const {control, handleSubmit} = useForm();
 
+    // Use the useRouter and useColorMode hooks from Expo to get the current route and color mode respectively
     const router = useRouter();
     const { colorMode } = useColorMode();
 
+    // Use the useSearchParams and useContext hooks to get the user_id and domain from the global context respectively
     const { user_id } = useSearchParams();
     const globalContext = useContext(Context)
     const {domain} = globalContext;
 
+    // Define an async function called onConfirmPressed that will make a request to the server to confirm the verification code
     const onConfirmPressed = async data =>  {
+        // Create a JSON body with the verification code
         let body = JSON.stringify({
             'verification_code': data.code
         })
 
+        // Make a POST request to the server to confirm the verification code
         fetch(`http://${domain}/api/user/verify/${user_id}/`,{
             method: 'POST',
             headers: { 
@@ -38,6 +46,7 @@ function VerificationScreen(props) {
             }
         })
         .then(json => {
+            // If the verification is successful, navigate to the sign in screen
             console.log("successfully verified!")
             router.push('/signIn')
         })
@@ -47,6 +56,7 @@ function VerificationScreen(props) {
     }
 
     return (
+        // Render the verification screen UI using various components from NativeBase
         <KeyboardAvoidingView h={{
             base: "400px",
             lg: "auto"

@@ -6,26 +6,32 @@ import { useRouter, Link } from "expo-router";
 import { Context } from '../../../context/GlobalContext.js';
 import { useForm } from 'react-hook-form';
 
+// Define regular expressions for email and password validation
 const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 const PASSWORD_REGEX = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,64})/;
 
 function SignUpScreen (props) {
+    // Use hooks to access the global context and routing utilities
     const globalContext = useContext(Context)
     const {domain, userID, setUserID} = globalContext;
     const router = useRouter();
+    // Use hooks to access the current color mode and form data
+
     const { colorMode } = useColorMode();
 
+    // Use hooks to keep track of the selected button index and any form errors
     const {control, handleSubmit, watch} = useForm();
     const [selectedIndex, setSelectedIndex] = useState(0);
 
 
-    // const[storeAddress, setStoreAddress] = useState('');
   
-    // const[error, setError] = useState('');
     const pwd = watch('password');
     const[error, setError] = useState('');
 
+    // Define a function to handle form submission
     const onRegisterPressed = async data =>  {
+
+        // Construct a JSON body to send in a POST request to the API
         let body = JSON.stringify({
             'email': data.email.toLowerCase(),
             'first_name': data.first_name,
@@ -35,10 +41,10 @@ function SignUpScreen (props) {
             'store_name': data.store_name,
             'store_description': data.store_description,
             'password': data.password,
-            // 'is_retailer': selectedIndex == 1 ? true : false
             'account_type': selectedIndex == 1 ? 3 : 1 // 1 == CUSTOMER, 3 == RETAIL_OWNER
         })
 
+        // Send a POST request to the API with the form data in the body
         fetch(`http://${domain}/api/user/register/`,{
             method: 'POST',
             headers: { 
@@ -46,14 +52,19 @@ function SignUpScreen (props) {
             },
             body:body
         })
+
+        // If the request is successful, parse the JSON response and redirect to the verification page
         .then(res => {
             if (res.ok) {
                 return res.json()
             } else {
+            
+                // If the request is not successful, display an error message and throw an error to trigger the catch block
                 setError('user already exists')
                 throw res.json()
             }
         })
+
         .then(json => {
             setUserID(json.user_id)
             console.log(json.user_id)
@@ -61,11 +72,13 @@ function SignUpScreen (props) {
             router.push({pathname: '/signUp/verify', params: {user_id: json.user_id}})
         })
         .catch(error => {
+             // Handle any errors that occur during the request
             console.log(error)
         })
     }
 
     return (
+        // Using KeyboardAvoidingView to make sure keyboard doesn't block input fields on smaller screens
         <KeyboardAvoidingView h={{
             base: "400px",
             lg: "auto"

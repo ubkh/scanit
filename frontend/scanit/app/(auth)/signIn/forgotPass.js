@@ -9,20 +9,26 @@ import { useForm } from 'react-hook-form';
 const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 function ForgotPasswordScreen(props) {
+    // Setting initial state and declaring required variables
     const[email, setEmail] = useState('');
     const router = useRouter();
-    const { colorMode } = useColorMode();
+    const { colorMode } = useColorMode(); // Getting the color mode of the app (dark or light)
 
-    const globalContext = useContext(Context)
-    const {domain} = globalContext;
 
-    const {control, handleSubmit} = useForm();
-    
+    const globalContext = useContext(Context)// Accessing the global state
+
+    const {domain} = globalContext;// Getting the domain from the global state
+
+
+    const {control, handleSubmit} = useForm();// Initializing the useForm hook to handle form validation
+
+    // Creating a JSON object with the email entered by the user
     const onSendPressed = async data => {
         let body = JSON.stringify({
             'email': data.email.toLowerCase(),
         })
 
+        // Sending a POST request to the backend API with the email entered by the user
         fetch(`http://${domain}/api/user/password-reset/`,{
             method: 'POST',
             headers: { 
@@ -33,18 +39,19 @@ function ForgotPasswordScreen(props) {
         .then(res => {
             if (res.ok) {
                 console.log('A link was sent to your email to reset your password')
-                router.push("/signIn");
+                router.push("/signIn");// Navigating to the sign-in page if the email is valid
                 return res.json()
             } else {
-                setError('Invalid email')
+                setError('Invalid email')// Setting an error message if the email is invalid
                 throw res.json()
             }
         })
         .catch(error => {
-            console.log(error)
+            console.log(error)// Logging the error in the console
         })
     }
 
+    // Rendering the Forgot Password screen
     return (
         <KeyboardAvoidingView h={{
             base: "400px",
