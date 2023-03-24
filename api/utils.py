@@ -18,7 +18,8 @@ def get_logged_in_user(user_token):
         return None
     payload = jwt.decode(user_token, settings.SECRET_KEY, algorithms=['HS256'])
     user_model = get_user_model()
-    user = user_model.objects.filter(user_id=payload['user_id']).first()
+    # user = user_model.objects.filter(user_id=payload['user_id']).first()
+    user = user_model.objects.get(user_id=payload['user_id'])
     if user:
         return user
     return None

@@ -639,8 +639,14 @@ class RetailerUploadItemAPIView(APIView):
 def retailerGetProduct(request, barcode):
     user_token = request.COOKIES.get('access_token')
     user = get_logged_in_user(user_token)
-    if not user_token or not user or not user.account_type == User.Account.RETAIL_OWNER or not user.account_type == User.Account.RETAIL_STAFF:
+
+    if not user:
+        return HttpResponse('Unauthorized', status=400)
+    
+
+    if user.account_type == 1:
         return HttpResponse('Unauthorized', status=401)
+    
 
     queryset = Product.objects.filter(barcode=barcode, store=user.employed_at) 
     if (queryset.count()):
@@ -650,18 +656,13 @@ def retailerGetProduct(request, barcode):
         return HttpResponseBadRequest()
 
 @csrf_exempt
-def retailerGetAllProducts(request):
-    user_token = request.COOKIES.get('access_token')
-    user = get_logged_in_user(user_token)
-    if not user_token or not user or not user.account_type == User.Account.RETAIL_OWNER or not user.account_type == User.Account.RETAIL_STAFF:
-        return HttpResponse('Unauthorized', status=401)
+def retailerGetAllProducts(request, store_id):
     
-    print(request.data)
-
-    queryset = Product.objects.filter(store=user.employed_at)
+    queryset = Product.objects.filter(store=store_id)
     if (queryset.count()):
         data = list(queryset.values())
-        return JsonResponse(data, safe=False)
+        print(data)
+        return JsonResponse({'products':data})
     else:
         return HttpResponseBadRequest()
 
