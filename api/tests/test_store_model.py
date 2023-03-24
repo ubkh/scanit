@@ -62,3 +62,21 @@ class StoreModelTests(TestCase):
         with self.assertRaises(IntegrityError):
             store2 = Store(name='Another Test Store', description='This is another test store', barcode='1234567890123')
             store2.save()
+
+    def test_duplicate_barcode(self):
+            """Test if unique barcode is generated when a duplicate is found"""
+            store = Store(name='Test Store', description='This is a test store', barcode='1234567890123')
+            store.save()
+            new_store = Store(name='Test Store2', description='This is a test store2')
+            store.save()         
+            self.assertNotEqual(new_store.barcode, '1234567890123')
+
+    def test_max_length(self):
+        """Test if max length of fields is enforced"""
+        store1 = Store(name='Test Store', description='a' * 749,barcode='1234567890123', address='a' * 90)
+        store1.save()
+        self.assertLess(len(store1.name), 100)
+        self.assertLess(len(store1.description), 750)
+        self.assertLess(len(store1.barcode), 25)
+        self.assertLess(len(store1.address), 100)
+           

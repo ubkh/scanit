@@ -7,9 +7,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from "expo-router";
 import NumericInput from 'react-native-numeric-input'; // https://github.com/himelbrand/react-native-numeric-input for props and info
 
+// Define the Pulse animation component
 const Pulse = (props) => {
+
+  // Define a new scaleValue state variable that is initially set to 0.5
   const [scaleValue] = useState(new Animated.Value(0.5));
 
+    // Define a useEffect hook that starts the animation when the component mounts
   useEffect(() => {
     Animated.timing(scaleValue, {
       toValue: 1.2,
@@ -25,6 +29,7 @@ const Pulse = (props) => {
     });
   }, []);
 
+    // Return the animated Pulse component
   return (
     <View style={styles.pulseContainer}>
       <Animated.View
@@ -40,7 +45,9 @@ const Pulse = (props) => {
   );
 };
 
+// Define the Basket component
 function Basket(props) {
+      // Define the context, color mode, and router hooks
     const globalContext = useContext(Context);
     const { colorMode } = useColorMode();
     const { basketList, setBasketList } = useContext(Context);
@@ -48,7 +55,7 @@ function Basket(props) {
     const [basketItems, setBasketItems] = useState(<Text> Your basket is empty </Text>);
     const router = useRouter();
 
-
+    // Define the removeItem function that removes an item from the basketList
     const removeItem = (index) => {
       Alert.alert(
             'Remove Item',
@@ -71,6 +78,7 @@ function Basket(props) {
             ],)
     }
 
+      // Define the handleQuantityChange function that updates the quantity of an item in the basketList
     const handleQuantityChange = (index, newQuantity) => {
       const updatedBasketList = basketList.map((basketItem, i) => {
         if (i === index) {
@@ -82,7 +90,11 @@ function Basket(props) {
       setBasketList(updatedBasketList);
     };
 
-    const calculateTotalString = () => {
+  // This function calculates the total price of all items in the basket.
+  // It uses the basketList array and adds up the price of each item multiplied by its quantity.
+  // It then updates the total state using the setTotal function.
+  // Finally, it returns a string that includes the total price formatted as pounds (£) and pence.
+  const calculateTotalString = () => {
       let sum = 0;
       for (let i = 0; i < basketList.length; i++) {
         sum += basketList[i].price * basketList[i].quantity
@@ -92,10 +104,14 @@ function Basket(props) {
 
       return "£" + (sum / 100)
     }
-    
+
+// This is a React useEffect hook that runs whenever the basketList or colorMode state changes.
+// It updates the basketItems state based on the current basketList array and colorMode.
     useEffect(() => {
         setBasketList(basketList);
 
+    // If the basketList is empty, display a message indicating that the basket is empty.
+    // Otherwise, display a list of all items in the basket.
         if (basketList.length === 0) {
           setBasketItems(<Text> Your basket is empty </Text>);
         } else {
