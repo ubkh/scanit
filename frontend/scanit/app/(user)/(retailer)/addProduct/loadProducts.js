@@ -15,13 +15,6 @@ function loadProducts(props) {
     const {control, handleSubmit} = useForm();
     // const { domain } = globalContext;
 
-    const onSubmit = async data => {
-
-        // let body = JSON.stringify({
-        // })
-        
-
-    }
     
     return (
         <View style={styles.container}>
@@ -35,65 +28,8 @@ function loadProducts(props) {
             
             
             <ItemLoader/>
-            {/* <CustomButton text = "Submit" onPress={handleSubmit(onSubmit())}/> */}
         </View>
     );
-
-
-    
-
-    // const onConfirmPressed = async data =>  {
-    //     let body = JSON.stringify({
-    //         'verification_code': data.codehead
-    //     })
-
-    //     fetch(`http://${domain}/api/user/verify/${user_id}/`,{
-    //         method: 'POST',
-    //         headers: { 
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body:body
-    //     })
-    //     .then(res => {
-    //         if (res.ok) {
-    //             return res.json()
-    //         } else {
-    //             throw res.json()
-    //         }
-    //     })
-    //     .then(json => {
-    //         console.log("successfully verified!")
-    //         router.push('/signIn')
-    //     })
-    //     .catch(error => {
-    //         console.log(error)
-    //     })
-    // }
-    
-    // const onSignInPressed = () => {
-    //     router.push('/signIn')
-    // }
-
-    // return (
-    //     <View style={styles.container}>
-    //         <Text>&nbsp;</Text>
-    //         <Text>&nbsp;</Text>
-    //         <Text>&nbsp;</Text>
-            
-    //         <Text style={styles.title}>Verify your account</Text>
-            
-    //         <CustomInput 
-    //             name='code'
-    //             placeholder='Code'
-    //             control = {control}
-    //             rules = {{required: 'Code is required'}} 
-    //         />
-    //         <CustomButton text = "Confirm" onPress={handleSubmit(onConfirmPressed)}/>
-    //         <CustomButton text = "Back to sign in" onPress={onSignInPressed} type = "TERTIARY"/>
-            
-    //     </View>
-    // );
-
     
 
 }

@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
+
 import { StyleSheet, useWindowDimensions } from "react-native";
-import {Text,StatusBar,Flex,Spacer,Button,Box,useColorMode,Center,KeyboardAvoidingView,} from "native-base";
+import { Text, StatusBar, Flex,Spacer,Button,Box,useColorMode,Center,KeyboardAvoidingView,} from "native-base";
 import CustomInput from "../../../components/CustomInput.js";
 import { useRouter, Link, SplashScreen } from "expo-router";
 import { Context } from "../../../context/GlobalContext.js";
