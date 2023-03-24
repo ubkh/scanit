@@ -24,7 +24,7 @@ function SignInScreen(props) {
   const { colorMode } = useColorMode();
   const globalContext = useContext(Context);
   const { signIn, authenticated } = useAuth();
-  const { domain } = globalContext;
+  const { domain, protocol } = globalContext;
 
   const [error, setError] = useState("");
 
@@ -42,7 +42,7 @@ function SignInScreen(props) {
       password: data.password,
     });
 
-    fetch(`http://${domain}/api/user/login/`, {
+    fetch(`${protocol}://${domain}/api/user/login/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -51,6 +51,7 @@ function SignInScreen(props) {
       credentials: "include",
     })
       .then((res) => {
+        console.log(res)
         if (res.ok) {
           return res.json();
         } else {

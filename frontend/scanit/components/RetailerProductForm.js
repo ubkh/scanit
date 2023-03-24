@@ -19,7 +19,7 @@ import { useRouter } from "expo-router";
 
 function RetailerProductForm({ isUpdate = false }) {
   const { productData, setProductData } = useContext(ProductDataContext);
-  const { domain } = useContext(Context);
+  const { domain, protocol } = useContext(Context);
   const router = useRouter();
   const {
     control,
@@ -61,7 +61,7 @@ function RetailerProductForm({ isUpdate = false }) {
 
   async function addSubmitHandler(values) {
     const jsonObj = dataToJSON(values);
-    const res = await fetch(`http://${domain}/api/retailer/add-product/`, {
+    const res = await fetch(`${protocol}://${domain}/api/retailer/add-product/`, {
       method: "POST",
       // mode: "cors",
       headers: {
@@ -89,7 +89,7 @@ function RetailerProductForm({ isUpdate = false }) {
     if (JSON.stringify(getProductData()) === jsonObj) {
       return;
     }
-    const res = await fetch(`http://${domain}/api/retailer/update-product/`, {
+    const res = await fetch(`${protocol}://${domain}/api/retailer/update-product/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

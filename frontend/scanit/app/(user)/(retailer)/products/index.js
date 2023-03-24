@@ -22,7 +22,7 @@ function Products() {
   const [isLoading, setIsLoading] = useState(true);
   const [showSuspended, setShowSuspended] = useState(false);
   // const [shouldUpdate, setShouldUpdate] = useState(true);
-  const { domain } = useContext(Context);
+  const { domain, protocol } = useContext(Context);
   const { colorMode } = useColorMode();
 
   useEffect(() => {
@@ -30,7 +30,7 @@ function Products() {
     (async () => {
       try {
         setIsLoading(true);
-        const res = await fetch(`http://${domain}/api/retailer/get-products/`, {
+        const res = await fetch(`${protocol}://${domain}/api/retailer/get-products/`, {
           credentials: "include",
         });
   

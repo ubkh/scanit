@@ -14,7 +14,7 @@ function ForgotPasswordScreen(props) {
     const { colorMode } = useColorMode();
 
     const globalContext = useContext(Context)
-    const {domain} = globalContext;
+    const {domain, protocol} = globalContext;
 
     const {control, handleSubmit} = useForm();
     
@@ -23,7 +23,7 @@ function ForgotPasswordScreen(props) {
             'email': data.email.toLowerCase(),
         })
 
-        fetch(`http://${domain}/api/user/password-reset/`,{
+        fetch(`${protocol}://${domain}/api/user/password-reset/`,{
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json'

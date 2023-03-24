@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form';
 function assignStaffPage(props) {
     const { user_id } = useSearchParams();
     const globalContext = useContext(Context)
-    const {domain, userID, setUserID} = globalContext;
+    const {domain, protocol, userID, setUserID} = globalContext;
     const {control, handleSubmit, watch} = useForm();
     const[number, setNumber] = useState('');
     const[store_address, setStoreAddress] = useState('');
@@ -36,7 +36,7 @@ function assignStaffPage(props) {
             'password': data.password
         })
 
-        fetch(`http://${domain}/api/staff/register/`,{
+        fetch(`${protocol}://${domain}/api/staff/register/`,{
             method: 'POST',
             credentials: "same-origin",
             headers: { 

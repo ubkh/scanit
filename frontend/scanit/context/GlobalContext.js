@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, createContext } from "react";
-import { DJANGO } from "@env";
+import { DJANGO, PROTOCOL } from "@env";
 import * as SecureStore from "expo-secure-store";
 
 export const Context = createContext();
@@ -10,6 +10,7 @@ export const Context = createContext();
 
 export default function ContextProvider(props) {
   const [domain, setDomain] = useState(DJANGO);
+  const [protocol, setProtocol] = useState(PROTOCOL);
 
   const [retailerBarcodeData, setRetailerBarcodeData] = useState("");
   const [retailerBarcodeType, setRetailerBarcodeType] = useState("");
@@ -24,6 +25,7 @@ export default function ContextProvider(props) {
 
   const globalContext = {
     domain,
+    protocol,
     basketList,
     setBasketList,
     isRetailerScanned,
