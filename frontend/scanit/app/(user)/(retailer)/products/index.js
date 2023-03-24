@@ -14,7 +14,9 @@ import BarCodeScanStyle from "../../../../styles/BarCodeScanStyle";
 import { useRouter } from "expo-router";
 import { useEffect, useState, useContext } from "react";
 import { Context } from "../../../../context/GlobalContext";
+import { useAuth } from "../../../../context/AuthContext";
 import ProductListItem from "../../../../components/ProductsListItem";
+
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -24,7 +26,8 @@ function Products() {
   // const [shouldUpdate, setShouldUpdate] = useState(true);
   const { domain, protocol } = useContext(Context);
   const { colorMode } = useColorMode();
-
+  const { user } = useAuth();
+  
   useEffect(() => {
     // useEffect has problem with async function. Create the async function and call it
     (async () => {
@@ -32,19 +35,32 @@ function Products() {
         setIsLoading(true);
         const res = await fetch(`${protocol}://${domain}/api/retailer/get-products/`, {
           credentials: "include",
+        })
+        .then(res => {
+          if (res.ok) {
+            return res.json();
+          } else {
+            throw res.json();
+          }
+        })
+        .then(json => {
+          setProducts(json.products);
+          setIsLoading(false);
+        })
+        .catch(err => {
+          console.log(error);
         });
   
-        if (res.ok) {
-          const productsData = await res.json();
-          setProducts(productsData);
-          setIsLoading(false);
-        } else {
-          // Handle non-ok responses here, if needed
-          console.error("Failed to fetch products:", res.status);
-        }
+        // if (res.ok) {
+        //   const productsData = await res.json();
+        //   setProducts(productsData);
+        //   setIsLoading(false);
+        // } else {
+        //   // Handle non-ok responses here, if needed
+        //   console.error("Failed to fetch products:", res.status);
+        // }
       } catch (error) {
-        // Handle network errors or any other errors here
-        console.error("Error fetching products:", error);
+        
       } finally {
         //setIsLoading(false);
       }

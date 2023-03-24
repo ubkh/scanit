@@ -10,8 +10,8 @@ import ProductDataProvider from "../../../context/RetailerProductContext";
 
 const links = [
   { label: "Home", url: "/(retailer)/home" },
-  { label: "Add a Product", url: "/addProduct" },
   { label: "Products", url: "/products" },
+  { label: "Add a Product", url: "/addProduct" },
   { label: "Assign Staff", url: "/assignStaff" },
   { label: "Account", url: "/account" },
 ];
@@ -19,11 +19,13 @@ const links = [
 export default function RetailerLayout() {
   const { userType, loading } = useAuth();
   const segments = useSegments();
-
   const { colorMode } = useColorMode();
 
   // TODO: Consider a context here to prevent access
-  // prevent other users from accessing this group of pages
+  // prevent other users from accessing this group of page/s
+  // if (userType !== "retailer") {
+  //   return <Redirect href={`/(${userType})/${segments[2]}`} />;
+  // }
   if (userType !== "retailer") {
     return <Redirect href={`/(${userType})/${segments[2]}`} />;
   }
