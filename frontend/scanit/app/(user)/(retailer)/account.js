@@ -17,7 +17,6 @@ function Account() {
   const { user, loading } = useAuth();
   const [ storeBarcode, setStoreBarcode ] = useState('');
   const globalContext = useContext(Context);
-  const { domain } = globalContext;
   console.log(user.user)
   
   const saveBarcodeImage = async () => {
@@ -36,7 +35,7 @@ function Account() {
         const shop_id = {"store_id" : user.user.employed_at_id}
         const JSONobj = JSON.stringify(shop_id);
         
-        fetch(`http://${domain}/api/retailer/get-barcode/`, {
+        fetch(`http://${globalContext.domain}/api/retailer/get-barcode/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
