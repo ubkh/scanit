@@ -35,6 +35,7 @@ const links = [
   { label: "Add a Product", url: "/addProduct" },
   { label: "Assign Staff", url: "/assignStaff" },
   { label: "Manage Staff", url: "/manageStaff" },
+  // { label: "edit", url: "/editStaff" },
   { label: "Account", url: "/account" },
 ];
 

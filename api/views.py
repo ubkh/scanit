@@ -712,6 +712,17 @@ class RetailerStaffAPIView(APIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (AllowAny,)
 
+    def get(self, request, store_id):
+
+        try:
+            store = Store.objects.get(id=store_id)
+            staff = User.objects.filter(employed_at=store)
+            data = list(staff.values())
+            return JsonResponse({'staff':data})
+
+        except:
+            return HttpResponse("Store does not exist!", status=status.HTTP_400_BAD_REQUEST)
+
     def post(self, request):
 
         user_id = request.data.get('user_id')

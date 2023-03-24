@@ -1,9 +1,12 @@
-import React from 'react';
+import { React, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Button, Box, StatusBar, useColorMode, Heading, Divider } from 'native-base';
 import EditStaffButton from './EditStaffButton';
 
-const Staff = ({ email, first_name, last_name }) => {
+const Staff = ({ email, first_name, last_name, data }) => {
+    
+    // const { userData, setUserData } = useState(data);
+
     return (
         <View style={styles.container}>
 
@@ -22,6 +25,7 @@ const Staff = ({ email, first_name, last_name }) => {
             <View style={styles.column}>
                 <EditStaffButton
                     first_name={first_name}
+                    data={data}
                 />
                 {/* <Button>
                     <Text>Button for {first_name} {last_name}</Text>

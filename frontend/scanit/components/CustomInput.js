@@ -4,7 +4,7 @@ import { Platform } from 'react-native';
 import { View, Text, Input, FormControl, WarningOutlineIcon } from "native-base";
 import { Controller } from "react-hook-form";
 
-const CustomInput = ({ control, name, rules = {}, placeholder, secureTextEntry}) => {
+const CustomInput = ({ defaultValue, control, name, rules = {}, placeholder, secureTextEntry}) => {
     return (
         <Controller     
             control = {control}
@@ -29,6 +29,7 @@ const CustomInput = ({ control, name, rules = {}, placeholder, secureTextEntry})
                             <Input width={"300px"}
                                 value = {value} 
                                 onChangeText = {onChange} 
+                                defaultValue = {defaultValue}
                                 onBlur = {onBlur} 
                                 placeholder = {placeholder}
                                 secureTextEntry = {secureTextEntry}

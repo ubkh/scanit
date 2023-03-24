@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { Button, View, Text, Box, StatusBar, useColorMode, Heading, Divider } from 'native-base';
 import CustomInput from '../../../components/CustomInput.js';
@@ -8,7 +8,7 @@ import { Context } from '../../../context/GlobalContext.js';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../../../context/AuthContext';
 
-const manageStaff = () => {
+const ManageStaff = () => {
 
     const router = useRouter();
     const globalContext = useContext(Context);
@@ -16,44 +16,29 @@ const manageStaff = () => {
     const { user } = useAuth();
     const [ staff, setStaff ] = useState([]);
 
-    const getStaff = async () => {
-
-        const data = { 'user_id' : user.user.user_id };
-        const body = JSON.stringify(data);
-        console.log(body);
-
-        fetch(`http://${domain}/api/retailer/get-staff/`,{
-            method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json'
-            },
-            body: body,
-            credentials: "include",
-        })
-        .then(res => {
-            if (res.ok) {
-                console.log(res)
-                return res.json()
-            } else {
-                console.log(res);
-                throw res.json()
+    useEffect(() => {
+        const getStaff = async () => {
+            try {
+                const res = await fetch(`http://${domain}/api/retailer/get-staff/${user.user.employed_at_id}/`, {
+                    include: 'credentials',
+                });
+                if (res.ok) {
+                    const json = await res.json();
+                    setStaff(json.staff);
+                } else {
+                    console.log(res);
+                    throw res.json();
+                }
+            } catch (error) {
+                console.log(error);
             }
-        })
-        .then(json => {
-            console.log(json)
-            setStaff(json)
-        })
-        .catch(error => {
-            console.log(error)
-        })
-        
-    }
+        };
+        getStaff();
+    }, []);
 
-    
-    
     return (
         <div>
-            
+
             <View style={styles.container}>
 
                 <View style={styles.column}>
@@ -70,19 +55,17 @@ const manageStaff = () => {
 
             </View>
 
-            {console.log(getStaff())}
-
-            {staff.map((s,index) => (
+            {staff.map((s) => (
                 <div>
                     <Staff
-                        key={index}
+                        key={s.email}
                         email={s.email}
                         first_name={s.first_name}
                         last_name={s.last_name}
+                        data={s}
                     />
                 </div>
             ))}
-
 
         </div>
     )
@@ -119,5 +102,4 @@ const styles = StyleSheet.create({
     },
 });
 
-
-export default manageStaff
+export default ManageStaff
