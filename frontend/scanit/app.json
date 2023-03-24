@@ -12,6 +12,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "jsEngine": "hermes",
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -21,6 +22,7 @@
     ],
     "ios": {
       "supportsTablet": true,
+      "jsEngine": "jsc",
       "bundleIdentifier": "com.anonymous.scanit"
     },
     "android": {
