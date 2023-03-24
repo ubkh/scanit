@@ -15,7 +15,8 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
 
   function CardDetails(props) {
 
-    const { colorMode } = useColorMode();
+  const { colorMode } = useColorMode();
+  const router = useRouter();
 
   
   const globalContext = useContext(Context);
@@ -32,27 +33,19 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
   const { retailerBarcodeType, setRetailerBarcodeType } = useContext(Context);
   const { isRetailerScanned, setRetailerScanned } = useContext(Context);
 
-
-
-  const router = useRouter();
-
   const getFullDate = () => {
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0');
     var yyyy = today.getFullYear();
-
     return dd + '/' + mm + '/' + yyyy;
-
   };
 
   const getFullTime = () => {
- 
     var d = new Date(),
     h = (d.getHours()<10?'0':'') + d.getHours(),
     m = (d.getMinutes()<10?'0':'') + d.getMinutes();
     return  h + ':' + m;
-
   };
 
   const resetFields =() => {
@@ -91,7 +84,10 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
   const handleSubmit = async () => {
     let currentMonth = new Date().getMonth() + 1;
     let currentYear = new Date().getFullYear();
-    if (cardNumber.length !== 16) {
+    if(name.length <= 3){
+      Alert.alert('Invalid Name', 'Please enter your full name');
+    }
+    else if (cardNumber.length !== 16) {
       Alert.alert('Invalid card number', 'Please enter a valid 16-digit card number');
     }
     else if(parseInt(expiryMonth) <= currentMonth && parseInt(expiryYear) <= currentYear){
@@ -107,6 +103,7 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
       Alert.alert('Invalid CVV', 'Please enter a valid 3-digit CVV');
     } 
     else {
+      //console.log('Payment successful');
       //console.warn('Card details submitted');
       router.push("/basket/Basket");
       router.push("/home")
@@ -116,7 +113,8 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
         {date: getFullDate(), time: getFullTime(), location: retailerBarcodeData[0].barcode , items: basketList },
         ...previousPurchases
       ])
-      console.warn(previousPurchases)
+      //console.warn(previousPurchases)
+      //console.warn(previousPurchases)
 
       
       const transactionData = {
@@ -155,24 +153,23 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
     <View style={{flex: 1}} _dark={{bg: "black"}} _light={{bg: "white"}}>
       <StatusBar barStyle={colorMode === 'light' ? 'dark-content' : 'light-content'} animated={true}/>
     <View style={PaymentStyle.container}>
-      <Text style={PaymentStyle.label}>Name on Card</Text>
       <Input
         style={PaymentStyle.input}
         placeholder="Enter Name on Card"
         value={name}
         onChangeText={handleNameOnCard}
         maxLength={30}
+        variant="underlined"
       />
-      <Text style={PaymentStyle.label}>Card Number</Text>
       <Input
         style={PaymentStyle.input}
-        placeholder="Enter card number"
+        placeholder="Enter Card Number"
         keyboardType="numeric"
         value={cardNumber}
         onChangeText={handleCardNumberChange}
         maxLength={16}
+        variant="underlined"
       />
-      <Text style={PaymentStyle.label}>Expiry Date</Text>
         <View style = {{flexDirection: "row"}}>
           <View style={{flex:1}}>
             <Input
@@ -182,6 +179,7 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
               value={expiryMonth}
               onChangeText={handleExpiryMonth}
               maxLength={2}
+              variant="underlined"
             />
           </View>
           <View style={{flex:1}}>
@@ -192,11 +190,11 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
               value={expiryYear}
               onChangeText={handleExpiryYear}
               maxLength={4}
+              variant="underlined"
             />
           </View>
         </View>
 
-      <Text style={PaymentStyle.label}>CVV</Text>
       <Input
         style={PaymentStyle.input}
         placeholder="Enter CVV"
@@ -204,6 +202,7 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
         value={cvv}
         onChangeText={handleCvvChange}
         maxLength={3}
+        variant="underlined"
       />
 
       <TouchableOpacity style={PaymentStyle.button} onPress={handleSubmit}>
@@ -211,55 +210,10 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
       </TouchableOpacity>
     </View>
     </View>
+
   );
 }
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     padding: 20,
-//   },
-//   label: {
-//     fontSize: 16,
-//     marginBottom: 5,
-//   },
-//   input: {
-//     height: 40,
-//     borderColor: '#ccc',
-//     borderWidth: 1,
-//     borderRadius: 5,
-//     paddingHorizontal: 10,
-//     marginBottom: 10,
-//   },
-//   inputMonth: {
-//     height: 40,
-//     borderColor: '#ccc',
-//     borderWidth: 1,
-//     borderRadius: 5,
-//     paddingHorizontal: 10,
-//     marginBottom: 10,
-//     justifyContent: 'flex-start',
-//   },
-//   inputYear: {
-//     height: 40,
-//     borderColor: '#ccc',
-//     borderWidth: 1,
-//     borderRadius: 5,
-//     paddingHorizontal: 10,
-//     marginBottom: 10,
-//     justifyContent: 'flex-end',
-//   },
-//   button: {
-//     backgroundColor: '#50C878',
-//     borderRadius: 5,
-//     padding: 10,
-//     alignItems: 'center',
-//   },
-//   buttonText: {
-//     color: '#fff',
-//     fontSize: 16,
-//   },
-// });
 
 export default CardDetails;
 

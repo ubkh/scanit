@@ -97,7 +97,7 @@ function Account() {
         <Text>&nbsp;</Text>
         
         <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacingX={5} spacingY={5} my={4}>
-          <Box borderWidth={1} borderColor="gray.200" borderRadius={8} width={310}
+          <Box borderWidth={1} borderColor="gray.200" borderRadius={8} width={260}
           rounded={10} _web={{shadow: 3}} alignItems="center" padding={10}>
             <Text style={{ fontFamily: 'Rubik-Bold' }}>Retailer barcode:</Text>
             <Text>&nbsp;</Text>
@@ -119,7 +119,7 @@ function Account() {
           
           {Platform.OS !== "web" &&
             <>
-            <Box borderWidth={1} borderColor="gray.200" width={310} borderRadius={8} p={4} marginTop={3}>
+            <Box borderWidth={1} borderColor="gray.200" width={260} borderRadius={8} p={4} marginTop={3}>
               <Box mb={2}>
                 <Text bold fontSize={16}>Appearance</Text>
               </Box>
@@ -129,7 +129,7 @@ function Account() {
                 <ThemeButton />
               </Box>
               </Box>
-              <Box borderWidth={1} borderColor="red.600" width={310} borderRadius={8} p={4} marginTop={6}>
+              <Box borderWidth={1} borderColor="red.600" width={260} borderRadius={8} p={4} marginTop={6}>
               <Box mb={2}>
                 <Text bold fontSize={16} color="red.600">Logout</Text>
               </Box>
