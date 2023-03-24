@@ -1,7 +1,9 @@
 # Translates models into JSON objects
 from rest_framework import serializers
+import json
 from django.contrib.auth import get_user_model
 from .models import Product, Store, User
+from .models import Transaction
 
 import datetime
 
@@ -110,6 +112,64 @@ class UserConfirmPasswordResetSerializer(serializers.Serializer):
             print("banana bread")
             raise serializers.ValidationError("Passwords do not match.")
         return data
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ['user_id', 'email', 'first_name', 'last_name', 'number', 'is_active',
+                  'account_type', 'verification_code', 'is_verified', 'date_joined']
+
+class StoreSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Store
+        fields = '__all__'
+
+class ProductSerializer(serializers.ModelSerializer):
+    store = StoreSerializer()
+
+    class Meta:
+        model = Product
+        fields = '__all__'
+
+class RetailerSerializer(serializers.ModelSerializer):
+    employed_at = StoreSerializer()
+
+    class Meta:
+        model = get_user_model()
+        fields = ['user_id', 'email', 'first_name', 'last_name', 'number', 'is_active',
+                  'account_type', 'employed_at', 'verification_code', 'is_verified', 'date_joined']
+
+class TransactionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Transaction
+        fields = ['shop', 'customer', 'products', 'amount']
+
+    def validate_shop(self, value):
+        return value
+    
+    def validate_customer(self, value):
+        return value
+    
+    def validate_products(self, value):
+        return str(value)
+
+    def validate_amount(self, value):
+        print(value)
+        return value
+
+    def create(self,validated_data):
+
+        # store = Store.objects.get(id=validated_data.get('store_id'))
+        product = self.Meta.model(
+                                shop=validated_data.get('shop'),
+                                customer=validated_data.get('customer'),
+                                products=validated_data.get('products'),
+                                amount=validated_data.get('amount')
+                                )
+
+        product.save()
+        return product
     
 class RetailerUploadItemSerializer(serializers.ModelSerializer):
 

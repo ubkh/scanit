@@ -1,5 +1,6 @@
-from .models import Product
+from .models import Product, Transaction
 from rest_framework import generics
+from rest_framework.decorators import api_view
 import json
 from .serializers import (
     UserRegistrationSerializer, 
@@ -7,8 +8,12 @@ from .serializers import (
     UserVerificationSerializer,
     UserPasswordResetSerializer,
     UserConfirmPasswordResetSerializer,
+    UserSerializer,
     RetailerUploadItemSerializer,
     StoreRegistrationSerializer,
+    TransactionSerializer,
+    ProductSerializer,
+    StoreSerializer
     ) 
 
 from rest_framework.views import APIView
@@ -396,6 +401,131 @@ def send_account_verification_code(request):
     return JsonResponse({'error': 'Invalid request'})
 
 
+# FILTER TRANSACTIONS BY BARCODE OF THE STORE
+class TransactionByBarcodeList(generics.ListAPIView):
+    serializer_class = TransactionSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        barcode = self.request.query_params.get('barcode', None)
+        if barcode is not None:
+            return Transaction.objects.filter(shop__barcode=barcode)
+        else:
+            return Transaction.objects.all()
+        
+
+# FIND A TRANSACTION WITH A SPECIFIC ID  
+class TransactionByIDList(generics.ListAPIView):
+    serializer_class = TransactionSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        transaction_id = self.request.query_params.get('transaction_id', None)
+        if transaction_id is not None:
+            return Transaction.objects.filter(transaction_id=transaction_id)
+        else:
+            return Transaction.objects.all()
+
+class TransactionByUserIDList(generics.ListAPIView):
+    serializer_class = TransactionSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        customer_id = self.request.query_params.get('user_id', None)
+        if customer_id is not None:
+            return Transaction.objects.filter(customer__id=customer_id)
+        else:
+            return Transaction.objects.all()
+
+@csrf_exempt
+def create_transaction(request):
+    print(request.body)
+    print(request.body.get("store"))
+    print(request.body.store)
+    if request.method == 'POST':
+
+        store_id = request.body.get('store')
+        customer_id = request.body.get('customer')
+        store = get_object_or_404(Store, id=store_id)
+        customer = get_object_or_404(User, id=customer_id)
+
+        serializer = TransactionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(store=store, customer=customer)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CreateTransactionAPIView(APIView):
+    serializer_class = TransactionSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (AllowAny,)
+
+    
+
+    def get(self, request):
+        content = { 'message': 'Hello!' }
+        return Response(content)
+    
+
+    def post(self, request):
+
+        # user_id = request.data.get('user_id')
+        # print(request.data)
+        # print(request.data.get('user_id'))
+
+
+        # user_id = request.data.get('user_id')
+        # user = User.objects.get(user_id=user_id)
+
+        # if (user.account_type == User.Account.CUSTOMER):
+        #     return HttpResponse('Unauthorized piss off m8', status=401)
+
+        serializer = self.serializer_class(data=request.data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return HttpResponse(status=200)
+        
+        print(serializer.errors)
+        return HttpResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# USE THIS TO CHECK IF THE STORE BARCODE WE SCAN IS VALID
+class StoreByBarcodeList(generics.ListAPIView):
+    serializer_class = StoreSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        barcode = self.request.query_params.get('barcode', None)
+        if barcode is not None:
+            return Store.objects.filter(barcode=barcode)
+        else:
+            return Store.objects.all()
+
+class RetailerList(generics.ListAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        retailer_types = [User.Account.RETAIL_STAFF, User.Account.RETAIL_OWNER]
+        return User.objects.filter(account_type__in=retailer_types)
+
+# USE THIS FOR WHEN WE SCAN A PRODUCT BARCODE TO CHECK IF THE PRODUCT IS IN THAT RETAILER
+class ProductByBarcodeAndStoreList(generics.ListAPIView):
+    serializer_class = ProductSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        barcode = self.request.query_params.get('barcode', None)
+        store_barcode = self.request.query_params.get('store_barcode', None)
+
+        if barcode is not None and store_barcode is not None:
+            return Product.objects.filter(barcode=barcode, store__barcode=store_barcode)
+        else:
+            return Product.objects.none()
+
+
+
+
 class RetailerUploadItemAPIView(APIView):
     serializer_class = RetailerUploadItemSerializer
     authentication_classes = (TokenAuthentication,)
@@ -509,8 +639,14 @@ class RetailerUploadItemAPIView(APIView):
 def retailerGetProduct(request, barcode):
     user_token = request.COOKIES.get('access_token')
     user = get_logged_in_user(user_token)
-    if not user_token or not user or not user.account_type == User.Account.RETAIL_OWNER or not user.account_type == User.Account.RETAIL_STAFF:
+
+    if not user:
+        return HttpResponse('Unauthorized', status=400)
+    
+
+    if user.account_type == 1:
         return HttpResponse('Unauthorized', status=401)
+    
 
     queryset = Product.objects.filter(barcode=barcode, store=user.employed_at) 
     if (queryset.count()):
@@ -520,18 +656,13 @@ def retailerGetProduct(request, barcode):
         return HttpResponseBadRequest()
 
 @csrf_exempt
-def retailerGetAllProducts(request):
-    user_token = request.COOKIES.get('access_token')
-    user = get_logged_in_user(user_token)
-    if not user_token or not user or not user.account_type == User.Account.RETAIL_OWNER or not user.account_type == User.Account.RETAIL_STAFF:
-        return HttpResponse('Unauthorized', status=401)
+def retailerGetAllProducts(request, store_id):
     
-    print(request.data)
-
-    queryset = Product.objects.filter(store=user.employed_at)
+    queryset = Product.objects.filter(store=store_id)
     if (queryset.count()):
         data = list(queryset.values())
-        return JsonResponse(data, safe=False)
+        print(data)
+        return JsonResponse({'products':data})
     else:
         return HttpResponseBadRequest()
 

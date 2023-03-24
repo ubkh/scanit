@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Product, Store
+from .models import User, Product, Store, Transaction
 # Register your models here.
 
 @admin.register(User)
@@ -13,3 +13,7 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(Store)
 class StoreAdmin(admin.ModelAdmin):
     list_display = ["id", "name", "description", "barcode", "address"]
+
+@admin.register(Transaction)
+class TransactionAdmin(admin.ModelAdmin):
+    list_display = ["transaction_id", "shop", "customer", "products", "date", "amount"]
