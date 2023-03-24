@@ -12,15 +12,25 @@ import {
   useColorMode,
   Box
 } from "native-base";
+import { useState, useContext, useEffect } from "react";
 import { Platform } from "react-native";
 import LogOutButton from "../../../components/LogOutButtonComponent";
 import { useForm } from "react-hook-form";
 import { useRouter, Navigator, Link } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { Context } from "../../../context/GlobalContext";
+import { useAuth } from "../../../context/AuthContext";
 
 function Home() {
   const router = useRouter();
   const { colorMode } = useColorMode();
+  const [ storeBarcode, setStoreBarcode ] = useState('');
+  const [ transactionList, setTransactionList ] = useState([]);
+  const [ totalMade, setTotalMade ] = useState(0);
+  const [ quantitySold, setQuantitySold ] = useState(0);
+  const [ averagePerTransaction, setAveragePerTransaction ] = useState(0);
+  const { user, loading } = useAuth();
+  const globalContext = useContext(Context);
   const {
     control,
     handleSubmit,
@@ -41,6 +51,117 @@ function Home() {
   //         </View>
   //     );
   // }
+
+  const getStoreBarcode = async () => {
+        
+    const shop_id = {"store_id" : user.user.employed_at_id}
+    const JSONobj = JSON.stringify(shop_id);
+    
+    fetch(`http://${globalContext.domain}/api/retailer/get-barcode/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONobj,
+      credentials: "include",
+    })
+    .then(res => {
+    if (res.ok) {
+        return res.json()
+      } else {
+        console.log(res);
+        setError('error innit')
+        throw res.json()
+      }
+    })
+    .then(json => {
+      setStoreBarcode(json.barcode)
+    })
+    .catch(error => {
+      console.log(error)
+    })
+    
+  }
+  
+
+  const calcTotalSalesMade = async () => {
+    try {
+      // AWAIT THE RESPONSE SO WE DON'T CONTINUE WITHOUT THIS
+      const response = await fetch(`http://${globalContext.domain}/api/transactions-by-barcode/?barcode=${storeBarcode}`,
+      {
+        method: "GET",
+      });
+
+      const transactions = await response.json();
+
+      setTransactionList(transactions)
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const calcTotalSales = () => {
+    let sum = 0;
+
+    for (let i = 0; i < transactionList.length; i++) {
+      const item = transactionList[i];
+      const amount = parseInt(item.amount) || 0;
+      sum += amount;
+    }
+
+    let items = 0
+
+    for (let i = 0; i < transactionList.length; i++) {
+      const product = transactionList[i];
+      const jsonString = product.products.replace(/'/g, "\"");
+      const jsonList = JSON.parse(jsonString);
+      for (let j = 0; j < jsonList.length; j++) {
+        const productAmount = jsonList[j].quantity
+        items += productAmount
+      }
+    }
+  
+    setQuantitySold(items);
+
+    setTotalMade(sum)
+
+  }
+
+  const calcAveragePerTransaction = () => {
+    let sum = 0;
+
+    for (let i = 0; i < transactionList.length; i++) {
+      const item = transactionList[i];
+      const amount = parseInt(item.amount) || 0;
+      sum += amount;
+    }
+
+    const average = sum / transactionList.length
+
+    setAveragePerTransaction(average)
+
+  }
+  
+
+  useEffect(() => {
+    getStoreBarcode();
+  }, [])
+  
+  useEffect( () => {
+    if (storeBarcode !== '') {
+      calcTotalSalesMade();
+    }
+  }, [storeBarcode])
+
+  useEffect( () => {
+    if (transactionList.length > 0) {
+      calcTotalSales();
+      calcAveragePerTransaction();
+    }
+  }, [transactionList])
+  
+
   return (
     <Box _dark={{ bg: "black" }} flex={1} _light={{ bg: "white" }} safeAreaTop>
       <StatusBar
@@ -94,7 +215,7 @@ function Home() {
             <Icon size={30} color={"white"} as={Ionicons} name="card-outline" />
             <Text>&nbsp;</Text>
             <Text color={"white"} style={{ fontFamily: "Rubik-Bold" }}>
-                Some statistic here
+                Total sales made: {transactionList.length === 0 ? "Loading..." : transactionList.length}
             </Text>
             </Center>
         </Box>
@@ -117,7 +238,7 @@ function Home() {
             <Icon size={30} color={"white"} as={Ionicons} name="card-outline" />
             <Text>&nbsp;</Text>
             <Text color={"white"} style={{ fontFamily: "Rubik-Bold" }}>
-                Some statistic here
+                Total earned: {"£" + (totalMade / 100)}
             </Text>
             </Center>
         </Box>
@@ -140,7 +261,7 @@ function Home() {
             <Icon size={30} color={"white"} as={Ionicons} name="card-outline" />
             <Text>&nbsp;</Text>
             <Text color={"white"} style={{ fontFamily: "Rubik-Bold" }}>
-                Some statistic here
+                Number of items sold: {quantitySold}
             </Text>
             </Center>
         </Box>
@@ -164,7 +285,7 @@ function Home() {
             <Icon size={30} color={"white"} as={Ionicons} name="card-outline" />
             <Text>&nbsp;</Text>
             <Text color={"white"} style={{ fontFamily: "Rubik-Bold" }}>
-                Some statistic here
+                Average per transaction {"£" + averagePerTransaction / 100}
             </Text>
             </Center>
         </Box>
