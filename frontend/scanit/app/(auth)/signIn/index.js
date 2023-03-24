@@ -1,34 +1,23 @@
 import React, { useState, useContext } from "react";
 
 import { StyleSheet, useWindowDimensions } from "react-native";
-import { Platform } from 'react-native';
-import {
-  View,
-  Text,
-  StatusBar,
-  Flex,
-  Spacer,
-  Button,
-  Box,
-  useColorMode,
-  Center,
-  KeyboardAvoidingView,
-} from "native-base";
+import { Text, StatusBar, Flex,Spacer,Button,Box,useColorMode,Center,KeyboardAvoidingView,} from "native-base";
 import CustomInput from "../../../components/CustomInput.js";
 import { useRouter, Link, SplashScreen } from "expo-router";
 import { Context } from "../../../context/GlobalContext.js";
 import { useAuth } from "../../../context/AuthContext";
 import { useForm } from "react-hook-form";
-import ThemeButton from "../../../components/ThemeButton";
 import ScanitLogo from "../../../components/ScanitLogoComponent";
 
 // Define the SignInScreen component
+/*Page that creates elements for Sign In functionality, including inputs for email and password,
+a fetch request to validate details and forget password button */
 function SignInScreen(props) {
   // Use hooks to manage state and retrieve data
   const { colorMode } = useColorMode();
   const globalContext = useContext(Context);
   const { signIn, authenticated } = useAuth();
-  const { domain } = globalContext;
+  const { domain, protocol } = globalContext;
 
   const [error, setError] = useState("");
 
@@ -47,7 +36,7 @@ function SignInScreen(props) {
       password: data.password,
     });
 
-    fetch(`http://${domain}/api/user/login/`, {
+    fetch(`${protocol}://${domain}/api/user/login/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -56,6 +45,7 @@ function SignInScreen(props) {
       credentials: "include",
     })
       .then((res) => {
+        console.log(res)
         if (res.ok) {
           return res.json();
         } else {
@@ -65,6 +55,7 @@ function SignInScreen(props) {
       })
       .then((json) => {
         // If the login is successful, update the state and navigate to the appropriate screen
+  
         globalContext.setUserID(json)
         signIn(json);
       })
@@ -167,8 +158,6 @@ function SignInScreen(props) {
             </Text>
           </Center>
         </Box>
-
-        {/* <ThemeButton /> */}
         <Spacer />
       </Flex>
     </KeyboardAvoidingView>

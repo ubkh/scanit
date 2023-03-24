@@ -114,7 +114,7 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
         ...previousPurchases
       ])
       //console.warn(previousPurchases)
-      //console.warn(previousPurchases)
+      console.warn(previousPurchases);
 
       
       const transactionData = {

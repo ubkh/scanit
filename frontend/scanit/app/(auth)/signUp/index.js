@@ -13,7 +13,7 @@ const PASSWORD_REGEX = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,64})/;
 function SignUpScreen (props) {
     // Use hooks to access the global context and routing utilities
     const globalContext = useContext(Context)
-    const {domain, userID, setUserID} = globalContext;
+    const {domain, protocol, userID, setUserID} = globalContext;
     const router = useRouter();
     // Use hooks to access the current color mode and form data
 
@@ -45,7 +45,7 @@ function SignUpScreen (props) {
         })
 
         // Send a POST request to the API with the form data in the body
-        fetch(`http://${domain}/api/user/register/`,{
+        fetch(`${protocol}://${domain}/api/user/register/`,{
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json'

@@ -12,7 +12,7 @@ function RetailerBarcodeScanner() {
   const [scanned, setScanned] = useState(false);
   const router = useRouter();
   const globalContext = useContext(Context);
-  const { domain } = globalContext;
+  const { domain, protocol } = globalContext;
   const { setProductData } = useContext(ProductDataContext);
 
   const askForCameraPermission = () => {
@@ -30,7 +30,7 @@ function RetailerBarcodeScanner() {
     setScanned(true);
     try {
       const res = await fetch(
-        `http://${domain}/api/retailer/get-product/${data}/`,
+        `${protocol}://${domain}/api/retailer/get-product/${data}`,
         { credentials: "include" }
       );
       if (res.ok) {

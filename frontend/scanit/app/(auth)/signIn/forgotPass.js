@@ -1,11 +1,13 @@
 import React, { useState, useContext } from 'react';
 import { Platform } from 'react-native';
-import { View, Text, StatusBar, Flex, Spacer, Button, Box, Heading, useColorMode, Center, KeyboardAvoidingView } from 'native-base';
+import { Text, StatusBar, Flex, Spacer, Button, Box, Heading, useColorMode, Center, KeyboardAvoidingView } from 'native-base';
 import CustomInput from '../../../components/CustomInput.js';
 import { useRouter, Link } from "expo-router";
 import { Context } from '../../../context/GlobalContext.js';
 import { useForm } from 'react-hook-form';
 
+
+/*Forget password functionality */
 const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 function ForgotPasswordScreen(props) {
@@ -14,10 +16,10 @@ function ForgotPasswordScreen(props) {
     const router = useRouter();
     const { colorMode } = useColorMode(); // Getting the color mode of the app (dark or light)
 
-
+  
     const globalContext = useContext(Context)// Accessing the global state
 
-    const {domain} = globalContext;// Getting the domain from the global state
+    const {domain,protocol} = globalContext;// Getting the domain from the global state
 
 
     const {control, handleSubmit} = useForm();// Initializing the useForm hook to handle form validation
@@ -29,7 +31,7 @@ function ForgotPasswordScreen(props) {
         })
 
         // Sending a POST request to the backend API with the email entered by the user
-        fetch(`http://${domain}/api/user/password-reset/`,{
+        fetch(`${protocol}://${domain}/api/user/password-reset/`,{
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json'

@@ -15,7 +15,7 @@ const PASSWORD_REGEX = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,64})/;
 function assignStaffPage(props) {
     // const { user_id } = useSearchParams();
     const globalContext = useContext(Context)
-    const {domain, userID, setUserID} = globalContext;
+    const {domain, protocol, userID, setUserID} = globalContext;
     const {control, handleSubmit, watch} = useForm();
     const[number, setNumber] = useState('');
     const[store_address, setStoreAddress] = useState('');
@@ -45,7 +45,7 @@ function assignStaffPage(props) {
             'account_type': 2,
         })
 
-        fetch(`http://${domain}/api/staff/register/`,{
+        fetch(`${protocol}://${domain}/api/staff/register/`,{
             method: 'POST',
             credentials: "same-origin",
             headers: { 

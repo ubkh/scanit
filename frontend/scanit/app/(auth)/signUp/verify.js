@@ -21,7 +21,7 @@ function VerificationScreen(props) {
     // Use the useSearchParams and useContext hooks to get the user_id and domain from the global context respectively
     const { user_id } = useSearchParams();
     const globalContext = useContext(Context)
-    const {domain} = globalContext;
+    const {domain, protocol} = globalContext;
 
     // Define an async function called onConfirmPressed that will make a request to the server to confirm the verification code
     const onConfirmPressed = async data =>  {
@@ -31,7 +31,7 @@ function VerificationScreen(props) {
         })
 
         // Make a POST request to the server to confirm the verification code
-        fetch(`http://${domain}/api/user/verify/${user_id}/`,{
+        fetch(`${protocol}://${domain}/api/user/verify/${user_id}/`,{
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json'

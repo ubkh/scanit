@@ -143,7 +143,7 @@ class TransactionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Transaction
-        fields = ['shop', 'customer', 'products', 'amount']
+        fields = ['date', 'transaction_id', 'shop', 'customer', 'amount','products']
 
     def validate_shop(self, value):
         return value
@@ -152,7 +152,8 @@ class TransactionSerializer(serializers.ModelSerializer):
         return value
     
     def validate_products(self, value):
-        return str(value)
+        #return str(value)
+        return json.dumps(value)
 
     def validate_amount(self, value):
         print(value)
