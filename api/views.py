@@ -210,6 +210,7 @@ class UserLoginAPIView(APIView):
 
             response.data = {
                 'access_token': user_access_token,
+                # 'retailer_barcode': user_instance.retailer_barcode,
                 'user': {
                     'user_id': user_instance.user_id,
                     'email': user_instance.email,

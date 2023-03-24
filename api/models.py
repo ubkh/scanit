@@ -95,11 +95,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 	last_name = models.CharField(max_length=32)
 	number = models.CharField(validators=[phone_regex], max_length=11, blank=True)
 	#retailer_barcode = models.CharField(max_length=100, unique=True, null=True, blank=True)
-	#store_address = models.CharField(max_length=100, blank=True, null=True)
 	is_active = models.BooleanField(default=True)
-	# is_staff = models.BooleanField(default=False)
-	#is_retailer = models.BooleanField(default=False)
-
+	
 	account_type = models.SmallIntegerField(
         choices = Account.choices,
         default = Account.CUSTOMER

@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { StyleSheet } from 'react-native';
+import { Platform } from "react-native";
 import { Button, View, Text, Box, StatusBar, useColorMode, Heading, Divider } from 'native-base';
 import CustomInput from '../../../components/CustomInput.js';
 import { useRouter, useSearchParams } from "expo-router";
@@ -7,9 +8,11 @@ import { Context } from '../../../context/GlobalContext.js';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../../../context/AuthContext';
 
+const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+const PASSWORD_REGEX = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,64})/;
 
-function assignStaffPage(props) {
-    const { user_id } = useSearchParams();
+
+function AssignStaffPage(props) {
     const globalContext = useContext(Context)
     const {domain, userID, setUserID} = globalContext;
     const {control, handleSubmit, watch} = useForm();
@@ -22,7 +25,7 @@ function assignStaffPage(props) {
     // const[lastName, setLastName] = useState('');
     // const[email, setEmail] = useState('');
     // const[number, setNumber] = useState('');
-    // const[storeAddress, setStoreAddress] = useState('');
+    const[retailerbarcode, set_retailer_barcode] = useState('');
     // const[password, setPassword] = useState('');
     // const[confirmPassword, setConfirmPassword] = useState('');
     const[error, setError] = useState('');
@@ -61,6 +64,8 @@ function assignStaffPage(props) {
             setUserID(json.user_id)
             console.log(json.user_id)
             console.log(userID)
+            router.push("/home");
+
         })
         .catch(error => {
             console.log(error)
@@ -116,6 +121,10 @@ function assignStaffPage(props) {
                 control = {control}
                 rules = {{
                     required: 'Email is required',
+                    pattern: {
+                        value: EMAIL_REGEX, 
+                        message: 'Not a valid email'
+                    }
                 }} 
             />
 
@@ -131,10 +140,10 @@ function assignStaffPage(props) {
                 control={control} 
                 rules = {{
                     required: 'Password is required', 
-                    // pattern: {
-                    //     value: PASSWORD_REGEX, 
-                    //     message: 'Password should contain atleast 8 characters \n - An uppercase character \n - A lower case character \n - A number \n - A special character'
-                    // }
+                    pattern: {
+                        value: PASSWORD_REGEX, 
+                        message: 'Password should contain atleast 8 characters \n - An uppercase character \n - A lower case character \n - A number \n - A special character'
+                    }
                 }} 
                 secureTextEntry
             />
@@ -165,4 +174,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default assignStaffPage;
+export default AssignStaffPage;

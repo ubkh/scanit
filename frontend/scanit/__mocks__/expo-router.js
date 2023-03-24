@@ -11,6 +11,7 @@ export const useRouter = jest.fn(() => ({
   back: jest.fn(),
 }));
 
+export const Link = jest.fn().mockImplementation(({ children }) => children);
 export const usePathname = jest.fn(() => "/");
 
 
