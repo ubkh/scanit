@@ -474,18 +474,22 @@ def retailerGetAllProducts(request, store_id):
 
 @csrf_exempt
 def retailerUpdateProduct(request):
-    user_token = request.COOKIES.get('access_token')
-    user = get_logged_in_user(user_token)
-    if not user_token or not user or not user.account_type == User.Account.RETAIL_OWNER or not user.account_type == User.Account.RETAIL_STAFF:
-        return HttpResponse('Unauthorized', status=401)
+    # user_token = request.COOKIES.get('access_token')
+    # user = get_logged_in_user(user_token)
+
+    # if not user_token or not user or not user.account_type == User.Account.RETAIL_OWNER or not user.account_type == User.Account.RETAIL_STAFF:
+    #     return HttpResponse('Unauthorized', status=401)
+
 
     try:
         product_data = json.loads(request.body)
-        product_query = Product.objects.filter(barcode=product_data['barcode'], store=user.employed_at)
+        product_query = Product.objects.filter(barcode=product_data['barcode'], store=product_data["store"])
         if (product_query.count()):
             product_obj = product_query.first()
             for (key, value) in product_data.items():
                 if (key == 'barcode'):  # should not be able to change the barcode
+                    continue
+                if (key=='store'):
                     continue
                 setattr(product_obj, key, value)
             product_obj.save()

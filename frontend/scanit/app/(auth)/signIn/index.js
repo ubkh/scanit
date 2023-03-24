@@ -9,9 +9,11 @@ import { useAuth } from "../../../context/AuthContext";
 import { useForm } from "react-hook-form";
 import ScanitLogo from "../../../components/ScanitLogoComponent";
 
+// Define the SignInScreen component
 /*Page that creates elements for Sign In functionality, including inputs for email and password,
 a fetch request to validate details and forget password button */
 function SignInScreen(props) {
+  // Use hooks to manage state and retrieve data
   const { colorMode } = useColorMode();
   const globalContext = useContext(Context);
   const { signIn, authenticated } = useAuth();
@@ -27,6 +29,7 @@ function SignInScreen(props) {
   const { height } = useWindowDimensions();
   const router = useRouter();
 
+  // Define a function that will be called when the "Sign In" button is pressed
   const onLoginPressed = async (data) => {
     let body = JSON.stringify({
       email: data.email.toLowerCase(),
@@ -50,6 +53,7 @@ function SignInScreen(props) {
         }
       })
       .then((json) => {
+        // If the login is successful, update the state and navigate to the appropriate screen
   
         globalContext.setUserID(json)
         signIn(json);
@@ -59,16 +63,19 @@ function SignInScreen(props) {
       });
   };
 
+  // Define a function that will be called when the "Forgot Password?" button is pressed
   const onForgotPasswordPressed = () => {
     router.push("/signIn/forgotPass");
   };
 
+    // If the user is already authenticated, show the splash screen
   if (authenticated) {
     return (
         <SplashScreen />
     )
   }
 
+    // Otherwise, render the sign-in form
   return (
     <KeyboardAvoidingView
       h={{

@@ -5,6 +5,7 @@ import { useRouter, useSearchParams, Link } from "expo-router";
 import { Context } from '../../../context/GlobalContext.js';
 import { useForm } from 'react-hook-form';
 
+// Define a React component called VerificationScreen
 function VerificationScreen(props) {
     const [ code, setCode] = useState('');
     const [ error, setError ] = useState('');
@@ -15,11 +16,14 @@ function VerificationScreen(props) {
     const globalContext = useContext(Context)
     const {domain, protocol} = globalContext;
 
+    // Define an async function called onConfirmPressed that will make a request to the server to confirm the verification code
     const onConfirmPressed = async data =>  {
+        // Create a JSON body with the verification code
         let body = JSON.stringify({
             'verification_code': data.code
         })
 
+        // Make a POST request to the server to confirm the verification code
         fetch(`${protocol}://${domain}/api/user/verify/${user_id}/`,{
             method: 'POST',
             headers: { 
@@ -43,6 +47,7 @@ function VerificationScreen(props) {
     }
 
     return (
+        // Render the verification screen UI using various components from NativeBase
         <KeyboardAvoidingView h={{
             base: "400px",
             lg: "auto"

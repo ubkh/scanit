@@ -6,20 +6,29 @@ import { useRouter, Link } from "expo-router";
 import { Context } from '../../../context/GlobalContext.js';
 import { useForm } from 'react-hook-form';
 
+// Define regular expressions for email and password validation
 const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 const PASSWORD_REGEX = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,64})/;
 
 function SignUpScreen (props) {
+    // Use hooks to access the global context and routing utilities
     const globalContext = useContext(Context)
     const {domain, protocol, userID, setUserID} = globalContext;
     const router = useRouter();
+    // Use hooks to access the current color mode and form data
+
     const { colorMode } = useColorMode();
+
+    // Use hooks to keep track of the selected button index and any form errors
     const {control, handleSubmit, watch} = useForm();
     const [selectedIndex, setSelectedIndex] = useState(0);
     const pwd = watch('password');
     const[error, setError] = useState('');
 
+    // Define a function to handle form submission
     const onRegisterPressed = async data =>  {
+
+        // Construct a JSON body to send in a POST request to the API
         let body = JSON.stringify({
             'email': data.email.toLowerCase(),
             'first_name': data.first_name,
@@ -38,24 +47,31 @@ function SignUpScreen (props) {
             },
             body:body
         })
+
+        // If the request is successful, parse the JSON response and redirect to the verification page
         .then(res => {
             if (res.ok) {
                 return res.json()
             } else {
+            
+                // If the request is not successful, display an error message and throw an error to trigger the catch block
                 setError('user already exists')
                 throw res.json()
             }
         })
+
         .then(json => {
             setUserID(json.user_id)
             router.push({pathname: '/signUp/verify', params: {user_id: json.user_id}})
         })
         .catch(error => {
+             // Handle any errors that occur during the request
             console.log(error)
         })
     }
 
     return (
+        // Using KeyboardAvoidingView to make sure keyboard doesn't block input fields on smaller screens
         <KeyboardAvoidingView h={{
             base: "400px",
             lg: "auto"
