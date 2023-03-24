@@ -41,8 +41,10 @@ const Pulse = (props) => {
 };
 
 function Basket(props) {
+    const globalContext = useContext(Context);
     const { colorMode } = useColorMode();
     const { basketList, setBasketList } = useContext(Context);
+    const { total, setTotal } = useContext(Context);
     const [basketItems, setBasketItems] = useState(<Text> Your basket is empty </Text>);
     const router = useRouter();
 
@@ -79,6 +81,17 @@ function Basket(props) {
       });
       setBasketList(updatedBasketList);
     };
+
+    const calculateTotalString = () => {
+      let sum = 0;
+      for (let i = 0; i < basketList.length; i++) {
+        sum += basketList[i].price * basketList[i].quantity
+      }
+
+      setTotal(sum);
+
+      return "£" + (sum / 100)
+    }
     
     useEffect(() => {
         setBasketList(basketList);
@@ -95,10 +108,14 @@ function Basket(props) {
             {basketList.map((item, index) => (
               <View style={styles.basketEntry} key={index}>
                   <Pulse key={index}>
-                      <Text>Barcode ID: {item.data}</Text>
+                      {/* <Text>Barcode ID: {item.data}</Text>
                       <Text>Barcode Type: {item.type}</Text>
+                  <View key={index}> */}
+                      <Text>Name: {item.name}</Text>
+                      <Text>Barcode ID: {item.barcode}</Text>
                       <Text>Quantity: {item.quantity}</Text>
-
+                      <Text>Price: {"£" + (item.price / 100)}</Text>
+                      <Text>&nbsp;</Text>
                     <View testID={`numeric-input-${index}`}>
                       <NumericInput
                         key={`${item.data}`}
@@ -123,6 +140,9 @@ function Basket(props) {
                         minValue={1}
                         rounded={true}
                         textColor={colorMode === 'light' ? 'black' : 'white'}
+                        rightButtonBackgroundColor={colorMode === 'light' ? 'white' : '#313332'}
+                        leftButtonBackgroundColor={colorMode === 'light' ? 'white' : '#313332'}
+                        iconStyle={colorMode === 'light' ? { fontSize: 18, color: 'black' } : {fontSize: 18, color: 'white'}}
                         totalHeight={40}
                         totalWidth={100}
                       />
@@ -155,7 +175,7 @@ function Basket(props) {
             ))}
             <View style={{width: '90%', alignSelf: "center"}}>
                 <Button shadow={2} bg="brand.400" style={{ marginBottom: 100 }}onPress= {() => router.push("basket/payment")}>
-                  <Text style={{fontWeight: "bold", color: "white", fontSize: 20}}>Checkout!</Text>
+                  <Text style={{fontWeight: "bold", color: "white", fontSize: 20}}>Checkout! • {calculateTotalString()}</Text>
                 </Button>
               </View>
           </ScrollView>

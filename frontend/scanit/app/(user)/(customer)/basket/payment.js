@@ -1,7 +1,13 @@
 import React, { useState, useContext } from 'react';
-import { TouchableOpacity, Alert } from 'react-native';
-import { View,  Text, useColorMode, StatusBar,Input } from 'native-base';
+//import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import {TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+
+//import {StatusBar, useColorMode} from 'native-base';
+import { View, Container, Text, useColorMode, StatusBar, Input, Heading } from 'native-base';
+
+
 import { useRouter } from "expo-router";
+import { useAuth } from '../../../../context/AuthContext';
 import { Context } from '../../../../context/GlobalContext';
 import PaymentStyle from '../../../../styles/PaymentPageStyle';
 
@@ -12,13 +18,16 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
   const { colorMode } = useColorMode();
   const router = useRouter();
 
-
+  
+  const globalContext = useContext(Context);
   const [name, setName] = useState('');
   const [cardNumber, setCardNumber] = useState('');
   const [expiryMonth, setExpiryMonth] = useState('');
   const [expiryYear, setExpiryYear] = useState('');
   const [cvv, setCvv] = useState('');
+  const { user } = useAuth();
   const { basketList, setBasketList } = useContext(Context);
+  const { total, setTotal } = useContext(Context);
   const { previousPurchases, setPreviousPurchases } = useContext(Context);
   const { retailerBarcodeData, setRetailerBarcodeData } = useContext(Context);
   const { retailerBarcodeType, setRetailerBarcodeType } = useContext(Context);
@@ -49,6 +58,7 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
     setCvv('');
     setExpiryMonth('');
     setExpiryYear('');
+    setTotal(0);
   };
 
   const handleNameOnCard = (text) => {
@@ -71,7 +81,7 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
     setCvv(text.replace(/[^0-9]/g, ''));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     let currentMonth = new Date().getMonth() + 1;
     let currentYear = new Date().getFullYear();
     if(name.length <= 3){
@@ -97,13 +107,42 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
       //console.warn('Card details submitted');
       router.push("/basket/Basket");
       router.push("/home")
-      console.warn(basketList);
+      //console.warn(basketList);
       setPreviousPurchases([
 
-        {date: getFullDate(), time: getFullTime(), location: retailerBarcodeData , items: basketList },
+        {date: getFullDate(), time: getFullTime(), location: retailerBarcodeData[0].barcode , items: basketList },
         ...previousPurchases
       ])
       //console.warn(previousPurchases)
+      //console.warn(previousPurchases)
+
+      
+      const transactionData = {
+        "shop": retailerBarcodeData[0].id,
+        "customer": user.user.user_id,
+        "products": globalContext.basketList,
+        "amount": globalContext.total
+      };
+      
+      const test = new Date().toISOString().slice(0, 10)
+
+      console.log(JSON.stringify(transactionData))
+      console.log("Body above here")
+      console.log(retailerBarcodeData)
+
+      fetch(`http://${globalContext.domain}/api/create-transaction/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(transactionData)
+      })
+      .then(response => console.log(response))
+      .then(data => console.log(data))
+      .catch(error => console.error(error));
+      
+      
+
       resetFields();
     }
   
@@ -113,7 +152,6 @@ import PaymentStyle from '../../../../styles/PaymentPageStyle';
 
     <View style={{flex: 1}} _dark={{bg: "black"}} _light={{bg: "white"}}>
       <StatusBar barStyle={colorMode === 'light' ? 'dark-content' : 'light-content'} animated={true}/>
-
     <View style={PaymentStyle.container}>
       <Input
         style={PaymentStyle.input}

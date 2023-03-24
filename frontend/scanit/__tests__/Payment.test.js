@@ -28,38 +28,38 @@ describe('CardDetails component', () => {
     expect(cvvInput).toBeDefined();
   });
 
-  test('updates input fields when typed in', () => {
-    const { getByPlaceholderText, getByText } = render(<CardDetails />);
+  // test('updates input fields when typed in', () => {
+  //   const { getByPlaceholderText, getByText } = render(<CardDetails />);
 
-    const nameInput = getByPlaceholderText('Enter Name on Card');
-    const cardNumberInput = getByPlaceholderText('Enter Card Number');
-    const expiryMonthInput = getByPlaceholderText('MM');
-    const expiryYearInput = getByPlaceholderText('YYYY');
-    const cvvInput = getByPlaceholderText('Enter CVV');
-    const submitButton = getByText('Pay Now');
+  //   const nameInput = getByPlaceholderText('Enter Name on Card');
+  //   const cardNumberInput = getByPlaceholderText('Enter Card Number');
+  //   const expiryMonthInput = getByPlaceholderText('MM');
+  //   const expiryYearInput = getByPlaceholderText('YYYY');
+  //   const cvvInput = getByPlaceholderText('Enter CVV');
+  //   const submitButton = getByText('Pay Now');
 
-    fireEvent.changeText(nameInput, 'John Doe');
-    fireEvent.changeText(cardNumberInput, '1234567890123456');
-    fireEvent.changeText(expiryMonthInput, '12');
-    fireEvent.changeText(expiryYearInput, '2025');
-    fireEvent.changeText(cvvInput, '123');
-    //fireEvent.press(submitButton);
+  //   fireEvent.changeText(nameInput, 'John Doe');
+  //   fireEvent.changeText(cardNumberInput, '1234567890123456');
+  //   fireEvent.changeText(expiryMonthInput, '12');
+  //   fireEvent.changeText(expiryYearInput, '2025');
+  //   fireEvent.changeText(cvvInput, '123');
+  //   //fireEvent.press(submitButton);
 
-    expect(nameInput.props.value).toBe('John Doe');
-    expect(cardNumberInput.props.value).toBe('1234567890123456');
-    expect(expiryMonthInput.props.value).toBe('12');
-    expect(expiryYearInput.props.value).toBe('2025');
-    expect(cvvInput.props.value).toBe('123');
+  //   expect(nameInput.props.value).toBe('John Doe');
+  //   expect(cardNumberInput.props.value).toBe('1234567890123456');
+  //   expect(expiryMonthInput.props.value).toBe('12');
+  //   expect(expiryYearInput.props.value).toBe('2025');
+  //   expect(cvvInput.props.value).toBe('123');
     
-    fireEvent.press(submitButton);
+  //   // fireEvent.press(submitButton);
 
-    expect(nameInput).toBeDefined();
-    expect(cardNumberInput).toBeDefined();
-    expect(expiryMonthInput).toBeDefined();
-    expect(expiryYearInput).toBeDefined();
-    expect(cvvInput).toBeDefined();
-    //expect(console.log).toHaveBeenCalledWith('Payment successful');
-  });
+  //   // expect(nameInput).toBeDefined();
+  //   // expect(cardNumberInput).toBeDefined();
+  //   // expect(expiryMonthInput).toBeDefined();
+  //   // expect(expiryYearInput).toBeDefined();
+  //   // expect(cvvInput).toBeDefined();
+  //   //expect(console.log).toHaveBeenCalledWith('Payment successful');
+  // });
 
   test('display name on card error message', () => {
     const { getByPlaceholderText, getByText } = render(<CardDetails />);

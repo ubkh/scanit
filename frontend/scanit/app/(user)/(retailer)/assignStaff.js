@@ -5,6 +5,7 @@ import CustomInput from '../../../components/CustomInput.js';
 import { useRouter, useSearchParams } from "expo-router";
 import { Context } from '../../../context/GlobalContext.js';
 import { useForm } from 'react-hook-form';
+import { useAuth } from '../../../context/AuthContext';
 
 
 function assignStaffPage(props) {
@@ -25,6 +26,9 @@ function assignStaffPage(props) {
     // const[password, setPassword] = useState('');
     // const[confirmPassword, setConfirmPassword] = useState('');
     const[error, setError] = useState('');
+    const { user } = useAuth();
+
+    console.log(user)
 
     const onRegisterPressed = async data =>  {
         let body = JSON.stringify({
@@ -32,8 +36,9 @@ function assignStaffPage(props) {
             'first_name': data.first_name,
             'last_name': data.last_name,
             'number': number,
-            'store_address': store_address,
-            'password': data.password
+            'employed_at_id': user.user.employed_at_id,
+            'password': data.password,
+            'account_type': 2,
         })
 
         fetch(`http://${domain}/api/staff/register/`,{
@@ -113,6 +118,12 @@ function assignStaffPage(props) {
                     required: 'Email is required',
                 }} 
             />
+
+
+
+
+
+            
       
             <CustomInput 
                 name = 'password'
@@ -128,7 +139,7 @@ function assignStaffPage(props) {
                 secureTextEntry
             />
             <Text>&nbsp;</Text>
-            <Button bg="brand.400" width="100%" maxWidth="300px" onPress={handleSubmit(onRegisterPressed)}>Assign staff</Button>
+            <Button bg="brand.400" width="100%" maxWidth="300px" onPress={handleSubmit(onRegisterPressed)} title={"Assign staff"}>Assign staff</Button>
             <Text>&nbsp;</Text>
             </View>
         </Box>

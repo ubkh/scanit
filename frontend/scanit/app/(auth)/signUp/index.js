@@ -1,6 +1,6 @@
 import React, { useState, useContext, useRef, useEffect } from 'react';
 import { Platform } from 'react-native';
-import { View, Text, StatusBar, Flex, Spacer, Button, Box, Heading, useColorMode, Center, KeyboardAvoidingView } from 'native-base';
+import { View, Text, StatusBar, Flex, Spacer, Button, Box, Heading, useColorMode, Center, KeyboardAvoidingView, ScrollView } from 'native-base';
 import CustomInput from '../../../components/CustomInput.js';
 import { useRouter, Link } from "expo-router";
 import { Context } from '../../../context/GlobalContext.js';
@@ -32,8 +32,11 @@ function SignUpScreen (props) {
             'last_name': data.last_name,
             'number': data.number,
             'store_address': data.store_address,
+            'store_name': data.store_name,
+            'store_description': data.store_description,
             'password': data.password,
-            'is_retailer': selectedIndex == 1 ? true : false
+            // 'is_retailer': selectedIndex == 1 ? true : false
+            'account_type': selectedIndex == 1 ? 3 : 1 // 1 == CUSTOMER, 3 == RETAIL_OWNER
         })
 
         fetch(`http://${domain}/api/user/register/`,{
@@ -68,6 +71,7 @@ function SignUpScreen (props) {
             lg: "auto"
             }} behavior={Platform.OS === "ios" ? "padding" : "height"} style={{flex: 1}} _dark={{bg: "black"}} _light={{bg: "white"}}>
         <StatusBar barStyle={colorMode === 'light' ? 'dark-content' : 'light-content'} animated={true}/>
+        <ScrollView>
         <Flex flex={1} alignItems="center" safeAreaTop>
             <Spacer />
 
@@ -139,6 +143,30 @@ function SignUpScreen (props) {
                         />  
                     }
 
+                    {selectedIndex == 1 &&
+                        <CustomInput 
+                            name = 'store_name'
+                            placeholder = 'Store name' 
+                            control={control} 
+                            rules = {{
+                                required: 'Name is required', 
+                            
+                            }} 
+                        />  
+                    }
+
+                    {selectedIndex == 1 &&
+                        <CustomInput 
+                            name = 'store_description'
+                            placeholder = 'Store description' 
+                            control={control} 
+                            rules = {{
+                                required: 'description is required', 
+                            
+                            }} 
+                        />  
+                    }
+
                     <CustomInput 
                         name = 'password'
                         placeholder = 'Password' 
@@ -171,6 +199,7 @@ function SignUpScreen (props) {
 
             <Spacer />
         </Flex>
+        </ScrollView>
         </KeyboardAvoidingView>
     );
 }

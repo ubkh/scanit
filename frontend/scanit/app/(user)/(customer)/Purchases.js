@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 
 const GroceryTrips = () => {
+  const globalContext = useContext(Context);
   const { colorMode } = useColorMode();
   const { previousPurchases, setPreviousPurchases } = useContext(Context);
   const { basketList, setBasketList } = useContext(Context);
@@ -30,7 +31,7 @@ const GroceryTrips = () => {
           [
             {
               text: 'Ok',
-              onPress: () => {
+              onPress: async () => {
                 var maxReturnDate = addDays(date, 30);
                 var today = new Date();
                 //today.setTime(today.getTime() + (30 * 24 * 60 * 60 * 1000));
@@ -38,7 +39,20 @@ const GroceryTrips = () => {
                 //console.warn(maxReturnDate);
 
                 if (today <= maxReturnDate){
-                  console.warn("you can return this item")
+                  try {
+                    // AWAIT THE RESPONSE SO WE DON'T CONTINUE WITHOUT THIS
+                    const response = await fetch(`http://${globalContext.domain}/api/transactions-by-user-id/?user_id=${globalContext.userID.user_id}`,
+                    {
+                      method: "GET",
+                    });
+        
+                    // AWAIT THE RESPONSE TO AVOID UNDEFINED ERRORS
+                    const transactionsList = await response.json();
+                    console.log(transactionsList);
+
+                  } catch (error) {
+                    console.error(error);
+                  }
                 } else {
                   console.warn("it has gone past the expiry date")
                 }
@@ -73,14 +87,14 @@ const GroceryTrips = () => {
             <Text><B>Items:</B></Text>
             <View style={{ marginLeft: 20 }}>
               {trip.items.map((item, index) => (
-                <><Text key={index}>{item.data}</Text><View style={{ flexDirection: "row", justifyContent: "flex-end" }} key={index}>               
-                  <TouchableOpacity
-                  style={styles.button}
-                    onPress={() => removeItem(index,trip.date)}
-                  >
-                    <Ionicons name="arrow-undo-outline" color="white" />
-                  </TouchableOpacity>
-                </View></>
+                <>
+                  <Text key={index}>Name: {item.name + "\n"}Barcode: {item.barcode + "\n"}Price: {"£" + (item.price / 100) + "\n"}Quanity: {item.quantity + "\n"}</Text>
+                    <View style={{ flexDirection: "row", justifyContent: "flex-end" }} key={index}>
+                      <TouchableOpacity style={styles.button} onPress={() => removeItem(index,trip.date)}>
+                        <Ionicons name="arrow-undo-outline" color="white" />
+                      </TouchableOpacity>
+                    </View>
+                </>
               ))}
             </View>
           </View>

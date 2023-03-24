@@ -22,6 +22,7 @@ import { Link, useRouter, useSearchParams } from "expo-router";
 import { useState, useContext, useEffect } from "react";
 import { TouchableOpacity, Alert, Platform } from "react-native";
 import { Context } from "../../../../context/GlobalContext";
+import { useAuth } from "../../../../context/AuthContext";
 
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -42,13 +43,14 @@ function getTestList(setSampleText, domain) {
 
 function Home() {
   const globalContext = useContext(Context);
+  const { signOut } = useAuth();
 
   const [sampleText, setSampleText] = useState("Hello, World!");
   const router = useRouter();
   const params = useSearchParams();
   const { data, type } = params || {};
   const { colorMode } = useColorMode();
-
+  const { user } = useAuth();
   const { domain } = globalContext;
   const { basketList } = globalContext;
   const { isRetailerScanned } = globalContext;
@@ -68,6 +70,7 @@ function Home() {
   console.log(`Most recent barcode type: ${type}`);
   console.log(basketList);
   console.log(`Has retailer been scanned? ${isRetailerScanned}`);
+  console.log(user.user.user_id)
 
 
   return (
@@ -114,9 +117,27 @@ function Home() {
               }}
             >
               <Text color="white" style={{ fontFamily: "Rubik-Bold" }}>
-                Shopping with
+                Shopping with{" "}
               </Text>
-              <Text color="white">Retailer: {retailerBarcodeData}</Text>
+              <Text color="white">
+                Store: {retailerBarcodeData && retailerBarcodeData.length > 0 ?
+                <Text style={{ fontFamily: "Rubik-Bold" }}>
+                  {retailerBarcodeData[0].name}
+                </Text>
+                :
+                "Unknown"
+                }
+                {"\nBarcode: "}
+                {retailerBarcodeData && retailerBarcodeData.length > 0 ?
+                <Text style={{ fontFamily: "Rubik-Bold" }}>
+                  {retailerBarcodeData[0].barcode}
+                </Text>
+                :
+                "Unknown"
+                }
+              </Text>
+
+
               <Text>&nbsp;</Text>
               <Button
                 bg="brand.400"

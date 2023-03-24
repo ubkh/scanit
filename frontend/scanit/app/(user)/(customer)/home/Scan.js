@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
 
     counterContainer: {
       position: "absolute",
-      bottom: 100,
+      bottom: 70,
     },
 
 });
