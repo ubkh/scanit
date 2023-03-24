@@ -21,6 +21,8 @@ function assignStaffPage(props) {
     const[store_address, setStoreAddress] = useState('');
     const router = useRouter();
     const { colorMode } = useColorMode();
+
+    const [ success, setSuccess ] = useState(false);
  
     // const[firstName, setFirstName] = useState('');
     // const[lastName, setLastName] = useState('');
@@ -61,11 +63,16 @@ function assignStaffPage(props) {
         })
         .then(json => {
             setUserID(json.user_id)
+            setSuccess(true);
         })
         .catch(error => {
             console.log(error)
         })
+
+        if (success) router.push('/manageStaff')
+
     }
+
 
     return (
     <Box _dark={{ bg: "black" }} flex={1} _light={{ bg: "white" }} safeAreaTop>
