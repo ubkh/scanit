@@ -409,7 +409,7 @@ class TransactionByBarcodeList(generics.ListAPIView):
     def get_queryset(self):
         barcode = self.request.query_params.get('barcode', None)
         if barcode is not None:
-            return Transaction.objects.filter(store__barcode=barcode)
+            return Transaction.objects.filter(shop__barcode=barcode)
         else:
             return Transaction.objects.all()
         
