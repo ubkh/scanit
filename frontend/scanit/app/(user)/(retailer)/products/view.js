@@ -23,6 +23,7 @@ export default function ViewProductData() {
         barcode: productData.barcode,
         expiry: productData.expiry,
         is_suspended: shouldSuspend,
+        store_id: productData.store_id,
       }),
       credentials: "include",
     });
