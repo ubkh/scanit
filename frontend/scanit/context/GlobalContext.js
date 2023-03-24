@@ -17,6 +17,7 @@ export default function ContextProvider(props) {
   const [total, setTotal] = useState(0);
   const [isRetailerScanned, setRetailerScanned] = useState(false);
   const[previousPurchases, setPreviousPurchases] = useState([]);
+  const[quantityValue, setQuantityValue] = useState(1);
 
   //const [ userType, setUserType ] = useState('retailer'); //'customer' or 'retailer'
   const [userID, setUserID] = useState(undefined); // Using this to store the JSON that is passed when logging in. Allows us to get the user ID for transactions etc.
@@ -37,6 +38,8 @@ export default function ContextProvider(props) {
     setPreviousPurchases,
     userID,
     setUserID,
+    quantityValue,
+    setQuantityValue,
     total,
     setTotal
   };

@@ -198,7 +198,7 @@ function Home() {
       <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacingX={5} spacingY={5} my={4} >
         <Box
             size={200}
-            width={310}
+            width={260}
             _android={{ width: "100%" }}
             borderRadius={10}
             borderWidth={1}
@@ -211,7 +211,7 @@ function Home() {
             },
             }}
         >
-            <Center size={200} width={310} borderRadius={10}>
+            <Center size={200} width={260} borderRadius={10}>
             <Icon size={30} color={"white"} as={Ionicons} name="card-outline" />
             <Text>&nbsp;</Text>
             <Text color={"white"} style={{ fontFamily: "Rubik-Bold" }}>
@@ -222,7 +222,7 @@ function Home() {
         
         <Box
             size={200}
-            width={310}
+            width={260}
             borderRadius={10}
             borderWidth={1}
             borderColor="gray.200"
@@ -234,7 +234,7 @@ function Home() {
             },
             }}
         >
-            <Center size={200} width={310} borderRadius={10}>
+            <Center size={200} width={260} borderRadius={10}>
             <Icon size={30} color={"white"} as={Ionicons} name="card-outline" />
             <Text>&nbsp;</Text>
             <Text color={"white"} style={{ fontFamily: "Rubik-Bold" }}>
@@ -245,7 +245,7 @@ function Home() {
                 
         <Box
             size={200}
-            width={310}
+            width={260}
             borderRadius={10}
             borderWidth={1}
             borderColor="gray.200"
@@ -257,7 +257,7 @@ function Home() {
             },
             }}
         >
-            <Center size={200} width={310} borderRadius={10}>
+            <Center size={200} width={260} borderRadius={10}>
             <Icon size={30} color={"white"} as={Ionicons} name="card-outline" />
             <Text>&nbsp;</Text>
             <Text color={"white"} style={{ fontFamily: "Rubik-Bold" }}>
@@ -269,7 +269,7 @@ function Home() {
 
         <Box
             size={200}
-            width={310}
+            width={260}
             borderRadius={10}
             borderWidth={1}
             borderColor="gray.200"
@@ -281,7 +281,7 @@ function Home() {
             },
             }}
         >
-            <Center size={200} width={300} borderRadius={10}>
+            <Center size={200} width={260} borderRadius={10}>
             <Icon size={30} color={"white"} as={Ionicons} name="card-outline" />
             <Text>&nbsp;</Text>
             <Text color={"white"} style={{ fontFamily: "Rubik-Bold" }}>
