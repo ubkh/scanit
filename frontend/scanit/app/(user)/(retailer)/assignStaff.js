@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { Platform } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { Button, View, Text, Box, StatusBar, useColorMode, Heading, Divider } from 'native-base';
 import CustomInput from '../../../components/CustomInput.js';
@@ -7,11 +8,14 @@ import { Context } from '../../../context/GlobalContext.js';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../../../context/AuthContext';
 
+const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+const PASSWORD_REGEX = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,64})/;
+
 
 function assignStaffPage(props) {
-    const { user_id } = useSearchParams();
+    // const { user_id } = useSearchParams();
     const globalContext = useContext(Context)
-    const {domain, userID, setUserID} = globalContext;
+    const {domain, protocol, userID, setUserID} = globalContext;
     const {control, handleSubmit, watch} = useForm();
     const[number, setNumber] = useState('');
     const[store_address, setStoreAddress] = useState('');
@@ -41,7 +45,7 @@ function assignStaffPage(props) {
             'account_type': 2,
         })
 
-        fetch(`http://${domain}/api/staff/register/`,{
+        fetch(`${protocol}://${domain}/api/staff/register/`,{
             method: 'POST',
             include: 'credentials',
             headers: { 
@@ -116,6 +120,10 @@ function assignStaffPage(props) {
                 control = {control}
                 rules = {{
                     required: 'Email is required',
+                    pattern: {
+                        value: EMAIL_REGEX, 
+                        message:'Not a valid email'
+                    }
                 }} 
             />
 
@@ -131,10 +139,10 @@ function assignStaffPage(props) {
                 control={control} 
                 rules = {{
                     required: 'Password is required', 
-                    // pattern: {
-                    //     value: PASSWORD_REGEX, 
-                    //     message: 'Password should contain atleast 8 characters \n - An uppercase character \n - A lower case character \n - A number \n - A special character'
-                    // }
+                    pattern: {
+                        value: PASSWORD_REGEX, 
+                        message: 'Password should contain atleast 8 characters \n - An uppercase character \n - A lower case character \n - A number \n - A special character'
+                    }
                 }} 
                 secureTextEntry
             />

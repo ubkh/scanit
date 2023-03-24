@@ -26,21 +26,6 @@ import { useAuth } from "../../../../context/AuthContext";
 
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 
-function getTestList(setSampleText, domain) {
-  return fetch(`http://${domain}/api/list`, {
-    method: "GET",
-  })
-    .then((response) => response.json())
-    .then((json) => {
-      console.log(json);
-      setSampleText(json[0].text);
-      return json;
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-}
-
 function Home() {
   const globalContext = useContext(Context);
   const { signOut } = useAuth();

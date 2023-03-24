@@ -1,7 +1,7 @@
 # ScanIt
 
 ## Deployed version
-The deployed version of the application can be found at *<[enter URL here](URL)>*.
+The deployed version of the web application can be found at *[https://scanit-pubjeemobail.surge.sh](https://scanit-pubjeemobail.surge.sh)*.
 
 ## Prerequisites
 - Expo Go app on mobile device.
@@ -42,7 +42,7 @@ To start the development server:
 $ python3 manage.py runserver <YOUR_IP>:8000
 ```
 
-This IP must be in the form ```192.168.X.X``` - found in Network Settings.
+If running locally, this IP must be in the form ```192.168.X.X``` - found in Network Settings.
 *(eg. 192.168.1.208:8000)*
 
 Run all tests with:
@@ -61,10 +61,11 @@ $ npm install
 Create a ```.env.local``` file at the frontend root and add to its contents:
 
 ```
-DJANGO=<YOUR_DJANGO_IP>:8000
+DJANGO="<YOUR_DJANGO_IP>:8000"
+PROTOCOL="https"
 ```
 
-This IP must be in the form ```192.168.X.X``` - found in Network Settings.
+If running locally IP must be in the form ```192.168.X.X``` - found in Network Settings, and PROTOCOL should be "http".
 *(eg. DJANGO=192.168.1.208:8000)*
 
 To start the development server:

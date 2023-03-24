@@ -16,14 +16,14 @@ function VerificationScreen(props) {
 
     const { user_id } = useSearchParams();
     const globalContext = useContext(Context)
-    const {domain} = globalContext;
+    const {domain, protocol} = globalContext;
 
     const onConfirmPressed = async data =>  {
         let body = JSON.stringify({
             'verification_code': data.code
         })
 
-        fetch(`http://${domain}/api/user/verify/${user_id}/`,{
+        fetch(`${protocol}://${domain}/api/user/verify/${user_id}/`,{
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json'

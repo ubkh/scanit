@@ -13,6 +13,7 @@ from .views import (
     TransactionByIDList,
     TransactionByUserIDList,
     StoreByBarcodeList,
+    StoreByUserID,
     RetailerList,
     ProductByBarcodeAndStoreList,
     RetailerBarcodeAPIView,
@@ -49,6 +50,7 @@ urlpatterns = [
     path('transactions-by-user-id/', TransactionByUserIDList.as_view(), name='get-transactions-by-user-id'),
     path('stores-by-barcode/', StoreByBarcodeList.as_view(), name='get-stores-by-barcode'),
     path('create-transaction/', CreateTransactionAPIView.as_view(), name='create-transaction'),
+    path('stores-by-shop-id/', StoreByUserID.as_view(), name='get-stores-by-shop-id'),
     
 	path('check-product/', ProductByBarcodeAndStoreList.as_view(), name='check-product'),
     

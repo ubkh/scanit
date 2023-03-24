@@ -1,11 +1,13 @@
 import React, { useState, useContext } from 'react';
 import { Platform } from 'react-native';
-import { View, Text, StatusBar, Flex, Spacer, Button, Box, Heading, useColorMode, Center, KeyboardAvoidingView } from 'native-base';
+import { Text, StatusBar, Flex, Spacer, Button, Box, Heading, useColorMode, Center, KeyboardAvoidingView } from 'native-base';
 import CustomInput from '../../../components/CustomInput.js';
 import { useRouter, Link } from "expo-router";
 import { Context } from '../../../context/GlobalContext.js';
 import { useForm } from 'react-hook-form';
 
+
+/*Forget password functionality */
 const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 function ForgotPasswordScreen(props) {
@@ -14,7 +16,7 @@ function ForgotPasswordScreen(props) {
     const { colorMode } = useColorMode();
 
     const globalContext = useContext(Context)
-    const {domain} = globalContext;
+    const {domain, protocol} = globalContext;
 
     const {control, handleSubmit} = useForm();
     
@@ -23,7 +25,7 @@ function ForgotPasswordScreen(props) {
             'email': data.email.toLowerCase(),
         })
 
-        fetch(`http://${domain}/api/user/password-reset/`,{
+        fetch(`${protocol}://${domain}/api/user/password-reset/`,{
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json'

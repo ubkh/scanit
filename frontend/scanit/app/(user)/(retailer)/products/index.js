@@ -24,7 +24,7 @@ function Products() {
   const [isLoading, setIsLoading] = useState(true);
   const [showSuspended, setShowSuspended] = useState(false);
   // const [shouldUpdate, setShouldUpdate] = useState(true);
-  const { domain } = useContext(Context);
+  const { domain, protocol } = useContext(Context);
   const { colorMode } = useColorMode();
   const { user } = useAuth();
   
@@ -33,7 +33,7 @@ function Products() {
     (async () => {
       try {
         setIsLoading(true);
-        const res = fetch(`http://${domain}/api/retailer/get-all-products/${user.user.employed_at_id}/`, {
+        const res = await fetch(`${protocol}://${domain}/api/retailer/get-products/`, {
           credentials: "include",
         })
         .then(res => {
