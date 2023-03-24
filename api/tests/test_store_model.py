@@ -79,3 +79,4 @@ class StoreModelTests(TestCase):
         self.assertLess(len(store1.description), 750)
         self.assertLess(len(store1.barcode), 25)
         self.assertLess(len(store1.address), 100)
+           
