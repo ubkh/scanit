@@ -14,6 +14,9 @@ from pathlib import Path
 import datetime
 from datetime import timedelta
 
+import os
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -82,12 +85,26 @@ WSGI_APPLICATION = 'scanit.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# Check if PostgreSQL environment variables are set
+if os.getenv('POSTGRES_URL') and os.getenv('PGNAME') and os.getenv('PGUSER') and os.getenv('POSTGRES_PASSWORD') and os.getenv('PGHOST') and os.getenv('PGPORT'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'URL': os.getenv('POSTGRES_URL'),
+            'NAME': os.getenv('PGNAME'),
+            'USER': os.getenv('PGUSER'),
+            'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+            'HOST': os.getenv('PGHOST'),
+            'PORT': os.getenv('PGPORT'),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation

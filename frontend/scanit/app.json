@@ -31,6 +31,12 @@
     "web": {
       "favicon": "./assets/favicon.png",
       "bundler": "metro"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c96aca92-ed92-488e-b0c4-89129334694c"
+      }
+    },
+    "owner": "pubjeemobail"
   }
 }
