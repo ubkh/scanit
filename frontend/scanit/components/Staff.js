@@ -24,7 +24,6 @@ const Staff = ({ email, first_name, last_name, data }) => {
         
             <View style={styles.column}>
                 <EditStaffButton
-                    first_name={first_name}
                     data={data}
                 />
                 {/* <Button>

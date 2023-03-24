@@ -4,7 +4,7 @@ import { Platform } from 'react-native';
 import { View, Text, Input, FormControl, WarningOutlineIcon } from "native-base";
 import { Controller } from "react-hook-form";
 
-const CustomInput = ({ defaultValue, control, name, rules = {}, placeholder, secureTextEntry}) => {
+const CustomInput = ({ defaultValue, control, name, rules = {}, placeholder, secureTextEntry, editable}) => {
     return (
         <Controller     
             control = {control}
@@ -33,6 +33,7 @@ const CustomInput = ({ defaultValue, control, name, rules = {}, placeholder, sec
                                 onBlur = {onBlur} 
                                 placeholder = {placeholder}
                                 secureTextEntry = {secureTextEntry}
+                                editable={editable}
                             />
                             <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
                                 {error && error.message || 'Error'}

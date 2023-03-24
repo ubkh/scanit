@@ -143,9 +143,8 @@ class StaffRegistrationAPIView(APIView):
         return Response(content)
 
     def post(self, request):
+
         
-        print("printing the emp")
-        print(request.data)
 
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -726,20 +725,49 @@ class RetailerStaffAPIView(APIView):
     def post(self, request):
 
         user_id = request.data.get('user_id')
-        print("THIS IS THE USER ID")
-        print(user_id)
-
+    
         try:
             user = User.objects.get(user_id=user_id)
             store = user.employed_at
             staff = User.objects.filter(employed_at=store)
 
-            print("THIS IS THE STAFF")
-            print(staff)
-            print(staff.count())
             data = list(staff.values())
             return JsonResponse(data, safe=False)
-            return Response()
 
         except:
             HttpResponse("User does not exist!", status=status.HTTP_400_BAD_REQUEST)
+
+
+class RetailerEditStaffAPIView(APIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (AllowAny,)
+
+    def get(self, request):
+        content = { 'message': 'Hello!' }
+        return Response(content)
+    
+    def post(self, request):
+        print("got to here")
+        user_id = request.data.get('user_id')
+        print("user_id = ")
+        print(user_id)
+
+        try:
+            user_id = request.data.get('user_id')
+            staff_query = User.objects.filter(user_id=user_id)
+            if (staff_query.count()):
+                staff = staff_query.first()
+                print("got to here problem in for loop")
+                
+                for (key, value) in request.data.items():
+                    if (key == 'user_id'):  # should not be able to change the user_id
+                        continue
+                    setattr(staff, key, value)
+                staff.save()
+                return HttpResponse(status=200)
+            else:
+                return HttpResponseBadRequest()
+        except ValidationError:
+            return HttpResponseBadRequest()
+        except:
+            return HttpResponseServerError()
