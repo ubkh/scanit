@@ -215,7 +215,7 @@ function Home() {
             <Icon size={30} color={"white"} as={Ionicons} name="card-outline" />
             <Text>&nbsp;</Text>
             <Text color={"white"} style={{ fontFamily: "Rubik-Bold" }}>
-                Total sales made: {transactionList.length === 0 ? "Loading..." : transactionList.length}
+                Total sales made: {transactionList.length === 0 ? "None" : transactionList.length}
             </Text>
             </Center>
         </Box>
