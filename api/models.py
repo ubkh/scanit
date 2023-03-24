@@ -156,24 +156,11 @@ class Product(models.Model):
 
 class Transaction(models.Model):
     transaction_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    retailer = models.ForeignKey(User, related_name='transactions_as_store', on_delete=models.CASCADE)
+    shop = models.ForeignKey(Store, related_name='transactions_as_store', on_delete=models.CASCADE)
     customer = models.ForeignKey(User, related_name='transactions_as_customer', on_delete=models.CASCADE)
     products = models.JSONField(encoder=DjangoJSONEncoder)
     date = models.DateField(auto_now_add=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-
-    def save(self, *args, **kwargs):
-        if not self.amount:
-            self.amount = self.calculate_amount()
-        super().save(*args, **kwargs)
-
-    def calculate_amount(self):
-        total_amount = 0
-        for product in self.products:
-            price = product.get('price', 0)
-            quantity = product.get('quantity', 1)
-            total_amount += price * quantity
-        return total_amount
 
     
     

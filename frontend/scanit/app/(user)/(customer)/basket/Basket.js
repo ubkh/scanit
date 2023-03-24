@@ -10,8 +10,10 @@ import NumericInput from 'react-native-numeric-input'; // https://github.com/him
 
 
 function Basket(props) {
+    const globalContext = useContext(Context);
     const { colorMode } = useColorMode();
     const { basketList, setBasketList } = useContext(Context);
+    const { total, setTotal } = useContext(Context);
     const [basketItems, setBasketItems] = useState(<Text> Your basket is empty </Text>);
     const router = useRouter();
 
@@ -50,12 +52,14 @@ function Basket(props) {
     };
 
     const calculateTotalString = () => {
-      let total = 0;
+      let sum = 0;
       for (let i = 0; i < basketList.length; i++) {
-        total += basketList[i].price * basketList[i].quantity
+        sum += basketList[i].price * basketList[i].quantity
       }
 
-      return "£" + (total / 100)
+      setTotal(sum);
+
+      return "£" + (sum / 100)
     }
     
     useEffect(() => {

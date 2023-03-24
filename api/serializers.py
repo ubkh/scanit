@@ -1,5 +1,6 @@
 # Translates models into JSON objects
 from rest_framework import serializers
+import json
 from django.contrib.auth import get_user_model
 from .models import Product, Store, User
 from .models import Transaction
@@ -139,12 +140,36 @@ class RetailerSerializer(serializers.ModelSerializer):
                   'account_type', 'employed_at', 'verification_code', 'is_verified', 'date_joined']
 
 class TransactionSerializer(serializers.ModelSerializer):
-    retailer = RetailerSerializer()
-    customer = UserSerializer()
 
     class Meta:
         model = Transaction
-        fields = ['transaction_id', 'retailer', 'customer', 'products', 'date']
+        fields = ['shop', 'customer', 'products', 'amount']
+
+    def validate_shop(self, value):
+        return value
+    
+    def validate_customer(self, value):
+        return value
+    
+    def validate_products(self, value):
+        return str(value)
+
+    def validate_amount(self, value):
+        print(value)
+        return value
+
+    def create(self,validated_data):
+
+        # store = Store.objects.get(id=validated_data.get('store_id'))
+        product = self.Meta.model(
+                                shop=validated_data.get('shop'),
+                                customer=validated_data.get('customer'),
+                                products=validated_data.get('products'),
+                                amount=validated_data.get('amount')
+                                )
+
+        product.save()
+        return product
     
 class RetailerUploadItemSerializer(serializers.ModelSerializer):
 

@@ -1,5 +1,6 @@
 from .models import Product, Transaction
 from rest_framework import generics
+from rest_framework.decorators import api_view
 import json
 from .serializers import (
     UserRegistrationSerializer, 
@@ -408,7 +409,7 @@ class TransactionByBarcodeList(generics.ListAPIView):
     def get_queryset(self):
         barcode = self.request.query_params.get('barcode', None)
         if barcode is not None:
-            return Transaction.objects.filter(retailer__employed_at__barcode=barcode)
+            return Transaction.objects.filter(store__barcode=barcode)
         else:
             return Transaction.objects.all()
         
@@ -424,6 +425,69 @@ class TransactionByIDList(generics.ListAPIView):
             return Transaction.objects.filter(transaction_id=transaction_id)
         else:
             return Transaction.objects.all()
+
+class TransactionByUserIDList(generics.ListAPIView):
+    serializer_class = TransactionSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        customer_id = self.request.query_params.get('user_id', None)
+        if customer_id is not None:
+            return Transaction.objects.filter(customer__id=customer_id)
+        else:
+            return Transaction.objects.all()
+
+@csrf_exempt
+def create_transaction(request):
+    print(request.body)
+    print(request.body.get("store"))
+    print(request.body.store)
+    if request.method == 'POST':
+
+        store_id = request.body.get('store')
+        customer_id = request.body.get('customer')
+        store = get_object_or_404(Store, id=store_id)
+        customer = get_object_or_404(User, id=customer_id)
+
+        serializer = TransactionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(store=store, customer=customer)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CreateTransactionAPIView(APIView):
+    serializer_class = TransactionSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (AllowAny,)
+
+    
+
+    def get(self, request):
+        content = { 'message': 'Hello!' }
+        return Response(content)
+    
+
+    def post(self, request):
+
+        # user_id = request.data.get('user_id')
+        # print(request.data)
+        # print(request.data.get('user_id'))
+
+
+        # user_id = request.data.get('user_id')
+        # user = User.objects.get(user_id=user_id)
+
+        # if (user.account_type == User.Account.CUSTOMER):
+        #     return HttpResponse('Unauthorized piss off m8', status=401)
+
+        serializer = self.serializer_class(data=request.data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return HttpResponse(status=200)
+        
+        print(serializer.errors)
+        return HttpResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # USE THIS TO CHECK IF THE STORE BARCODE WE SCAN IS VALID
 class StoreByBarcodeList(generics.ListAPIView):

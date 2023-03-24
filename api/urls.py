@@ -11,14 +11,16 @@ from .views import (
     RetailerUploadItemAPIView,
     TransactionByBarcodeList,
     TransactionByIDList,
+    TransactionByUserIDList,
     StoreByBarcodeList,
     RetailerList,
     ProductByBarcodeAndStoreList,
     RetailerBarcodeAPIView,
+    CreateTransactionAPIView,
     # retailerAddProduct,
     retailerGetProduct,
     retailerGetAllProducts,
-    retailerUpdateProduct
+    retailerUpdateProduct,
 )
 
 urlpatterns = [
@@ -43,7 +45,9 @@ urlpatterns = [
 	# CUSTOMER AND RETAILER URL PATHS FOR TRANSACTIONS
 	path('transactions-by-barcode/', TransactionByBarcodeList.as_view(), name='get-transactions-by-barcode'),
     path('transactions-by-id/', TransactionByIDList.as_view(), name='get-transactions-by-id'),
+    path('transactions-by-user-id/', TransactionByUserIDList.as_view(), name='get-transactions-by-user-id'),
     path('stores-by-barcode/', StoreByBarcodeList.as_view(), name='get-stores-by-barcode'),
+    path('create-transaction/', CreateTransactionAPIView.as_view(), name='create-transaction'),
     
 	path('check-product/', ProductByBarcodeAndStoreList.as_view(), name='check-product'),
     

@@ -22,6 +22,7 @@ import { Link, useRouter, useSearchParams } from "expo-router";
 import { useState, useContext } from "react";
 import { TouchableOpacity, Alert, Platform } from "react-native";
 import { Context } from "../../../../context/GlobalContext";
+import { useAuth } from "../../../../context/AuthContext";
 
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -42,6 +43,7 @@ function getTestList(setSampleText, domain) {
 
 function Home() {
   const globalContext = useContext(Context);
+  const { signOut } = useAuth();
 
   const [sampleText, setSampleText] = useState("Hello, World!");
   //route = useRoute();
@@ -49,7 +51,7 @@ function Home() {
   const params = useSearchParams();
   const { data, type } = params || {};
   const { colorMode } = useColorMode();
-
+  const { user } = useAuth();
   const { domain } = globalContext;
   const { basketList } = globalContext;
   const { isRetailerScanned } = globalContext;
@@ -69,7 +71,7 @@ function Home() {
   console.log(`Most recent barcode type: ${type}`);
   console.log(basketList);
   console.log(`Has retailer been scanned? ${isRetailerScanned}`);
-  console.log(globalContext.userID)
+  console.log(user.user.user_id)
 
   return (
     <View style={{ flex: 1 }} _dark={{ bg: "black" }} _light={{ bg: "white" }}>

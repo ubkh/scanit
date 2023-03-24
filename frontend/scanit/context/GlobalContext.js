@@ -14,6 +14,7 @@ export default function ContextProvider(props) {
   const [retailerBarcodeData, setRetailerBarcodeData] = useState([]);
   const [retailerBarcodeType, setRetailerBarcodeType] = useState("");
   const [basketList, setBasketList] = useState([]);
+  const [total, setTotal] = useState(0);
   const [isRetailerScanned, setRetailerScanned] = useState(false);
   const[previousPurchases, setPreviousPurchases] = useState([]);
 
@@ -36,6 +37,8 @@ export default function ContextProvider(props) {
     setPreviousPurchases,
     userID,
     setUserID,
+    total,
+    setTotal
   };
 
   return (
