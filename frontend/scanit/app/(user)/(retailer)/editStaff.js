@@ -21,8 +21,6 @@ const editStaff = (props) => {
     // const [ user_data ] = useSearchParams();
     const user_data = useSearchParams()
     const string_user = user_data.user_data
-    // console.log(string_user)
-    // console.log(JSON.parse(user_data.user_data))
     const [ successful, setSuccessful ] = useState(false);
 
     const user = JSON.parse(user_data.user_data);
@@ -36,9 +34,6 @@ const editStaff = (props) => {
             'last_name': data.last_name,
             'password': data.password,
         };
-
-        // const body = user;
-        console.log(body)
 
         await fetch(`http://${domain}/api/retailer/update-staff/`, {
             method: 'POST',

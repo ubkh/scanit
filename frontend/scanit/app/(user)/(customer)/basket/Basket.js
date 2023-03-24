@@ -1,6 +1,6 @@
-import { ScrollView, TouchableOpacity, StyleSheet, Alert, Animated} from 'react-native';
-import { View, Text, Heading, Button, StatusBar, Flex, Divider, Spacer, useColorMode } from 'native-base';
-import { useState, useContext, useEffect, useRef } from 'react';
+import { ScrollView, Platform, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Container, Text, Heading, Button, StatusBar, Center, Flex, Divider, Spacer, useColorMode } from 'native-base';
+import { useState, useContext, useEffect } from 'react';
 // import { useNavigation, useRoute } from '@react-navigation/native';
 import { Context } from '../../../../context/GlobalContext';
 import { Ionicons } from '@expo/vector-icons';
@@ -64,7 +64,7 @@ function Basket(props) {
               {
                 text: 'Ok',
                 onPress: () => {
-                  console.log(`Removing item at index ${index} of the basket. Bros too poor lmao`)
+                  console.log(`Removing item at index ${index} of the basket.`)
                   const newList = [...basketList];
                   newList.splice(index, 1);
                   setBasketList(newList);
@@ -117,16 +117,11 @@ function Basket(props) {
         } else {
           setBasketItems(
         <View style={styles.basketList}>
-          <ScrollView
-         ref={ref => {this.scrollView = ref}}
-         onContentSizeChange={() => this.scrollView.scrollToEnd({animated: true})}>
+          <ScrollView>
           <Text style={styles.basketHeader}>{basketList.length} products</Text>
             {basketList.map((item, index) => (
               <View style={styles.basketEntry} key={index}>
-                  <Pulse key={index}>
-                      {/* <Text>Barcode ID: {item.data}</Text>
-                      <Text>Barcode Type: {item.type}</Text>
-                  <View key={index}> */}
+                  <View key={index}>
                       <Text>Name: {item.name}</Text>
                       <Text>Barcode ID: {item.barcode}</Text>
                       <Text>Quantity: {item.quantity}</Text>
@@ -164,7 +159,6 @@ function Basket(props) {
                       />
                     </View>
 
-
                       <View style={{flexDirection: "row", justifyContent: "flex-end"}} key={index}>
                         <TouchableOpacity
                           testID={`remove-button-${index}`}
@@ -185,7 +179,7 @@ function Basket(props) {
                           </View>
                         </TouchableOpacity>
                       </View>
-                  </Pulse>
+                  </View>
                   <Text>&nbsp;</Text>
               </View>
             ))}
@@ -248,22 +242,6 @@ function Basket(props) {
       right: 0,
       alignItems: "center",
       justifyContent: "center",
-    },
-    pulseContainer: {
-      marginVertical: 10,
-      borderWidth: 1,
-      borderColor:'#50C878',
-      borderRadius: 5,
-      padding: 10,
-    },
-    pulse: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(125, 225, 10, 0.3)',
-      borderRadius: 5,
     },
 });
 

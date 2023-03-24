@@ -49,9 +49,6 @@ function RetailerAddProductForm() {
 
   async function submitHandler(values) {
 
-    console.log(" this is the user useAuth")
-    console.log(user)
-
     const jsonObj = JSON.stringify({
       ...values,
       price: Math.ceil(parseFloat(values.price) * 100), // some inputs like "300.09" becomes 30008.9999999 for some reason, hence Math.ceil

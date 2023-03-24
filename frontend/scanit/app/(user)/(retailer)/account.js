@@ -17,7 +17,6 @@ function Account() {
   const { user, loading } = useAuth();
   const [ storeBarcode, setStoreBarcode ] = useState('');
   const globalContext = useContext(Context);
-  console.log(user.user)
   
   const saveBarcodeImage = async () => {
     
@@ -26,7 +25,6 @@ function Account() {
     // if (permission.granted) {
       //   await ImagePicker.saveAsync(imageUri);
       // } else {
-        //   console.log('Permission denied');
         // }
       };
       
@@ -47,7 +45,6 @@ function Account() {
       if (res.ok) {
           return res.json()
         } else {
-          console.log(res);
           setError('error innit')
           throw res.json()
         }

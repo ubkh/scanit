@@ -32,8 +32,6 @@ function assignStaffPage(props) {
     const[error, setError] = useState('');
     const { user } = useAuth();
 
-    console.log(user)
-
     const onRegisterPressed = async data =>  {
         let body = JSON.stringify({
             'email': data.email.toLowerCase(),
@@ -63,8 +61,6 @@ function assignStaffPage(props) {
         })
         .then(json => {
             setUserID(json.user_id)
-            console.log(json.user_id)
-            console.log(userID)
         })
         .catch(error => {
             console.log(error)

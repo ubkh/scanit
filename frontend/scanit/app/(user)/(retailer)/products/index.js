@@ -33,7 +33,7 @@ function Products() {
     (async () => {
       try {
         setIsLoading(true);
-        const res = await fetch(`${protocol}://${domain}/api/retailer/get-products/`, {
+        const res = await fetch(`${protocol}://${domain}/api/retailer/get-all-products/${user.user.employed_at_id}/`, {
           credentials: "include",
         })
         .then(res => {

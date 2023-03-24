@@ -40,8 +40,7 @@ function ForgotPasswordScreen(props) {
         })
         .then(res => {
             if (res.ok) {
-                console.log('A link was sent to your email to reset your password')
-                router.push("/signIn");// Navigating to the sign-in page if the email is valid
+                router.push("/signIn");
                 return res.json()
             } else {
                 setError('Invalid email')// Setting an error message if the email is invalid

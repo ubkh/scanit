@@ -7,18 +7,11 @@ import { useForm } from 'react-hook-form';
 
 // Define a React component called VerificationScreen
 function VerificationScreen(props) {
-    // Define two pieces of state using the useState hook
-    const[code, setCode] = useState('');
-    const[ error, setError ] = useState('');
-
-    // Use the useForm hook from react-hook-form to create a form object
+    const [ code, setCode] = useState('');
+    const [ error, setError ] = useState('');
     const {control, handleSubmit} = useForm();
-
-    // Use the useRouter and useColorMode hooks from Expo to get the current route and color mode respectively
     const router = useRouter();
     const { colorMode } = useColorMode();
-
-    // Use the useSearchParams and useContext hooks to get the user_id and domain from the global context respectively
     const { user_id } = useSearchParams();
     const globalContext = useContext(Context)
     const {domain, protocol} = globalContext;
@@ -46,8 +39,6 @@ function VerificationScreen(props) {
             }
         })
         .then(json => {
-            // If the verification is successful, navigate to the sign in screen
-            console.log("successfully verified!")
             router.push('/signIn')
         })
         .catch(error => {
