@@ -14,7 +14,7 @@ import {
 } from "native-base";
 import { Platform } from "react-native";
 import CustomInput from "../../../components/CustomInput.js";
-import { useRouter, Link } from "expo-router";
+import { useRouter, Link, SplashScreen } from "expo-router";
 import { Context } from "../../../context/GlobalContext.js";
 import { useAuth } from "../../../context/AuthContext";
 import { useForm } from "react-hook-form";
@@ -24,7 +24,7 @@ import ScanitLogo from "../../../components/ScanitLogoComponent";
 function SignInScreen(props) {
   const { colorMode } = useColorMode();
   const globalContext = useContext(Context);
-  const { signIn } = useAuth();
+  const { signIn, authenticated } = useAuth();
   const { domain } = globalContext;
 
   const [error, setError] = useState("");
@@ -76,9 +76,11 @@ function SignInScreen(props) {
     router.push("/signIn/forgotPass");
   };
 
-  const onSignUpPressed = () => {
-    router.push("/signUp");
-  };
+  if (authenticated) {
+    return (
+        <SplashScreen />
+    )
+  }
 
   return (
     <KeyboardAvoidingView

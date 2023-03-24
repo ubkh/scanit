@@ -7,8 +7,7 @@
             "last_name" : "Obamama",
             "email": "bigbarack@thewhitehouse.gov.us",
             "password": "pbkdf2_sha256$390000$IBeEXfZURZAOtlHqxfXNzj$zzlS2YS7ZsVpnzFPlkucgj1ptnCGE8toGuDR8mfXAu4=",
-            "is_staff" : true,
-            "is_retailer" : true,
+            "account_type" : 2,
             "verification_code" : "5DJ821",
             "is_verified" : true,
             "date_joined": "2009-01-20"

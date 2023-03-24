@@ -13,12 +13,14 @@ import { Formik } from "formik";
 import { Context } from "../context/GlobalContext";
 import validateForm from "./forms-validations/RetailerAddProduct";
 import { useSearchParams } from "expo-router";
+import { useAuth } from "../context/AuthContext.js"
 
 function RetailerAddProductForm() {
   const params = useSearchParams();
   const { productData } = params || {};
   const globalContext = useContext(Context);
   const { domain } = globalContext;
+  const { user } = useAuth();
   // const errorStyle = { color: "#c20808" };
 
   // if product was not found in the db then productData has only the barcode. This prevents price from becoming a NaN
@@ -46,10 +48,15 @@ function RetailerAddProductForm() {
   }
 
   async function submitHandler(values) {
+
+    console.log(" this is the user useAuth")
+    console.log(user)
+
     const jsonObj = JSON.stringify({
       ...values,
       price: Math.ceil(parseFloat(values.price) * 100), // some inputs like "300.09" becomes 30008.9999999 for some reason, hence Math.ceil
       quantity: parseInt(values.quantity),
+      store: user.user.employed_at_id,
     });
     await fetch(`http://${domain}/api/retailer/add-product/`, {
       method: "POST",

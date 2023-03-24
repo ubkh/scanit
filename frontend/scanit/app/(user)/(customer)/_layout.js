@@ -10,7 +10,7 @@ import { useAuth } from "../../../context/AuthContext";
 
 const links = [
 ];
-  
+
 export default function CustomerLayout() {
   const { userType, user } = useAuth();
   const globalContext = useContext(Context);
@@ -26,13 +26,6 @@ export default function CustomerLayout() {
   }
 
   const { basketList } = globalContext;
-
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
-  const { width } = useWindowDimensions();
-
-  useEffect(() => {
-      setIsSmallScreen(width < 600);
-  }, [width]);
 
   function getNumberOfBasketItems() {
     let total = 0;
@@ -69,8 +62,9 @@ export default function CustomerLayout() {
                     }}>
                 </Tabs.Screen>
                 <Tabs.Screen 
-                    name="Basket"
+                    name="basket"
                     options={{
+                        title: "Basket",
                         headerShown: false,
                         tabBarIcon: ({ color, size }) => (
                         <Ionicons name="cart-outline" color={color} size={size} />
@@ -89,6 +83,16 @@ export default function CustomerLayout() {
                             marginLeft: 5,
                             paddingTop: 2,
                         },
+                    }}>
+                </Tabs.Screen>
+                <Tabs.Screen 
+                    name="Purchases"
+                    options={{
+                        headerShown: false,
+                        tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="newspaper-outline" color={color} size={size} />
+                        ),
+                        //backgroundColor: '#0f0f0f',
                     }}>
                 </Tabs.Screen>
                 <Tabs.Screen 
@@ -113,7 +117,7 @@ export default function CustomerLayout() {
   // for now no customer support on web, but can make it limited if we need to
   return (
     <Navigator router={TabRouter}>
-        <NavBarComponent links={ links } isSmallScreen={ isSmallScreen } />
+        <NavBarComponent links={ links }/>
         <View _dark={{bg: "black"}} style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
              <Text bold>The customer side is not supported on web.</Text>
              <Text>&nbsp;</Text>
