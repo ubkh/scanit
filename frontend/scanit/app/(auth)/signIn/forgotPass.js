@@ -1,11 +1,13 @@
 import React, { useState, useContext } from 'react';
 import { Platform } from 'react-native';
-import { View, Text, StatusBar, Flex, Spacer, Button, Box, Heading, useColorMode, Center, KeyboardAvoidingView } from 'native-base';
+import { Text, StatusBar, Flex, Spacer, Button, Box, Heading, useColorMode, Center, KeyboardAvoidingView } from 'native-base';
 import CustomInput from '../../../components/CustomInput.js';
 import { useRouter, Link } from "expo-router";
 import { Context } from '../../../context/GlobalContext.js';
 import { useForm } from 'react-hook-form';
 
+
+/*Forget password functionality */
 const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 function ForgotPasswordScreen(props) {

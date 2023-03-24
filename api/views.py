@@ -431,9 +431,10 @@ class TransactionByUserIDList(generics.ListAPIView):
     permission_classes = [AllowAny]
 
     def get_queryset(self):
-        customer_id = self.request.query_params.get('user_id', None)
-        if customer_id is not None:
-            return Transaction.objects.filter(customer__id=customer_id)
+        customer = self.request.query_params.get('customer', None)
+
+        if customer is not None:
+            return Transaction.objects.filter(customer=customer)
         else:
             return Transaction.objects.all()
 
@@ -498,6 +499,18 @@ class StoreByBarcodeList(generics.ListAPIView):
         barcode = self.request.query_params.get('barcode', None)
         if barcode is not None:
             return Store.objects.filter(barcode=barcode)
+        else:
+            return Store.objects.all()
+
+# USE THIS TO CHECK STORE BY ID
+class StoreByUserID(generics.ListAPIView):
+    serializer_class = StoreSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        id = self.request.query_params.get('id', None)
+        if id is not None:
+            return Store.objects.filter(id=id)
         else:
             return Store.objects.all()
 
