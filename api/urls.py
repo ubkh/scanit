@@ -10,6 +10,7 @@ from .views import (
 	UserPasswordResetConfirmView,
     RetailerUploadItemAPIView,
     RetailerBarcodeAPIView,
+    RetailerStaffAPIView,
     # retailerAddProduct,
     retailerGetProduct,
     retailerGetAllProducts,
@@ -37,4 +38,5 @@ urlpatterns = [
     path('retailer/get-products/', retailerGetAllProducts, name='retailer-get-all-products'),
     path('retailer/update-product/', retailerUpdateProduct, name='update-product'),
     path('retailer/get-barcode/', RetailerBarcodeAPIView.as_view(),name='retailer-get-barcode'),
+    path('retailer/get-staff/', RetailerStaffAPIView.as_view(), name='retailer-get-staff'),
 ]

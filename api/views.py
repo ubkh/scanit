@@ -577,4 +577,27 @@ class RetailerBarcodeAPIView(APIView):
             HttpResponse("Store does not exist!", status=status.HTTP_400_BAD_REQUEST)
        
 
+class RetailerStaffAPIView(APIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (AllowAny,)
 
+    def post(self, request):
+
+        user_id = request.data.get('user_id')
+        print("THIS IS THE USER ID")
+        print(user_id)
+
+        try:
+            user = User.objects.get(user_id=user_id)
+            store = user.employed_at
+            staff = User.objects.filter(employed_at=store)
+
+            print("THIS IS THE STAFF")
+            print(staff)
+            print(staff.count())
+            data = list(staff.values())
+            return JsonResponse(data, safe=False)
+            return Response()
+
+        except:
+            HttpResponse("User does not exist!", status=status.HTTP_400_BAD_REQUEST)
