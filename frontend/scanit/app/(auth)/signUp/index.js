@@ -11,7 +11,7 @@ const PASSWORD_REGEX = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,64})/;
 
 function SignUpScreen (props) {
     const globalContext = useContext(Context)
-    const {domain, userID, setUserID} = globalContext;
+    const {domain, protocol, userID, setUserID} = globalContext;
     const router = useRouter();
     const { colorMode } = useColorMode();
 
@@ -39,7 +39,7 @@ function SignUpScreen (props) {
             'account_type': selectedIndex == 1 ? 3 : 1 // 1 == CUSTOMER, 3 == RETAIL_OWNER
         })
 
-        fetch(`http://${domain}/api/user/register/`,{
+        fetch(`${protocol}://${domain}/api/user/register/`,{
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json'
