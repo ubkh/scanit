@@ -1,7 +1,7 @@
 # ScanIt
 
 ## Deployed version
-The deployed version of the web application can be found at *<[https://scanit-pubjeemobail.serge.sh](https://scanit-pubjeemobail.serge.sh)>*.
+The deployed version of the web application can be found at *[https://scanit-pubjeemobail.serge.sh](https://scanit-pubjeemobail.serge.sh)*.
 
 ## Prerequisites
 - Expo Go app on mobile device.
